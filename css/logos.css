@@ -40,11 +40,15 @@
   align-items: center;
   flex-shrink: 0;
   animation: logos-scroll var(--logos-duration) linear infinite;
+  will-change: transform;
 }
 
 .logos__group img {
   height: clamp(40px, 6.5vw, 60px);
   width: auto;
+  /* Anula o `max-width: 100%` do reset: aqui ele limitaria a imagem à
+     largura do contêiner e quebraria a medida do loop. */
+  max-width: none;
   opacity: 0.55;
   transition: opacity var(--duration-default) var(--ease-default);
 }

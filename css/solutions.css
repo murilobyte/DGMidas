@@ -114,6 +114,13 @@
   height: 34px;
 }
 
+/* Este ícone é largo (56x34): fixa a altura e deixa a largura livre
+   para não achatar o desenho. */
+.card__icon--consulting svg {
+  width: auto;
+  height: 30px;
+}
+
 .card__icon svg path {
   fill: currentColor;
 }
