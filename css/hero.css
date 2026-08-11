@@ -1,5 +1,8 @@
 .hero {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding-block: clamp(1.5rem, 4vw, 3rem) 0;
   text-align: center;
   border-radius: 0 0 clamp(20px, 3vw, 32px) clamp(20px, 3vw, 32px);
@@ -80,23 +83,45 @@
   font-weight: 700;
 }
 
+/* As margens abaixo reproduzem o `gap: 1.15rem` que estes dois blocos
+   tinham quando ficavam dentro do .hero__content. */
 .hero__proof {
+  margin-top: 1.15rem;
   color: var(--light-green);
   font-weight: 500;
   max-width: 480px;
+}
+
+/*
+  A cópia do mobile vive fora da hero, sobre o fundo preto da página.
+  Como está fora, o `.hero.is-loaded` não a alcança — quem revela é o
+  observador genérico [data-animate], que adiciona .in-view.
+*/
+.hero__proof--mobile {
+  display: none;
+  margin-inline: auto;
+  padding-inline: var(--section-padding-x);
+  padding-block: clamp(1.5rem, 6vw, 2.25rem);
+  text-align: center;
+}
+
+.hero__proof--mobile.in-view {
+  opacity: 1;
+  transform: none;
 }
 
 .hero__actions {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.5rem;
+  margin-top: 1.65rem;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .hero__visual {
   position: relative;
+  width: 100%;
   max-width: 900px;
   margin: clamp(1.25rem, 3vw, 2rem) auto 0;
   /* Recorta os celulares nas laterais e alinha a base deles ao fim do gradiente. */
@@ -150,19 +175,45 @@
 }
 
 @media (max-width: 720px) {
+  .hero__text {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* Troca de lugar: some a de dentro do gradiente, entra a do fundo preto. */
+  .hero__proof--desktop {
+    display: none;
+  }
+
+  .hero__proof--mobile {
+    display: block;
+  }
+
+  /*
+    O painel é mais alto no mobile porque o SVG ocupa 92% da largura
+    (contra 78% no desktop) e ficava com o topo dos celulares cortado.
+    900/570 dá a altura exata do SVG mais uma folga pequena.
+  */
+  .hero__panel {
+    aspect-ratio: 900 / 570;
+  }
+
   .hero__phones-wrap {
     width: 92%;
-    max-width: 420px;
+    max-width: none;
   }
 
   .hero__actions {
     flex-direction: column;
     width: 100%;
-    max-width: 320px;
+    max-width: 190px;
+    gap: 0.6rem;
   }
 
   .hero__actions .btn {
     width: 100%;
+    padding-block: 0.6rem;
+    font-size: 0.8rem;
   }
 }
 

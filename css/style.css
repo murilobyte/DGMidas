@@ -24,6 +24,14 @@ body {
   margin-inline: clamp(1.25rem, 10vw, 150px);
 }
 
+/* No mobile os 10vw viravam ~37px de cada lado, apertando demais os
+   blocos com gradiente. Só o recuo muda — nada de layout. */
+@media (max-width: 720px) {
+  .section-inset {
+    margin-inline: 1rem;
+  }
+}
+
 /* Botões — usados pelo header, hero, soluções e CTA final. */
 .btn {
   display: inline-flex;
@@ -90,6 +98,28 @@ body {
 .btn--secondary:hover {
   transform: translateY(-2px);
   background-color: rgba(217, 217, 217, 0.14);
+}
+
+@media (max-width: 720px) {
+  .btn {
+    padding: 0.7rem 1.4rem;
+    font-size: 0.85rem;
+  }
+
+  /* Sem cascata no mobile: não há hover em toque, e a cópia do ::before
+     ainda aparecia no estado :hover residual após o toque. */
+  .btn__char {
+    overflow: visible;
+  }
+
+  .btn__char-inner::before {
+    content: none;
+  }
+
+  .btn:hover .btn__char-inner {
+    transform: none;
+    transition: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

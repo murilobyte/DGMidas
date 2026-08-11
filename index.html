@@ -87,13 +87,15 @@
             disparos pela <strong>API Oficial da Meta</strong>, automação e
             CRM.
           </p>
-          <p class="hero__proof">
-            + de R$ 100 milhões em vendas gerados para nossos clientes.
-          </p>
-          <div class="hero__actions">
-            <a href="#contato" class="btn btn--primary">Disparar agora</a>
-            <a href="#tecnologia" class="btn btn--secondary">Como funciona</a>
-          </div>
+        </div>
+
+        <p class="hero__proof hero__proof--desktop">
+          + de R$ 100 milhões em vendas gerados para nossos clientes.
+        </p>
+
+        <div class="hero__actions">
+          <a href="#contato" class="btn btn--primary">Disparar agora</a>
+          <a href="#tecnologia" class="btn btn--secondary">Como funciona</a>
         </div>
 
         <div class="hero__visual">
@@ -106,6 +108,13 @@
           </div>
         </div>
       </section>
+
+      <!-- Mesma prova social, sobre o fundo preto: exibida só no mobile.
+           Uma das duas fica sempre em display:none, então o leitor de
+           tela nunca encontra o texto duplicado. -->
+      <p class="hero__proof hero__proof--mobile" data-animate>
+        + de R$ 100 milhões em vendas gerados para nossos clientes.
+      </p>
 
       <section class="logos" aria-label="Marcas parceiras">
         <div class="logos__track">
