@@ -1,0 +1,193 @@
+html {
+  scroll-padding-top: 96px;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--black);
+  transition: background-color var(--duration-default) var(--ease-default),
+    backdrop-filter var(--duration-default) var(--ease-default),
+    box-shadow var(--duration-default) var(--ease-default);
+}
+
+.site-header.is-scrolled {
+  background-color: rgba(14, 14, 14, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-block: 1rem;
+}
+
+.header__logo {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header__logo img {
+  width: 132px;
+  height: auto;
+}
+
+.header__nav-list {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.header__nav-link {
+  position: relative;
+  display: inline-block; /* transform não se aplica a elementos inline */
+  font-size: 0.95rem;
+  color: var(--gray);
+  padding-block: 0.25rem;
+  transition: color var(--duration-default) var(--ease-default),
+    transform var(--duration-default) var(--ease-default);
+}
+
+.header__nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: var(--white);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-default) var(--ease-default);
+}
+
+.header__nav-link:hover {
+  color: var(--white);
+  transform: translateY(-2px);
+}
+
+.header__nav-link:hover::after {
+  transform: scaleX(1);
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.header__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--orange);
+  color: var(--white);
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.65rem 1.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: transform var(--duration-default) var(--ease-default),
+    filter var(--duration-default) var(--ease-default),
+    box-shadow var(--duration-default) var(--ease-default);
+}
+
+.header__cta:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 8px 20px rgba(224, 104, 25, 0.35);
+}
+
+.header__burger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.header__burger span {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--white);
+  border-radius: 2px;
+  transition: transform var(--duration-default) var(--ease-default),
+    opacity var(--duration-default) var(--ease-default);
+}
+
+.header__burger[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.header__burger[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.header__burger[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 860px) {
+  .header__nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--black);
+    border-bottom: 1px solid rgba(217, 217, 217, 0.08);
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height var(--duration-default) var(--ease-default),
+      opacity var(--duration-default) var(--ease-default);
+  }
+
+  .header__nav.is-open {
+    max-height: 320px;
+    opacity: 1;
+  }
+
+  .header__nav-list {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 1rem var(--section-padding-x) 1.5rem;
+  }
+
+  .header__nav-list li {
+    width: 100%;
+  }
+
+  .header__nav-link {
+    display: block;
+    padding-block: 0.75rem;
+  }
+
+  .header__cta {
+    display: none;
+  }
+
+  .header__burger {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__nav-link:hover {
+    transform: none;
+  }
+
+  .header__cta:hover {
+    transform: none;
+  }
+}

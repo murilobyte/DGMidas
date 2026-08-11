@@ -1,0 +1,103 @@
+@import "variables.css";
+@import "reset.css";
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin-inline: auto;
+  padding-inline: var(--section-padding-x);
+}
+
+/* Foco visível padrão para navegação por teclado. */
+:focus-visible {
+  outline: 2px solid var(--light-green);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Recuo lateral compartilhado pelos blocos "full-bleed" (hero e soluções). */
+.section-inset {
+  margin-inline: clamp(1.25rem, 10vw, 150px);
+}
+
+/* Botões — usados pelo header, hero, soluções e CTA final. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 1.75rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: transform var(--duration-default) var(--ease-default),
+    filter var(--duration-default) var(--ease-default),
+    background-color var(--duration-default) var(--ease-default),
+    box-shadow var(--duration-default) var(--ease-default);
+}
+
+/*
+  Cascata: cada letra é uma janela com recorte próprio. No hover a letra
+  cai para fora por baixo enquanto a cópia (::before, posicionada acima)
+  desce para o lugar dela. O `--i` escalona o início, criando a onda.
+*/
+.btn__char {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.btn__char-inner {
+  display: block;
+  transition: transform 0.4s var(--ease-default);
+  transition-delay: calc(var(--i) * 30ms);
+}
+
+.btn__char-inner::before {
+  content: attr(data-char);
+  position: absolute;
+  left: 0;
+  top: -100%;
+  width: 100%;
+}
+
+.btn:hover .btn__char-inner {
+  transform: translateY(100%);
+}
+
+.btn--primary {
+  background-color: var(--orange);
+  color: var(--white);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 10px 24px rgba(224, 104, 25, 0.35);
+}
+
+.btn--secondary {
+  background-color: rgba(217, 217, 217, 0.08);
+  color: var(--white);
+}
+
+.btn--secondary:hover {
+  transform: translateY(-2px);
+  background-color: rgba(217, 217, 217, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover {
+    transform: none;
+  }
+
+  .btn:hover .btn__char-inner {
+    transform: none;
+  }
+}

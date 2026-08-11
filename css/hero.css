@@ -1,0 +1,173 @@
+.hero {
+  position: relative;
+  padding-block: clamp(1.5rem, 4vw, 3rem) 0;
+  text-align: center;
+  border-radius: 0 0 clamp(20px, 3vw, 32px) clamp(20px, 3vw, 32px);
+  background: linear-gradient(180deg, var(--black) 40%, var(--dark-green) 100%);
+}
+
+.hero__content {
+  max-width: 720px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.15rem;
+}
+
+.hero__eyebrow,
+.hero__title,
+.hero__text,
+.hero__proof,
+.hero__actions {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--ease-default), transform 0.7s var(--ease-default);
+}
+
+.hero.is-loaded .hero__eyebrow {
+  transition-delay: 0.05s;
+}
+
+.hero.is-loaded .hero__title {
+  transition-delay: 0.16s;
+}
+
+.hero.is-loaded .hero__text {
+  transition-delay: 0.27s;
+}
+
+.hero.is-loaded .hero__proof {
+  transition-delay: 0.38s;
+}
+
+.hero.is-loaded .hero__actions {
+  transition-delay: 0.49s;
+}
+
+.hero.is-loaded .hero__eyebrow,
+.hero.is-loaded .hero__title,
+.hero.is-loaded .hero__text,
+.hero.is-loaded .hero__proof,
+.hero.is-loaded .hero__actions {
+  opacity: 1;
+  transform: none;
+}
+
+.hero__eyebrow {
+  color: var(--light-green);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.hero__title {
+  font-size: clamp(2.25rem, 6.5vw, 4.25rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+
+.hero__text {
+  color: #838383;
+  max-width: 560px;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+.hero__text strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.hero__proof {
+  color: var(--light-green);
+  font-weight: 500;
+  max-width: 480px;
+}
+
+.hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero__visual {
+  position: relative;
+  max-width: 900px;
+  margin: clamp(1.25rem, 3vw, 2rem) auto 0;
+  /* Recorta os celulares nas laterais e alinha a base deles ao fim do gradiente. */
+  overflow: hidden;
+  border-radius: clamp(20px, 3vw, 32px);
+}
+
+.hero__panel {
+  width: 100%;
+  aspect-ratio: 900 / 440;
+  border-radius: clamp(20px, 3vw, 32px);
+  background: transparent;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.7s var(--ease-default), transform 0.7s var(--ease-default);
+}
+
+.hero.is-loaded .hero__panel {
+  transition-delay: 0.45s;
+  opacity: 1;
+  transform: none;
+}
+
+/*
+  Ancorado por `bottom: 0`: a base do SVG encosta exatamente no fim do
+  gradiente, sem folga. A entrada sobe 50px a partir daí e o parallax é
+  só horizontal, para o encaixe nunca sair do lugar.
+*/
+.hero__phones-wrap {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 78%;
+  max-width: 640px;
+  transform: translate(-50%, 50px);
+  opacity: 0;
+  transition: opacity 0.8s var(--ease-default), transform 0.8s var(--ease-default);
+  will-change: transform;
+}
+
+.hero.is-loaded .hero__phones-wrap {
+  transition-delay: 0.55s;
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.hero__phones-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 720px) {
+  .hero__phones-wrap {
+    width: 92%;
+    max-width: 420px;
+  }
+
+  .hero__actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__phones-wrap {
+    transform: translate(-50%, 0) !important;
+  }
+}

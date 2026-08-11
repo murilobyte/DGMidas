@@ -1,0 +1,261 @@
+.tech {
+  background-color: var(--black);
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+.tech__header {
+  max-width: 620px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.tech__title,
+.tech__desc {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.6s var(--ease-default), transform 0.6s var(--ease-default);
+}
+
+.tech__title.in-view,
+.tech__desc.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+.tech__desc.in-view {
+  transition-delay: 0.08s;
+}
+
+.tech__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--white);
+}
+
+.tech__desc {
+  margin-top: 1rem;
+  color: #838383;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.tech__desc strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.tech__timeline {
+  position: relative;
+  max-width: 900px;
+  margin: clamp(3rem, 8vw, 5rem) auto 0;
+  padding-inline: var(--section-padding-x);
+}
+
+.tech__line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  transform: translateX(-50%);
+  background-color: rgba(217, 217, 217, 0.12);
+}
+
+/* Animados por transform (compositor), nunca por height/top. */
+.tech__line-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--orange);
+  transform: scaleY(0);
+  transform-origin: top;
+  will-change: transform;
+}
+
+.tech__marker {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  transform: translate(-50%, -50%);
+  background-color: var(--orange);
+  border-radius: 2px;
+  box-shadow: 0 0 12px 2px rgba(224, 104, 25, 0.55),
+    0 0 28px 6px rgba(224, 104, 25, 0.25);
+  will-change: transform;
+}
+
+/* Pulso contínuo, como um sinal transmitindo. */
+.tech__marker::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 1px solid var(--orange);
+  border-radius: 4px;
+  animation: marker-pulse 2.4s var(--ease-default) infinite;
+  pointer-events: none;
+}
+
+@keyframes marker-pulse {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(2.4);
+  }
+}
+
+.tech__list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: clamp(2rem, 6vw, 4.5rem);
+}
+
+.tech__item {
+  grid-column: 2;
+  padding-block: clamp(3rem, 8vw, 5.5rem);
+  text-align: left;
+}
+
+.tech__item--left {
+  grid-column: 1;
+  text-align: right;
+}
+
+.tech__item:nth-child(1) {
+  grid-row: 1;
+}
+
+.tech__item:nth-child(2) {
+  grid-row: 2;
+}
+
+.tech__item:nth-child(3) {
+  grid-row: 3;
+}
+
+.tech__item:nth-child(4) {
+  grid-row: 4;
+}
+
+.tech__item:nth-child(5) {
+  grid-row: 5;
+}
+
+.tech__item:nth-child(6) {
+  grid-row: 6;
+}
+
+.tech__item-title {
+  font-size: clamp(1.25rem, 2.1vw, 1.55rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #3a3a3a;
+  opacity: 0.6;
+  transform: translateY(8px);
+  transition: color 0.4s var(--ease-default), opacity 0.4s var(--ease-default),
+    transform 0.4s var(--ease-default);
+}
+
+.tech__item-text {
+  margin-top: 0.6rem;
+  max-width: 34ch;
+  font-size: clamp(0.9rem, 1.35vw, 1.05rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #2e2e2e;
+  opacity: 0.5;
+  transform: translateY(8px);
+  transition: color 0.4s var(--ease-default), opacity 0.4s var(--ease-default),
+    transform 0.4s var(--ease-default);
+}
+
+/* Nos itens da esquerda a caixa encosta na linha central, não na borda. */
+.tech__item--left .tech__item-text {
+  margin-left: auto;
+}
+
+.tech__item.is-active .tech__item-title {
+  color: var(--white);
+  opacity: 0.85;
+  transform: none;
+}
+
+.tech__item.is-active .tech__item-text {
+  color: var(--gray);
+  opacity: 0.75;
+  transform: none;
+}
+
+.tech__item.is-current .tech__item-title {
+  opacity: 1;
+}
+
+.tech__item.is-current .tech__item-text {
+  opacity: 1;
+}
+
+/*
+  Fica fora da .tech__timeline de propósito: dentro dela, a altura extra
+  faria a linha de progresso continuar depois do último item.
+  A entrada anima o wrapper, e não o botão, para não disputar o
+  `transform` com o hover.
+*/
+.tech__cta {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  padding-inline: var(--section-padding-x);
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s var(--ease-default), transform 0.6s var(--ease-default);
+}
+
+.tech__cta.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+@media (max-width: 720px) {
+  .tech__line {
+    left: 28px;
+    transform: none;
+  }
+
+  .tech__marker {
+    left: 29px; /* centro da linha de 2px que começa em 28px */
+  }
+
+  .tech__list {
+    grid-template-columns: 1fr;
+    padding-left: 60px;
+  }
+
+  .tech__item,
+  .tech__item--left {
+    grid-column: 1;
+    text-align: left;
+  }
+
+  .tech__item--left .tech__item-text {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tech__item-title,
+  .tech__item-text {
+    transition: color 0.2s, opacity 0.2s;
+    transform: none;
+  }
+
+  .tech__marker::after {
+    animation: none;
+  }
+}

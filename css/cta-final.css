@@ -1,0 +1,78 @@
+.cta-final {
+  background: linear-gradient(180deg, var(--black) 0%, var(--dark-green) 100%);
+  padding-block: clamp(5rem, 12vw, 8rem);
+  text-align: center;
+}
+
+.cta-final__inner {
+  max-width: 640px;
+  margin-inline: auto;
+}
+
+/* A entrada anima o wrapper .cta-final__action, e não o botão, para o
+   `transform` do hover não ser sobrescrito pela regra .in-view. */
+.cta-final__title,
+.cta-final__text,
+.cta-final__action {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s var(--ease-default), transform 0.6s var(--ease-default);
+}
+
+.cta-final__title.in-view,
+.cta-final__text.in-view,
+.cta-final__action.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+.cta-final__text.in-view {
+  transition-delay: 0.1s;
+}
+
+.cta-final__action.in-view {
+  transition-delay: 0.2s;
+}
+
+.cta-final__title {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--white);
+}
+
+.cta-final__text {
+  margin-top: 1rem;
+  color: var(--gray);
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.cta-final__text strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.cta-final__action {
+  margin-top: 2rem;
+}
+
+.cta-final__btn {
+  padding: 1.1rem 2.75rem;
+  font-size: 1.05rem;
+}
+
+.cta-final__btn:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.cta-final__btn:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-final__btn:hover,
+  .cta-final__btn:active {
+    transform: none;
+  }
+}

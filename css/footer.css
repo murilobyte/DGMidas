@@ -1,0 +1,91 @@
+.site-footer {
+  --footer-radius: clamp(32px, 4vw, 72px);
+  position: relative;
+  z-index: 1;
+  /*
+    Sobe sobre o fim da CTA: sem isso as curvas revelariam o fundo do body
+    (#0E0E0E), praticamente igual ao preto do footer, e sumiriam.
+  */
+  margin-top: calc(var(--footer-radius) * -1);
+  background-color: var(--absolute-black);
+  border-radius: var(--footer-radius) var(--footer-radius) 0 0;
+  padding-block: clamp(3.5rem, 9vw, 8rem) clamp(1.5rem, 2.5vw, 2.5rem);
+  overflow: hidden;
+}
+
+.site-footer__inner {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.site-footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.site-footer__col--right {
+  text-align: right;
+  align-items: flex-end;
+}
+
+.site-footer__heading {
+  color: var(--white);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.15rem;
+}
+
+/* Todas as informações em #313131 — só o título "Contato" fica em branco. */
+.site-footer__link {
+  color: #313131;
+  font-size: 0.95rem;
+  transition: color var(--duration-default) var(--ease-default);
+}
+
+.site-footer__link:hover {
+  color: var(--white);
+}
+
+.site-footer__address,
+.site-footer__cnpj {
+  color: #313131;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Logo grande: mesma linha de recuo das demais seções (section-inset). */
+.site-footer__brand {
+  margin-top: clamp(3rem, 11vw, 10rem);
+}
+
+.site-footer__logo {
+  width: min(66%, 950px);
+  height: auto;
+  opacity: 0.1;
+}
+
+.site-footer__copy {
+  margin-top: clamp(1.75rem, 4.5vw, 4rem);
+  text-align: center;
+  color: #313131;
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .site-footer__inner {
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .site-footer__col--right {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .site-footer__logo {
+    width: 100%;
+  }
+}

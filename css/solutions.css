@@ -1,0 +1,238 @@
+.solutions {
+  background-color: var(--black);
+  /* Sem padding no topo: o respiro acima vem do padding da faixa de logos,
+     mantendo-a centralizada entre a hero e este painel. */
+  padding-block: 0 clamp(3rem, 8vw, 6rem);
+}
+
+.solutions__panel {
+  border-radius: clamp(24px, 3vw, 40px);
+  background: linear-gradient(180deg, var(--dark-green) 0%, var(--black) 68%);
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 3.5rem);
+}
+
+.solutions__header {
+  max-width: 620px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+/* A entrada anima o wrapper .solutions__cta, e não o botão, para o
+   `transform` do hover não ser sobrescrito pela regra .in-view. */
+.solutions__title,
+.solutions__subtitle,
+.solutions__cta {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s var(--ease-default), transform 0.6s var(--ease-default);
+}
+
+.solutions__title.in-view,
+.solutions__subtitle.in-view,
+.solutions__cta.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+.solutions__subtitle.in-view {
+  transition-delay: 0.08s;
+}
+
+.solutions__cta.in-view {
+  transition-delay: 0.16s;
+}
+
+.solutions__title {
+  font-size: clamp(2rem, 4.5vw, 2.75rem);
+  font-weight: 800;
+  color: var(--white);
+}
+
+.solutions__subtitle {
+  margin-top: 1rem;
+  color: var(--gray);
+  line-height: 1.5;
+  font-weight: 600;
+}
+
+.solutions__cta {
+  margin-top: 2rem;
+}
+
+.solutions__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2vw, 1.5rem);
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: #161616;
+  border-radius: clamp(16px, 2vw, 22px);
+  padding: clamp(1.5rem, 3vw, 2rem);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s var(--ease-default), transform 0.6s var(--ease-default);
+}
+
+.card.in-view {
+  opacity: 1;
+  transform: none;
+}
+
+.card:nth-child(2).in-view {
+  transition-delay: 0.08s;
+}
+
+.card:nth-child(3).in-view {
+  transition-delay: 0.16s;
+}
+
+.card:nth-child(4).in-view {
+  transition-delay: 0.24s;
+}
+
+.card:nth-child(5).in-view {
+  transition-delay: 0.32s;
+}
+
+.card:nth-child(6).in-view {
+  transition-delay: 0.4s;
+}
+
+.card__icon {
+  align-self: flex-end;
+  display: inline-flex;
+  color: var(--light-green);
+  margin-bottom: clamp(2rem, 5vw, 3rem);
+}
+
+.card__icon svg {
+  width: 34px;
+  height: 34px;
+}
+
+.card__icon svg path {
+  fill: currentColor;
+}
+
+.card:hover .card__icon--message svg {
+  animation: icon-pulse 0.6s var(--ease-default);
+}
+
+.card:hover .card__icon--traffic svg {
+  animation: icon-rise 0.6s var(--ease-default);
+}
+
+.card:hover .card__icon--analytics svg {
+  animation: icon-search 0.6s var(--ease-default);
+}
+
+.card:hover .card__icon--media svg {
+  animation: icon-spin 0.6s var(--ease-default);
+}
+
+.card:hover .card__icon--crm svg {
+  animation: icon-grow 0.6s var(--ease-default);
+}
+
+.card:hover .card__icon--consulting svg {
+  animation: icon-blink 0.6s var(--ease-default);
+}
+
+.card__title {
+  color: var(--white);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.card__text {
+  margin-top: 0.75rem;
+  color: var(--gray);
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+
+@keyframes icon-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+@keyframes icon-rise {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes icon-search {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(-8deg) scale(1.05);
+  }
+  75% {
+    transform: rotate(8deg) scale(1.05);
+  }
+}
+
+@keyframes icon-spin {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(18deg);
+  }
+}
+
+@keyframes icon-grow {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.15);
+  }
+}
+
+@keyframes icon-blink {
+  0%, 100% {
+    transform: scaleY(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.6);
+    opacity: 0.7;
+  }
+}
+
+@media (max-width: 960px) {
+  .solutions__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .solutions__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card__title {
+    font-size: 1.2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card:hover .card__icon svg {
+    animation: none;
+  }
+}
