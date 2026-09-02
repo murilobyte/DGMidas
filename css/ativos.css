@@ -26,6 +26,14 @@
   --panel: #161616;
   /* Off-white morno dos dois blocos claros. Leitura minha da captura —
      se o valor da marca for outro, trocar só aqui. */
+  /*
+     A hero tem 200svh, mas o fechamento termina por volta de 70% do
+     curso. Sem compensar isso sobravam ~430px de preto rolando sem
+     nada acontecendo antes do próximo texto entrar. Este recuo puxa o
+     bloco seguinte para cima, então ele chega justamente quando as
+     colunas acabam de fechar.
+  */
+  --hero-tail: 50svh;
   --light: #f5f2ed;
   --ink: #0e0e0e;
   --ink-muted: #4a4a4a;
@@ -88,8 +96,22 @@ html {
 /* ---------------------------------------------------------------- */
 
 .intro {
+  /*
+    `position: relative` + z-index não são decoração: a .hero é
+    posicionada, então sem isto ela pintaria por cima deste bloco em vez
+    de ser coberta por ele.
+  */
+  position: relative;
+  z-index: 1;
+  margin-top: calc(-1 * var(--hero-tail));
   background-color: var(--absolute-black);
   padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+/* Sem animação de fechamento a hero volta a ter uma tela só e não há
+   cauda para compensar. */
+.hero--static + .intro {
+  margin-top: 0;
 }
 
 .intro__inner {
@@ -163,6 +185,7 @@ html {
   X e fica centrado na altura da linha, independentemente do tamanho da
   descrição.
 */
+
 .catalog__row {
   display: grid;
   grid-template-columns: minmax(150px, 0.9fr) minmax(0, 2fr) auto;

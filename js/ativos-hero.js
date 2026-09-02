@@ -238,6 +238,16 @@
           { scaleY: 0, transformOrigin: "center", ease: "power2.out", duration: 1 },
           0
         )
+        /*
+         * A grade de pontos some junto com as colunas. Medi a opacidade
+         * dela na referência ao longo do mesmo curso:
+         *
+         *   scroll     0    200    400    600    800   1000   1200
+         *   opacidade  1  0,937  0,747  0,436  0,167  0,025      0
+         *
+         * A curva é power2.inOut — o ajuste bate em todos os pontos.
+         */
+        .to(".hero__pattern", { opacity: 0, ease: "power2.inOut", duration: 1 }, 0)
         /* O texto sai antes das barras terminarem de fechar, como na
            referência: em ~70% do curso ele já sumiu. */
         .to(".hero__content", { opacity: 0, ease: "power1.in", duration: 0.7 }, 0);

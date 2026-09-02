@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="is-loading">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -33,6 +33,7 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/preloader.css" />
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/hero.css" />
     <link rel="stylesheet" href="css/logos.css" />
@@ -43,8 +44,31 @@
     <link rel="stylesheet" href="css/cta-final.css" />
     <link rel="stylesheet" href="css/footer.css" />
     <link rel="stylesheet" href="css/lead-modal.css" />
+    <noscript>
+      <style>
+        .preloader { display: none !important; }
+        .is-loading, .is-loading body { overflow: auto !important; }
+      </style>
+    </noscript>
   </head>
   <body>
+    <!--
+      Preloader. A cortina já nasce no HTML para não haver um piscar de
+      página antes do JS assumir. Quem a remove é js/preloader.js; o
+      <noscript> no <head> cobre o caso de JS desligado e há uma animação
+      de segurança no CSS para o caso de o script não carregar.
+    -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+      <div class="preloader__track">
+        <div class="preloader__line">
+          <span class="preloader__marker">
+            <span class="preloader__dot"></span>
+            <span class="preloader__pct">0%</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
     <header class="site-header" id="site-header">
       <div class="container header__inner">
         <a href="#inicio" class="header__logo">
@@ -586,6 +610,7 @@
       </div>
     </div>
 
+    <script src="js/preloader.js"></script>
     <script src="js/main.js"></script>
     <script src="js/header.js"></script>
     <script src="js/hero.js"></script>

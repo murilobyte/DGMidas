@@ -1,0 +1,177 @@
+/*
+  Preloader do site.
+
+  Reproduz a montagem do https://www.sui.io, com as cores da marca. O que
+  medi lá, para referência:
+
+    .intro_map      trilho de 1280px (container) x 73px, centrado na tela
+    .line_progress  cresce de 0 até a largura do trilho
+    .current_percent  fica grudado na ponta direita da linha; tem uma
+                    linha tracejada vertical de fundo e, no topo, um
+                    quadrado de 12px na cor de destaque + a porcentagem
+                    em branco de 16px
+    saída           a cortina desliza para CIMA e sai da tela
+
+  Aqui o azul #298DFF vira o laranja da marca.
+*/
+
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  /* Largura reservada para o marcador — ver .preloader__track. */
+  --marker-w: 60px;
+  background-color: var(--absolute-black);
+  /* O marcador avança para fora do trilho; sem isto ele viraria barra
+     de rolagem horizontal em telas estreitas. */
+  overflow: hidden;
+  /* A saída é um deslize para cima, como na referência. */
+  transform: translateY(0);
+  transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.preloader.is-done {
+  transform: translateY(-100%);
+}
+
+/*
+  Rede de segurança: se o preloader.js não carregar, nada removeria a
+  cortina e o site ficaria inacessível atrás de uma tela preta. Esta
+  animação sobe a cortina sozinha depois de 8s. Quando o JS funciona ele
+  termina muito antes e a animação nunca chega a ser vista.
+
+  (Para JS desligado existe o <noscript> no <head> de cada página, que
+  esconde o preloader de imediato.)
+*/
+@keyframes preloader-failsafe {
+  to {
+    transform: translateY(-100%);
+    visibility: hidden;
+  }
+}
+
+.preloader {
+  animation: preloader-failsafe 0.9s cubic-bezier(0.76, 0, 0.24, 1) 8s forwards;
+}
+
+/* Trava a rolagem enquanto a cortina está no ar. */
+.is-loading,
+.is-loading body {
+  overflow: hidden;
+}
+
+/*
+  O marcador fica FORA do trilho (left: 100%), então quem precisa caber
+  na tela é o conjunto trilho + marcador, não só o trilho. A
+  `margin-right` reserva a largura do marcador e faz o grid centrar o
+  conjunto inteiro — sem ela o número "100%" era cortado em toda largura
+  abaixo de ~1440px.
+*/
+.preloader__track {
+  position: relative;
+  width: min(1280px, calc(100% - 2 * var(--section-padding-x) - var(--marker-w)));
+  margin-right: var(--marker-w);
+  height: 73px;
+}
+
+/*
+  A linha de progresso. O que cresce é a largura; a "cometa" clara fica
+  presa na ponta direita porque o background tem tamanho fixo e
+  `background-position: right`. Sem isso o gradiente esticaria junto com
+  a barra e perderia o ponto de luz da referência.
+*/
+.preloader__line {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 10px;
+  background-image: linear-gradient(
+    90deg,
+    rgba(224, 104, 25, 0) 0%,
+    #7a3a10 32%,
+    var(--orange) 74%,
+    #ffffff 100%
+  );
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: 220px 100%;
+}
+
+/*
+  Marcador grudado na ponta da linha, ocupando a altura toda do trilho.
+  `left: 100%` e não `right: 0`: na referência o quadrado e o número
+  ficam DEPOIS da ponta da barra, não sobre ela.
+*/
+.preloader__marker {
+  position: absolute;
+  left: 100%;
+  bottom: 0;
+  height: 73px;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* A tracejada vertical que liga o número à barra. */
+.preloader__marker::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 20px;
+  bottom: 12px;
+  width: 1px;
+  background-image: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.5) 0 3px,
+    rgba(255, 255, 255, 0) 3px 7px
+  );
+}
+
+.preloader__dot {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  background-color: var(--orange);
+}
+
+.preloader__pct {
+  color: var(--white);
+  font-size: 1rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  /* Sem isto o número "empurra" o layout ao passar de 9% para 10%. */
+  min-width: 3.2ch;
+}
+
+@media (max-width: 640px) {
+  .preloader__track {
+    height: 56px;
+  }
+
+  .preloader__marker {
+    height: 56px;
+  }
+
+  .preloader__pct {
+    font-size: 0.875rem;
+  }
+}
+
+/*
+  Menos movimento: sem deslize. A cortina só some — e o JS já encurta a
+  contagem, então ela sai quase de imediato.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .preloader {
+    transition: opacity 0.2s linear;
+    animation: none;
+  }
+
+  .preloader.is-done {
+    transform: none;
+    opacity: 0;
+  }
+}
