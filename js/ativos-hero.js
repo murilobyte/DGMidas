@@ -1,35 +1,40 @@
 /*
- * Animação da hero de /ativos.
+ * Hero de /ativos — barras verticais com gradiente e grade de pontos.
  *
- * A entrada reproduz o que o sui.io/ai faz de fato — verifiquei o CSS
- * computado ao vivo, não fui pelo que o briefing descrevia:
+ * Tudo aqui foi tirado do CSS computado ao vivo do https://www.sui.io/ai,
+ * não da descrição do briefing.
  *
- *   1. as colunas CRESCEM da altura do CSS original (44,44 / 66,67 /
- *      88,89 / 100 svh) para a rampa alta (até 809svh). Como elas são
- *      centradas, crescer empurra as pontas claras do gradiente para
- *      fora da tela — é assim que o miolo escurece e o brilho recua
- *      para as bordas;
- *   2. ao mesmo tempo os dois stops de cada gradiente deslizam:
- *      topo 63%->40% e 100%->90%, base 37%->60% e 0%->10%.
+ * ENTRADA (uma vez, ao carregar)
+ *   As colunas CRESCEM da altura original (44,44 / 66,67 / 88,89 /
+ *   100 svh) para a rampa alta. Como são centradas na vertical, crescer
+ *   empurra as pontas claras do gradiente para fora da tela: é assim que
+ *   o miolo escurece e o brilho recua para as bordas. Ao mesmo tempo os
+ *   dois stops deslizam — topo 63%->40% e 100%->90%, base 37%->60% e
+ *   0%->10%.
  *
- * NÃO existe loop de respiração contínua no site de referência: medi os
- * valores por 6s parado e por todo o scroll do hero, e eles não mudam
- * depois da entrada. Por isso não implementei um aqui.
+ * FECHAMENTO (preso ao scroll)
+ *   Medi as alturas das colunas ao longo de toda a rolagem do hero de
+ *   referência:
+ *
+ *     scroll     0    200    400    600    800   1000   1200
+ *     coluna 0  1618  1094   672    352    135     20      0
+ *     coluna 7  7284  4924  3025   1586    608     90      0
+ *
+ *   Duas leituras importantes: a razão entre as colunas fica constante
+ *   (7284/1618 = 4924/1094 = ... = 4,50), ou seja o fator é ÚNICO para
+ *   todas; e a curva é (1-p)^1,93, que é praticamente power2.out.
+ *
+ *   Encolher devolve as pontas claras para dentro da tela, e as colunas
+ *   viram aquele losango simétrico de "onda sonora" antes de sumirem. O
+ *   texto some junto, um pouco antes.
  *
  * Nada disto é necessário para a página ser legível: o CSS já descreve o
- * estado final e toda animação usa `gsap.from()`.
+ * estado final e toda animação de entrada usa `gsap.from()`.
  */
 (function () {
   "use strict";
 
   var BAR_COUNT = 15;
-  var NOISE_SCALE = 3;
-  var NOISE_MAX_EDGE = 420;
-  var NOISE_EVERY = 3;
-  /* Densidade e alpha do grão — ver o comentário em draw(). */
-  var NOISE_DENSITY = 0.2;
-  var NOISE_ALPHA_MIN = 30;
-  var NOISE_ALPHA_RANGE = 40;
 
   /* Alturas iniciais em svh, por índice de coluna (as do CSS original
      da referência). O resto das colunas parte de 100svh. */
@@ -40,12 +45,16 @@
     if (!hero) return;
 
     buildBars(hero.querySelector(".hero__bars"));
+    syncHeaderHeight(hero);
 
+    /* Sem fechamento não há motivo para o trilho extra de rolagem. */
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduced) return;
+    if (reduced || !window.gsap || !window.ScrollTrigger) {
+      hero.classList.add("hero--static");
+    }
 
-    if (window.gsap) initMotion(hero);
-    initNoise(hero);
+    if (reduced || !window.gsap) return;
+    initMotion(hero);
   }
 
   /*
@@ -76,6 +85,35 @@
     container.appendChild(frag);
   }
 
+  /*
+   * A camada presa começa logo abaixo do header, então precisa saber a
+   * altura dele. O CSS tem um fallback de 80px para o caso de este
+   * script não rodar.
+   */
+  function syncHeaderHeight(hero) {
+    var header = document.getElementById("site-header");
+    if (!header) return;
+
+    var apply = function () {
+      hero.style.setProperty("--hd", header.offsetHeight + "px");
+    };
+
+    apply();
+
+    var timer = 0;
+    window.addEventListener(
+      "resize",
+      function () {
+        window.clearTimeout(timer);
+        timer = window.setTimeout(function () {
+          apply();
+          if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+        }, 150);
+      },
+      { passive: true }
+    );
+  }
+
   /* 1svh em pixels. Medido de verdade, porque em iOS o svh difere do
      innerHeight enquanto a barra do navegador está recolhida. */
   function svhToPx() {
@@ -94,39 +132,38 @@
     var ctx = gsap.context(function () {
       var bars = gsap.utils.toArray(".bar");
 
-      var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      /* ---------- entrada ---------- */
+      var intro = gsap.timeline({ defaults: { ease: "power3.out" } });
 
       /*
-       * As colunas crescem e o brilho recua para as bordas.
-       *
        * A referência anima `height` de verdade. Aqui é scaleY, por um
        * motivo medido: animar a altura de 15 elementos de milhares de
-       * pixels dispara layout a cada frame, e o Lighthouse contabilizou
-       * CLS 2.25 (15 layout shifts). scaleY roda no compositor e dá CLS
-       * zero.
+       * pixels dispara layout a cada frame, e o Lighthouse acusou
+       * CLS 2,25. scaleY roda no compositor e dá CLS zero.
        *
        * O resultado na tela é idêntico: o gradiente é background-image,
-       * então ele escala junto com a caixa — uma coluna de altura H com
-       * stops em % e scaleY(k) desenha exatamente o mesmo que uma coluna
-       * de altura H*k.
+       * então escala junto com a caixa — uma coluna de altura H com
+       * stops em % e scaleY(k) desenha o mesmo que uma coluna de altura
+       * H*k.
        *
        * A razão vem da altura real já calculada pelo CSS, então continua
        * correta se --ramp mudar ou no breakpoint do mobile.
        */
-      tl.from(
-        bars,
-        {
-          scaleY: function (i, el) {
-            var finalH = el.getBoundingClientRect().height;
-            if (!finalH) return 1;
-            return ((START_SVH[i] || 100) * unit) / finalH;
+      intro
+        .from(
+          bars,
+          {
+            scaleY: function (i, el) {
+              var finalH = el.getBoundingClientRect().height;
+              if (!finalH) return 1;
+              return ((START_SVH[i] || 100) * unit) / finalH;
+            },
+            transformOrigin: "center",
+            duration: 1.1,
+            stagger: { each: 0.03, from: "center" },
           },
-          transformOrigin: "center",
-          duration: 1.1,
-          stagger: { each: 0.03, from: "center" },
-        },
-        0
-      )
+          0
+        )
         .from(".hero__bars", { opacity: 0, duration: 0.6, ease: "none" }, 0)
         .from(
           ".bar__top",
@@ -166,22 +203,23 @@
 
       /* Aba em segundo plano não precisa animar. */
       document.addEventListener("visibilitychange", function () {
-        if (document.hidden) tl.pause();
-        else tl.resume();
+        if (document.hidden) intro.pause();
+        else intro.resume();
       });
 
+      /* ---------- fechamento preso ao scroll ---------- */
       if (!window.ScrollTrigger) return;
       gsap.registerPlugin(window.ScrollTrigger);
 
       /*
-       * Reação ao scroll: só a opacidade do conjunto.
+       * O scaleY do fechamento vai no CONTÊINER, não em cada coluna.
+       * Dois motivos: é o que a medição mostra (fator único para todas
+       * as colunas, razões constantes entre elas), e evita que este
+       * tween e o da entrada disputem a mesma propriedade no mesmo
+       * elemento se o usuário rolar durante a abertura.
        *
-       * No site de referência as colunas NÃO se mexem com o scroll —
-       * amostrei os valores ao longo de todo o hero e eles ficam
-       * congelados. Um scrub de scaleY por coluna, como o briefing
-       * pedia, também brigaria com o scaleY da entrada pela mesma
-       * propriedade. Opacidade não transforma nada, não custa layout e
-       * mantém a saída suave para a próxima seção.
+       * start/end cobrem exatamente o curso em que .hero__sticky fica
+       * presa: o trilho tem 100svh a mais que a camada.
        */
       gsap
         .timeline({
@@ -191,11 +229,18 @@
                DESCENDENTES dele e nunca resolveria. */
             trigger: hero,
             start: "top top",
-            end: "bottom top",
-            scrub: 0.6,
+            end: "bottom bottom",
+            scrub: 0.4,
           },
         })
-        .to(".hero__bars", { opacity: 0.25 }, 0);
+        .to(
+          ".hero__bars",
+          { scaleY: 0, transformOrigin: "center", ease: "power2.out", duration: 1 },
+          0
+        )
+        /* O texto sai antes das barras terminarem de fechar, como na
+           referência: em ~70% do curso ele já sumiu. */
+        .to(".hero__content", { opacity: 0, ease: "power1.in", duration: 0.7 }, 0);
     }, hero);
 
     window.DGAtivosHero = {
@@ -203,114 +248,6 @@
         ctx.revert();
       },
     };
-  }
-
-  /*
-   * Grão de filme. Desenhado em resolução reduzida e esticado pelo CSS —
-   * um ImageData em tamanho real seria alguns megabytes por frame.
-   * O loop só roda com a hero visível e a aba ativa.
-   */
-  function initNoise(hero) {
-    var canvas = hero.querySelector(".hero__noise");
-    if (!canvas || !canvas.getContext) return;
-
-    var ctx2d = canvas.getContext("2d", { alpha: true });
-    if (!ctx2d) return;
-
-    var imageData = null;
-    var buffer32 = null;
-    var frame = 0;
-    var rafId = 0;
-    var visible = false;
-
-    function resize() {
-      var rect = hero.getBoundingClientRect();
-      var w = Math.max(1, Math.min(NOISE_MAX_EDGE, Math.ceil(rect.width / NOISE_SCALE)));
-      var h = Math.max(1, Math.min(NOISE_MAX_EDGE, Math.ceil(rect.height / NOISE_SCALE)));
-
-      if (canvas.width === w && canvas.height === h) return;
-
-      canvas.width = w;
-      canvas.height = h;
-      imageData = ctx2d.createImageData(w, h);
-      /* Uma escrita de 32 bits por pixel em vez de quatro de 8: é o que
-         mantém o custo do grão irrelevante no perfil. */
-      buffer32 = new Uint32Array(imageData.data.buffer);
-    }
-
-    function draw() {
-      if (!buffer32) return;
-
-      /*
-       * Grão ESPARSO e modulado por alpha: a maioria dos pixels fica
-       * totalmente transparente e uns 20% recebem um ponto claro fraco.
-       *
-       * A referência usa um canvas cinza opaco com mix-blend-mode:
-       * soft-light. Isso é elegante mas frágil: onde o blend não é
-       * aplicado (rasterização por software, por exemplo) a camada vira
-       * um lençol cinza de 50% por cima da página inteira e destrói o
-       * preto do miolo — foi exatamente o que aconteceu aqui na primeira
-       * tentativa. Com alpha esparso o pior caso é um véu de ~4/255, que
-       * ninguém enxerga, e o resultado com blend continua sendo grão.
-       */
-      for (var i = 0; i < buffer32.length; i++) {
-        var a =
-          Math.random() < NOISE_DENSITY
-            ? NOISE_ALPHA_MIN + ((Math.random() * NOISE_ALPHA_RANGE) | 0)
-            : 0;
-        /* Little-endian: 0xAABBGGRR — branco com alpha variável. */
-        buffer32[i] = (a << 24) | 0x00ffffff;
-      }
-
-      ctx2d.putImageData(imageData, 0, 0);
-    }
-
-    function loop() {
-      rafId = window.requestAnimationFrame(loop);
-      if (frame++ % NOISE_EVERY === 0) draw();
-    }
-
-    function start() {
-      if (rafId || !visible || document.hidden) return;
-      resize();
-      loop();
-    }
-
-    function stop() {
-      if (!rafId) return;
-      window.cancelAnimationFrame(rafId);
-      rafId = 0;
-    }
-
-    var io = new IntersectionObserver(
-      function (entries) {
-        visible = entries[0].isIntersecting;
-        if (visible) start();
-        else stop();
-      },
-      { threshold: 0 }
-    );
-    io.observe(hero);
-
-    document.addEventListener("visibilitychange", function () {
-      if (document.hidden) stop();
-      else start();
-    });
-
-    var resizeTimer = 0;
-    window.addEventListener(
-      "resize",
-      function () {
-        window.clearTimeout(resizeTimer);
-        resizeTimer = window.setTimeout(function () {
-          resize();
-          if (rafId) draw();
-        }, 150);
-      },
-      { passive: true }
-    );
-
-    resize();
   }
 
   document.addEventListener("DOMContentLoaded", initHeroBars);

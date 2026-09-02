@@ -52,11 +52,41 @@
   initial-value: 0%;
 }
 
+/*
+  A seção é só o TRILHO: ela tem o dobro da altura útil e não desenha
+  nada. Quem desenha é .hero__sticky, que fica presa no topo enquanto o
+  trilho passa — os ~100svh de sobra são exatamente o curso de rolagem
+  da animação de fechamento.
+
+  IMPORTANTE: nada de `overflow: hidden` aqui. Um ancestral com overflow
+  recortado vira o contêiner de rolagem do sticky e o `position: sticky`
+  deixa de grudar na viewport. O recorte mora na camada presa.
+
+  --hd é a altura do header, medida em js/ativos-hero.js. Sem JS o
+  fallback de 80px mantém o enquadramento próximo do certo.
+*/
 .hero {
   --ramp: 62svh;
+  --hd: 80px;
   position: relative;
-  min-height: 100svh;
+  height: calc(200svh - var(--hd));
   background: var(--absolute-black);
+}
+
+/*
+  Sem animação de fechamento (usuário pediu menos movimento, ou o GSAP
+  não carregou) o trilho extra viraria ~100svh de rolagem sem nada
+  acontecendo. Nesse caso a seção encolhe para uma tela só. Quem aplica
+  a classe é js/ativos-hero.js.
+*/
+.hero--static {
+  height: calc(100svh - var(--hd));
+}
+
+.hero__sticky {
+  position: sticky;
+  top: var(--hd);
+  height: calc(100svh - var(--hd));
   overflow: hidden;
   /* Contexto de empilhamento próprio: as colunas medem vários milhares
      de pixels e não podem vazar para o header nem para a seção seguinte. */
@@ -65,7 +95,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-block: clamp(5rem, 14vh, 9rem);
+  padding-block: clamp(2rem, 6vh, 4rem);
 }
 
 .hero__bg {
@@ -163,31 +193,7 @@
   image-rendering: pixelated;
 }
 
-/*
-  Grão de filme.
-
-  A referência usa soft-light a 50% sobre um canvas cinza opaco. Aqui o
-  canvas é transparente com pontos claros esparsos (ver draw() em
-  js/ativos-hero.js), então o blend é um ganho, não uma dependência: se
-  ele não for aplicado, o pior caso é um véu de ~4/255 em vez de um
-  lençol cinza cobrindo a página.
-*/
-.hero__noise {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  opacity: 0.4;
-  mix-blend-mode: overlay;
-}
-
-/*
-  Conteúdo. Na v1 o bloco eyebrow + headline fica no centro e a linha de
-  apoio desce quase até o rodapé da hero. O `margin-top: auto` na nota
-  empurra ela para baixo dentro do flex, sem posicionamento absoluto e
-  sem quebrar a altura da seção.
-*/
+/* Eyebrow, headline e a linha de apoio, tudo no mesmo bloco centrado. */
 .hero__content {
   position: relative;
   z-index: 2;
@@ -234,14 +240,10 @@
   display: block;
 }
 
+/* Centralizada junto com o resto do bloco, logo abaixo da headline. */
 .hero__note {
-  position: relative;
-  z-index: 2;
-  margin-top: auto;
-  padding-top: clamp(3rem, 13vh, 8rem);
-  padding-inline: var(--section-padding-x);
+  margin-top: 0.75rem;
   max-width: 440px;
-  text-align: center;
   color: rgba(255, 255, 255, 0.82);
   font-size: 0.9375rem;
   line-height: 1.6;
@@ -259,10 +261,3 @@
   .bar:nth-child(1), .bar:nth-child(6) { --d: 5; }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  /* O grão animado é a única camada sem estado final útil parado: sem
-     loop vira um chuvisco fixo. Melhor sumir. */
-  .hero__noise {
-    display: none;
-  }
-}

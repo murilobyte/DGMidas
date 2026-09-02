@@ -35,22 +35,27 @@
   }
 
   /*
-   * O flutuante só entra depois que a hero sai de cena: na primeira
-   * dobra ele competiria com o CTA principal, que está logo ali.
+   * O flutuante só entra depois da hero: na primeira dobra ele
+   * competiria com o CTA principal, que está logo ali.
+   *
+   * O gatilho é a chegada do bloco seguinte, e não a saída da hero, de
+   * propósito: a hero tem 200svh (o trilho da animação de fechamento),
+   * então esperar ela sair inteira seguraria o botão por duas telas
+   * inteiras de rolagem.
    */
   function initFloatingButton() {
     var float = document.querySelector(".wa-float");
-    var hero = document.querySelector(".hero");
-    if (!float || !hero) return;
+    var next = document.querySelector(".intro");
+    if (!float || !next) return;
 
     var io = new IntersectionObserver(
       function (entries) {
-        float.classList.toggle("is-visible", !entries[0].isIntersecting);
+        float.classList.toggle("is-visible", entries[0].isIntersecting);
       },
       { threshold: 0 }
     );
 
-    io.observe(hero);
+    io.observe(next);
   }
 
   /*

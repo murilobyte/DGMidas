@@ -103,32 +103,39 @@
       <!-- ============================================================
            HERO
            ============================================================ -->
+      <!--
+        A seção tem o DOBRO da altura da tela e prende uma camada de
+        100svh dentro dela (.hero__sticky) — mesma montagem do
+        sui.io/ai. É esse trecho a mais de rolagem que dá espaço para a
+        animação de fechamento acontecer com a hero parada na tela.
+      -->
       <section class="hero" id="topo">
-        <!--
-          Fundo decorativo. As 15 colunas são criadas por
-          js/ativos-hero.js — ver o comentário lá sobre por que não
-          moram no HTML.
-        -->
-        <div class="hero__bg" aria-hidden="true">
-          <div class="hero__bars"></div>
-          <div class="hero__pattern"></div>
-          <canvas class="hero__noise"></canvas>
+        <div class="hero__sticky">
+          <!--
+            Fundo decorativo. As 15 colunas são criadas por
+            js/ativos-hero.js — ver o comentário lá sobre por que não
+            moram no HTML.
+          -->
+          <div class="hero__bg" aria-hidden="true">
+            <div class="hero__bars"></div>
+            <div class="hero__pattern"></div>
+          </div>
+
+          <div class="hero__content">
+            <p class="hero__eyebrow">Ativos para tráfego pago</p>
+
+            <h1 class="hero__title">
+              <span class="hero__line"><span class="hero__line-inner">Sua operação de anúncios</span></span>
+              <span class="hero__line"><span class="hero__line-inner">não pode parar</span></span>
+            </h1>
+
+            <!-- v1 -->
+            <p class="hero__note">
+              Todos os ativos que sua empresa precisa para anunciar, prontos
+              para rodar hoje
+            </p>
+          </div>
         </div>
-
-        <div class="hero__content">
-          <p class="hero__eyebrow">Ativos para tráfego pago</p>
-
-          <h1 class="hero__title">
-            <span class="hero__line"><span class="hero__line-inner">Sua operação de anúncios</span></span>
-            <span class="hero__line"><span class="hero__line-inner">não pode parar</span></span>
-          </h1>
-        </div>
-
-        <!-- v1 -->
-        <p class="hero__note">
-          Todos os ativos que sua empresa precisa para anunciar, prontos para
-          rodar hoje
-        </p>
       </section>
 
       <!-- ============================================================
@@ -172,15 +179,12 @@
               A operação para, o faturamento para junto, e o suporte da
               plataforma responde com um artigo de ajuda genérico.
             </p>
-            <!--
-              [X] segundo parágrafo. Na v1 ele falava de: abrir o
-              gerenciador e a estrutura não rodar mais sem explicação, o
-              fornecedor sumir, montar do zero custar uma semana entre
-              verificação e aquecimento, e o mais barato sair mais caro.
-              A captura não estava legível o bastante para transcrever
-              palavra por palavra — colar aqui o original.
-            -->
-            <p data-animate>[X]</p>
+            <p data-animate>Você abre o gerenciador e a estrutura não roda mais, 
+              sem explicação. O fornecedor que vendeu o ativo some. Montar tudo do 
+              zero custa uma semana entre verificação, configuração e aquecimento, e 
+              procurar o mais barato sai mais caro ainda, porque ativo sem configuração, 
+              sem histórico e sem garantia cobra a conta depois.
+Nós existimos para que nada disso seja problema seu.</p>
           </div>
         </div>
       </section>
