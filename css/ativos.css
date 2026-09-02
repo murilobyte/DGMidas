@@ -6,38 +6,40 @@
   .site-footer, .faq__item — e não pode alterar como elas se comportam
   na home.
 
+  A página alterna blocos escuros e blocos claros, como na captura de
+  referência:
+    hero (preto) -> intro (preto) -> dor (preto) -> catálogo (grafite)
+    -> suporte (CLARO) -> faixa laranja -> faq (preto)
+    -> cta final (CLARO) -> rodapé (preto)
+
   Ritmo vertical: uma escala só, --sec-y. Nenhum padding de seção
   fora dela.
 */
 
 .page-ativos {
-  --sec-y: clamp(5rem, 10vw, 9rem);
+  --sec-y: clamp(4.5rem, 9vw, 8rem);
   --line: rgba(255, 255, 255, 0.08);
   --line-strong: rgba(255, 255, 255, 0.16);
-  /* Piso de contraste do corpo de texto: 0.78 sobre preto passa AA com
+  /* Piso de contraste do corpo de texto sobre preto: 0.78 passa AA com
      folga em 16px. O cinza #838383 da home reprovava no mobile. */
   --muted: rgba(255, 255, 255, 0.78);
-  --panel: #111111;
+  --panel: #161616;
+  /* Off-white morno dos dois blocos claros. Leitura minha da captura —
+     se o valor da marca for outro, trocar só aqui. */
+  --light: #f5f2ed;
+  --ink: #0e0e0e;
+  --ink-muted: #4a4a4a;
   background-color: var(--absolute-black);
 }
 
-/*
-  Âncoras precisam limpar a barra superior + o header, não só o header.
-  Quem rola é o <html>, então o scroll-padding tem de morar nele — em
-  .page-ativos (o <body>) a propriedade não teria efeito. Sobrescreve os
-  96px de css/header.css porque esta folha carrega depois, e só nesta
-  página.
-*/
+/* Quem rola é o <html>, então o scroll-padding tem de morar nele — em
+   .page-ativos (o <body>) a propriedade não teria efeito. */
 html {
-  scroll-padding-top: 132px;
+  scroll-padding-top: 96px;
 }
 
 .section {
   padding-block: var(--sec-y);
-}
-
-.section--panel {
-  background-color: var(--panel);
 }
 
 .section__head {
@@ -47,28 +49,23 @@ html {
 }
 
 .section__title {
-  font-size: clamp(2rem, 5vw, 3.25rem);
-  font-weight: 800;
-  line-height: 1.1;
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.18;
   letter-spacing: -0.02em;
   color: var(--white);
-  text-wrap: balance;
+  text-align: center;
 }
 
 .section__lead {
   margin-top: 1.25rem;
   color: var(--muted);
-  font-size: 1.0625rem;
+  font-size: 1rem;
   line-height: 1.7;
 }
 
-.section__lead strong {
-  color: var(--white);
-  font-weight: 700;
-}
-
-/* Entrada padrão das seções — o observador de [data-animate] do main.js
-   é quem adiciona .in-view. */
+/* Entrada padrão — o observador de [data-animate] do main.js é quem
+   adiciona .in-view. */
 [data-animate] {
   opacity: 0;
   transform: translateY(18px);
@@ -80,119 +77,57 @@ html {
   transform: none;
 }
 
-/* ---------------------------------------------------------------- */
-/* Barra superior de confiança + header                              */
-/* ---------------------------------------------------------------- */
-
-/*
-  A barra e o header grudam juntos, como um bloco só. Empilhar dois
-  `position: sticky; top: 0` faria um cobrir o outro; por isso quem gruda
-  é o wrapper, e o .site-header volta a `relative` (que o menu mobile
-  precisa, porque ele se posiciona por `absolute; top: 100%`).
-*/
-.topstack {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
+/* O header fica sobre o preto da hero, sem barra de confiança acima —
+   a v1 não tem essa barra. */
 .page-ativos .site-header {
-  position: relative;
-}
-
-.topbar {
   background-color: var(--absolute-black);
-  border-bottom: 1px solid var(--line);
-  font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.82);
 }
 
-.topbar__inner {
+/* ---------------------------------------------------------------- */
+/* Subheadline + CTAs                                                */
+/* ---------------------------------------------------------------- */
+
+.intro {
+  background-color: var(--absolute-black);
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+.intro__inner {
+  max-width: 620px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.intro__text {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.intro__text strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.intro__actions {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 0.25rem 1.5rem;
-  padding-block: 0.6rem;
-  text-align: center;
-}
-
-.topbar__item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  white-space: nowrap;
-}
-
-.topbar__item svg {
-  width: 14px;
-  height: 14px;
-  flex-shrink: 0;
-  fill: var(--orange);
-}
-
-@media (max-width: 560px) {
-  .topbar {
-    font-size: 0.75rem;
-  }
-
-  .topbar__inner {
-    gap: 0.2rem 0.9rem;
-  }
-}
-
-/* ---------------------------------------------------------------- */
-/* Faixa de números                                                  */
-/* ---------------------------------------------------------------- */
-
-.stats {
-  background-color: var(--absolute-black);
-  border-block: 1px solid var(--line);
-  padding-block: clamp(2.5rem, 6vw, 4rem);
-}
-
-.stats__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(1.5rem, 4vw, 2.5rem);
-  text-align: center;
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.35rem;
-}
-
-.stat__number {
-  font-size: clamp(1.75rem, 4vw, 2.75rem);
-  font-weight: 800;
-  line-height: 1;
-  color: var(--orange);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.stat__label {
-  color: var(--muted);
-  font-size: 0.9375rem;
-  line-height: 1.4;
-  text-wrap: balance;
-}
-
-@media (max-width: 760px) {
-  .stats__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  gap: 1rem;
+  margin-top: 2.25rem;
 }
 
 /* ---------------------------------------------------------------- */
 /* Dor do comprador                                                  */
 /* ---------------------------------------------------------------- */
 
+.pain {
+  background-color: var(--absolute-black);
+}
+
 .pain__body {
-  max-width: 720px;
+  max-width: 640px;
   margin: clamp(2rem, 5vw, 3rem) auto 0;
   display: flex;
   flex-direction: column;
@@ -201,7 +136,7 @@ html {
 
 .pain__body p {
   color: var(--muted);
-  font-size: 1.0625rem;
+  font-size: 1rem;
   line-height: 1.75;
   text-align: center;
 }
@@ -210,23 +145,27 @@ html {
 /* Catálogo                                                          */
 /* ---------------------------------------------------------------- */
 
+.catalog {
+  background-color: var(--panel);
+}
+
 .catalog__list {
   margin-top: clamp(2.5rem, 6vw, 4rem);
   border-top: 1px solid var(--line);
 }
 
 /*
-  Linhas, não cards em grade — foi o formato que já funcionava na v1 e é
-  o que escala para cinco produtos sem virar parede de texto.
+  Linhas, não cards em grade — é o formato da referência e o que escala
+  para cinco produtos sem virar parede de texto.
 
-  A grade de 3 colunas com largura fixa nas laterais é o que garante o
-  pedido de "botões alinhados": em todas as linhas o CTA começa na mesma
-  coordenada X e fica centrado na altura da linha, independentemente do
-  tamanho da descrição.
+  A grade de 3 colunas com largura fixa nas laterais é o que mantém os
+  CTAs alinhados: em todas as linhas o botão começa na mesma coordenada
+  X e fica centrado na altura da linha, independentemente do tamanho da
+  descrição.
 */
 .catalog__row {
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr) auto;
+  grid-template-columns: minmax(150px, 0.9fr) minmax(0, 2fr) auto;
   align-items: center;
   gap: clamp(1.5rem, 4vw, 3rem);
   padding-block: clamp(1.75rem, 4vw, 2.5rem);
@@ -239,9 +178,9 @@ html {
 }
 
 .catalog__name {
-  font-size: clamp(1.5rem, 3vw, 2.125rem);
-  font-weight: 700;
-  line-height: 1.1;
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  font-weight: 400;
+  line-height: 1.15;
   letter-spacing: -0.01em;
   color: var(--white);
 }
@@ -254,7 +193,7 @@ html {
 
 .catalog__desc {
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   line-height: 1.6;
 }
 
@@ -262,11 +201,6 @@ html {
   color: rgba(255, 255, 255, 0.72);
   font-size: 0.9375rem;
   line-height: 1.6;
-}
-
-.catalog__for b {
-  color: var(--white);
-  font-weight: 600;
 }
 
 .catalog__cta {
@@ -286,103 +220,13 @@ html {
 }
 
 /* ---------------------------------------------------------------- */
-/* Garantia — seção de destaque                                      */
+/* Suporte — bloco claro                                             */
 /* ---------------------------------------------------------------- */
 
-.warranty {
-  background-color: var(--absolute-black);
-  padding-block: var(--sec-y);
+.support {
+  background-color: var(--light);
+  color: var(--ink);
 }
-
-/*
-  O painel usa a assinatura visual do site: bloco recuado, cantos
-  arredondados e gradiente laranja saindo do topo. É o argumento mais
-  forte da página, então é o único bloco com cor de fundo própria.
-*/
-.warranty__panel {
-  position: relative;
-  overflow: hidden;
-  border-radius: clamp(24px, 3vw, 40px);
-  border: 1px solid var(--line-strong);
-  background: linear-gradient(180deg, rgba(224, 104, 25, 0.22) 0%, var(--panel) 55%);
-  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 3.5rem);
-}
-
-.warranty__head {
-  max-width: 640px;
-  margin-inline: auto;
-  text-align: center;
-}
-
-.warranty__eyebrow {
-  color: var(--orange);
-  font-weight: 600;
-  font-size: 0.9375rem;
-  margin-bottom: 0.75rem;
-}
-
-.warranty__steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1rem, 2.5vw, 1.75rem);
-  margin-top: clamp(2.5rem, 6vw, 3.5rem);
-}
-
-.warranty__step {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: clamp(1.5rem, 3vw, 2rem);
-  border-radius: 20px;
-  border: 1px solid var(--line);
-  background-color: rgba(0, 0, 0, 0.35);
-}
-
-.warranty__num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background-color: var(--orange);
-  color: var(--white);
-  font-size: 0.9375rem;
-  font-weight: 700;
-}
-
-.warranty__step-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--white);
-}
-
-.warranty__step-text {
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-.warranty__foot {
-  margin-top: clamp(2rem, 5vw, 3rem);
-  text-align: center;
-}
-
-.warranty__note {
-  margin-top: 1rem;
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 0.9375rem;
-}
-
-@media (max-width: 860px) {
-  .warranty__steps {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ---------------------------------------------------------------- */
-/* Suporte                                                           */
-/* ---------------------------------------------------------------- */
 
 .support__inner {
   display: grid;
@@ -392,23 +236,23 @@ html {
 }
 
 .support__title {
-  font-size: clamp(2rem, 4.5vw, 3rem);
-  font-weight: 800;
+  font-size: clamp(1.9rem, 4vw, 2.75rem);
+  font-weight: 700;
   line-height: 1.1;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .support__subtitle {
-  margin-top: 1.25rem;
-  font-size: 1.125rem;
+  margin-top: 1.5rem;
+  font-size: 1rem;
   font-weight: 700;
-  color: var(--white);
+  color: var(--ink);
 }
 
 .support__text {
   margin-top: 1rem;
-  color: var(--muted);
-  font-size: 1.0625rem;
+  color: var(--ink-muted);
+  font-size: 1rem;
   line-height: 1.7;
 }
 
@@ -417,10 +261,10 @@ html {
 }
 
 .support__media {
-  border-radius: clamp(20px, 3vw, 32px);
+  border-radius: clamp(16px, 2vw, 24px);
   overflow: hidden;
-  /* Trava a proporção antes de a imagem baixar — é o que impede o
-     salto de layout (CLS) nesta seção. */
+  /* Trava a proporção antes de a imagem baixar — é o que impede o salto
+     de layout (CLS) nesta seção. */
   aspect-ratio: 4 / 3;
 }
 
@@ -445,195 +289,37 @@ html {
 }
 
 /* ---------------------------------------------------------------- */
-/* Como funciona a compra — timeline                                 */
-/* ---------------------------------------------------------------- */
-
-.steps__list {
-  max-width: 820px;
-  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
-  display: flex;
-  flex-direction: column;
-}
-
-.steps__item {
-  position: relative;
-  display: grid;
-  grid-template-columns: 56px 1fr;
-  gap: clamp(1rem, 3vw, 2rem);
-  padding-bottom: clamp(2rem, 4vw, 2.75rem);
-}
-
-.steps__item:last-child {
-  padding-bottom: 0;
-}
-
-/* A linha da timeline é um ::before da bolinha, esticado até o próximo
-   passo. O último item não desenha nada. */
-.steps__marker {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 1px solid var(--line-strong);
-  background-color: var(--panel);
-  color: var(--orange);
-  font-size: 1.125rem;
-  font-weight: 800;
-}
-
-.steps__item:not(:last-child) .steps__marker::before {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 1px;
-  height: calc(100% + clamp(2rem, 4vw, 2.75rem));
-  transform: translateX(-50%);
-  background: linear-gradient(180deg, var(--line-strong), rgba(255, 255, 255, 0.02));
-}
-
-.steps__body {
-  padding-top: 0.75rem;
-}
-
-.steps__title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--white);
-}
-
-.steps__text {
-  margin-top: 0.5rem;
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.7;
-}
-
-/* ---------------------------------------------------------------- */
-/* Prova social                                                      */
+/* Faixa laranja de transição                                        */
 /* ---------------------------------------------------------------- */
 
 /*
-  Carrossel por scroll-snap: rola com o dedo, com a roda e com as setas
-  do teclado sem uma linha de JS de arrasto. Os botões só empurram o
-  scrollLeft.
+  Liga o bloco claro do suporte ao preto do FAQ. A mesma grade de
+  pontos da hero por cima, para a faixa não ficar um degradê liso no
+  meio de uma página que é toda texturizada.
 */
-.social__viewport {
-  margin-top: clamp(2.5rem, 6vw, 3.5rem);
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  /* Espaço para o anel de foco do slide não ser cortado no scroll. */
-  padding: 4px;
+.orange-band {
+  position: relative;
+  height: clamp(120px, 16vw, 220px);
+  background: linear-gradient(
+    180deg,
+    var(--orange) 0%,
+    #8a3f10 52%,
+    var(--absolute-black) 100%
+  );
 }
 
-.social__viewport::-webkit-scrollbar {
-  display: none;
-}
-
-.social__track {
-  display: flex;
-  gap: clamp(1rem, 2.5vw, 1.5rem);
-}
-
-.social__card {
-  flex: 0 0 min(420px, 82%);
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  padding: clamp(1.5rem, 3vw, 2rem);
-  border-radius: 20px;
-  border: 1px solid var(--line);
-  background-color: var(--panel);
-}
-
-.social__quote {
-  color: var(--muted);
-  font-size: 1.0625rem;
-  line-height: 1.7;
-}
-
-/* Slot para o print do WhatsApp. Enquanto não houver imagem, o próprio
-   contorno tracejado mostra onde ela entra. */
-.social__shot {
-  margin-top: auto;
-  border-radius: 14px;
-  border: 1px dashed var(--line-strong);
-  background-color: rgba(0, 0, 0, 0.4);
-  aspect-ratio: 4 / 3;
-  display: grid;
-  place-items: center;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  text-align: center;
-  padding: 1rem;
-  overflow: hidden;
-}
-
-.social__shot img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.social__author {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.social__name {
-  font-weight: 700;
-  color: var(--white);
-  font-size: 1rem;
-}
-
-.social__role {
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 0.875rem;
-}
-
-.social__nav {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 2rem;
-}
-
-.social__arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  border: 1px solid var(--line-strong);
-  color: var(--white);
-  transition: background-color var(--duration-default) var(--ease-default),
-    opacity var(--duration-default) var(--ease-default);
-}
-
-.social__arrow:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.08);
-}
-
-.social__arrow:disabled {
-  opacity: 0.35;
-  cursor: default;
-}
-
-.social__arrow svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
+.orange-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../assets/hero-grid.png");
+  background-repeat: repeat;
+  background-size: 14px 14px;
+  image-rendering: pixelated;
 }
 
 /* ---------------------------------------------------------------- */
-/* FAQ (variante escura)                                             */
+/* FAQ (variante escura, duas colunas)                               */
 /* ---------------------------------------------------------------- */
 
 /*
@@ -641,19 +327,21 @@ html {
   herdar o acordeão de js/faq.js sem duplicar JS. O visual é escrito do
   zero aqui — css/faq.css (painel branco da home) não é carregado nesta
   página, então não há conflito.
-
-  Layout em duas colunas: título fixo à esquerda, lista à direita.
 */
+.faq--dark {
+  background-color: var(--absolute-black);
+}
+
 .faq--dark .faq__inner {
   display: grid;
   grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr);
-  gap: clamp(2rem, 6vw, 4.5rem);
+  gap: clamp(2rem, 6vw, 5rem);
   align-items: start;
 }
 
 .faq--dark .faq__title {
   font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1;
   letter-spacing: -0.02em;
   color: var(--white);
@@ -661,8 +349,8 @@ html {
 
 .faq--dark .faq__intro {
   margin-top: 1rem;
-  color: var(--muted);
-  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.875rem;
   line-height: 1.6;
 }
 
@@ -685,10 +373,10 @@ html {
   align-items: center;
   gap: 1rem;
   width: 100%;
-  padding-block: 1.4rem;
+  padding-block: 1.35rem;
   text-align: left;
-  font-size: 1.0625rem;
-  font-weight: 600;
+  font-size: 0.9375rem;
+  font-weight: 400;
   color: var(--white);
   transition: color var(--duration-default) var(--ease-default);
 }
@@ -698,15 +386,15 @@ html {
 }
 
 .faq--dark .faq__index {
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
 }
 
 .faq--dark .faq__icon {
   position: relative;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   flex-shrink: 0;
 }
 
@@ -759,9 +447,9 @@ html {
 }
 
 .faq--dark .faq__answer-text {
-  padding: 0 3rem 1.5rem;
+  padding: 0 3rem 1.4rem;
   color: var(--muted);
-  font-size: 1rem;
+  font-size: 0.9375rem;
   line-height: 1.7;
 }
 
@@ -777,102 +465,36 @@ html {
   .faq--dark .faq__question {
     grid-template-columns: 1.75rem 1fr auto;
     gap: 0.75rem;
-    font-size: 1rem;
   }
 }
 
 /* ---------------------------------------------------------------- */
-/* Venda cruzada                                                     */
-/* ---------------------------------------------------------------- */
-
-.cross__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1rem, 2.5vw, 1.75rem);
-  margin-top: clamp(2.5rem, 6vw, 3.5rem);
-}
-
-.cross__card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.85rem;
-  padding: clamp(1.75rem, 3vw, 2.25rem);
-  border-radius: 20px;
-  border: 1px solid var(--line);
-  background-color: rgba(255, 255, 255, 0.02);
-  transition: border-color var(--duration-default) var(--ease-default),
-    transform var(--duration-default) var(--ease-default);
-}
-
-.cross__card:hover {
-  border-color: var(--line-strong);
-  transform: translateY(-3px);
-}
-
-.cross__icon {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background-color: rgba(224, 104, 25, 0.14);
-}
-
-.cross__icon svg {
-  width: 20px;
-  height: 20px;
-  fill: var(--orange);
-}
-
-.cross__title {
-  font-size: 1.1875rem;
-  font-weight: 700;
-  color: var(--white);
-}
-
-.cross__text {
-  color: var(--muted);
-  font-size: 1rem;
-  line-height: 1.65;
-}
-
-.cross__link {
-  margin-top: auto;
-  padding-top: 0.5rem;
-  color: var(--orange);
-  font-size: 0.9375rem;
-  font-weight: 600;
-}
-
-.cross__link:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 860px) {
-  .cross__grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cross__card:hover {
-    transform: none;
-  }
-}
-
-/* ---------------------------------------------------------------- */
-/* CTA final                                                         */
+/* CTA final — bloco claro                                           */
 /* ---------------------------------------------------------------- */
 
 .closing {
-  background: linear-gradient(180deg, var(--absolute-black) 0%, rgba(224, 104, 25, 0.16) 100%);
-  padding-block: var(--sec-y);
+  background-color: var(--light);
   text-align: center;
 }
 
 .closing__inner {
-  max-width: 720px;
+  max-width: 760px;
   margin-inline: auto;
+}
+
+.closing__title {
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.closing__text {
+  margin-top: 1.5rem;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.7;
 }
 
 .closing__actions {
@@ -884,7 +506,20 @@ html {
   margin-top: 2.25rem;
 }
 
+/* O .btn--secondary do site é branco a 8% — invisível sobre o bloco
+   claro. Aqui ele vira um contorno escuro. */
+.closing .btn--secondary {
+  background-color: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(14, 14, 14, 0.25);
+}
+
+.closing .btn--secondary:hover {
+  background-color: rgba(14, 14, 14, 0.06);
+}
+
 @media (max-width: 560px) {
+  .intro__actions,
   .closing__actions {
     flex-direction: column;
     width: 100%;
@@ -892,6 +527,7 @@ html {
     margin-inline: auto;
   }
 
+  .intro__actions .btn,
   .closing__actions .btn {
     width: 100%;
   }
@@ -976,10 +612,7 @@ html {
   2. Nome acessível dos botões. O efeito cascata de js/main.js quebra o
      rótulo em um <span> por letra e o .btn__char-inner é `display:
      block` — cada letra vira uma caixa de bloco, então o texto visível
-     é computado como "V\ne\nr\n..." e deixa de bater com o aria-label
-     ("Ver catálogo de ativos"). O axe reprova por label/name mismatch,
-     que é justamente o que quebra comando de voz.
-
+     é computado como "V\ne\nr\n..." e deixa de bater com o aria-label.
      `inline-block` mantém a animação (transform funciona igual, e o
      overflow do .btn__char continua recortando) e devolve o rótulo a
      uma linha só para quem lê a página.

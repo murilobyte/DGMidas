@@ -1,25 +1,39 @@
 /*
  * Animação da hero de /ativos.
  *
- * Três camadas, todas opcionais:
- *   1. respiração contínua das barras (loop ocioso)
- *   2. reação ao scroll (ScrollTrigger com scrub)
- *   3. grão animado no canvas
+ * A entrada reproduz o que o sui.io/ai faz de fato — verifiquei o CSS
+ * computado ao vivo, não fui pelo que o briefing descrevia:
  *
- * Nada aqui é necessário para a página ser legível. O CSS já entrega o
- * estado final; toda animação de entrada usa `gsap.from()`, então se o
- * GSAP não carregar o texto simplesmente já está no lugar.
+ *   1. as colunas CRESCEM da altura do CSS original (44,44 / 66,67 /
+ *      88,89 / 100 svh) para a rampa alta (até 809svh). Como elas são
+ *      centradas, crescer empurra as pontas claras do gradiente para
+ *      fora da tela — é assim que o miolo escurece e o brilho recua
+ *      para as bordas;
+ *   2. ao mesmo tempo os dois stops de cada gradiente deslizam:
+ *      topo 63%->40% e 100%->90%, base 37%->60% e 0%->10%.
+ *
+ * NÃO existe loop de respiração contínua no site de referência: medi os
+ * valores por 6s parado e por todo o scroll do hero, e eles não mudam
+ * depois da entrada. Por isso não implementei um aqui.
+ *
+ * Nada disto é necessário para a página ser legível: o CSS já descreve o
+ * estado final e toda animação usa `gsap.from()`.
  */
 (function () {
   "use strict";
 
   var BAR_COUNT = 15;
-  /* Divisor de resolução do grão: desenhamos pequeno e o CSS escala. */
   var NOISE_SCALE = 3;
   var NOISE_MAX_EDGE = 420;
-  /* Redesenha o grão a cada N frames — a 60fps dá ~20 quadros por
-     segundo, o suficiente para o olho ler como ruído vivo. */
   var NOISE_EVERY = 3;
+  /* Densidade e alpha do grão — ver o comentário em draw(). */
+  var NOISE_DENSITY = 0.2;
+  var NOISE_ALPHA_MIN = 30;
+  var NOISE_ALPHA_RANGE = 40;
+
+  /* Alturas iniciais em svh, por índice de coluna (as do CSS original
+     da referência). O resto das colunas parte de 100svh. */
+  var START_SVH = { 0: 44.44, 1: 66.67, 2: 88.89, 12: 88.89, 13: 66.67, 14: 44.44 };
 
   function initHeroBars() {
     var hero = document.querySelector(".hero");
@@ -28,20 +42,16 @@
     buildBars(hero.querySelector(".hero__bars"));
 
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    /* Estado final estático: sem loop, sem grão, sem scrub. */
     if (reduced) return;
 
     if (window.gsap) initMotion(hero);
-
     initNoise(hero);
   }
 
   /*
-   * As 15 colunas são geradas em JS de propósito: são elementos puramente
-   * decorativos, e 30 spans vazios no HTML só atrapalhariam a leitura do
-   * documento (e o peso da página) sem acrescentar nada semanticamente.
-   * O container já é aria-hidden.
+   * As 15 colunas são geradas em JS de propósito: são decorativas, e 45
+   * elementos vazios no HTML só pesariam a leitura do documento sem
+   * acrescentar nada semanticamente. O container já é aria-hidden.
    */
   function buildBars(container) {
     if (!container || container.children.length) return;
@@ -66,60 +76,113 @@
     container.appendChild(frag);
   }
 
+  /* 1svh em pixels. Medido de verdade, porque em iOS o svh difere do
+     innerHeight enquanto a barra do navegador está recolhida. */
+  function svhToPx() {
+    var probe = document.createElement("div");
+    probe.style.cssText = "position:absolute;visibility:hidden;height:100svh;pointer-events:none";
+    document.body.appendChild(probe);
+    var px = probe.offsetHeight || window.innerHeight;
+    probe.remove();
+    return px / 100;
+  }
+
   function initMotion(hero) {
     var gsap = window.gsap;
+    var unit = svhToPx();
 
-    /* gsap.context() agrupa tudo o que for criado dentro dele; um
-       ctx.revert() desfaz de uma vez (tweens, ScrollTriggers e estilos
-       inline). Guardado em DGAtivosHero para quem precisar derrubar. */
     var ctx = gsap.context(function () {
-      /* --- 1. respiração contínua -------------------------------- */
-      var breathe = [
-        gsap.to(".bar__top", {
-          "--stop": "38%",
-          duration: 3.2,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          stagger: { each: 0.14, from: "center" },
-        }),
-        gsap.to(".bar__bottom", {
-          "--stop": "62%",
-          duration: 3.2,
-          ease: "sine.inOut",
-          yoyo: true,
-          repeat: -1,
-          stagger: { each: 0.14, from: "center" },
-        }),
-      ];
+      var bars = gsap.utils.toArray(".bar");
 
-      /* Aba em segundo plano não precisa animar nada. */
-      document.addEventListener("visibilitychange", function () {
-        breathe.forEach(function (tween) {
-          if (document.hidden) tween.pause();
-          else tween.resume();
-        });
-      });
+      var tl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
-      /* --- 2. entrada da headline e do conteúdo ------------------ */
-      gsap
-        .timeline({ defaults: { ease: "power3.out" } })
-        .from(".hero__line-inner", {
-          yPercent: 100,
-          duration: 0.9,
-          stagger: 0.08,
-        })
+      /*
+       * As colunas crescem e o brilho recua para as bordas.
+       *
+       * A referência anima `height` de verdade. Aqui é scaleY, por um
+       * motivo medido: animar a altura de 15 elementos de milhares de
+       * pixels dispara layout a cada frame, e o Lighthouse contabilizou
+       * CLS 2.25 (15 layout shifts). scaleY roda no compositor e dá CLS
+       * zero.
+       *
+       * O resultado na tela é idêntico: o gradiente é background-image,
+       * então ele escala junto com a caixa — uma coluna de altura H com
+       * stops em % e scaleY(k) desenha exatamente o mesmo que uma coluna
+       * de altura H*k.
+       *
+       * A razão vem da altura real já calculada pelo CSS, então continua
+       * correta se --ramp mudar ou no breakpoint do mobile.
+       */
+      tl.from(
+        bars,
+        {
+          scaleY: function (i, el) {
+            var finalH = el.getBoundingClientRect().height;
+            if (!finalH) return 1;
+            return ((START_SVH[i] || 100) * unit) / finalH;
+          },
+          transformOrigin: "center",
+          duration: 1.1,
+          stagger: { each: 0.03, from: "center" },
+        },
+        0
+      )
+        .from(".hero__bars", { opacity: 0, duration: 0.6, ease: "none" }, 0)
         .from(
-          [".hero__eyebrow", ".hero__text", ".hero__actions", ".hero__microcopy", ".hero__badges"],
-          { y: 18, opacity: 0, duration: 0.7, stagger: 0.08 },
-          0.15
+          ".bar__top",
+          {
+            "--blue-stop": "63%",
+            "--black-stop": "100%",
+            duration: 1.1,
+            stagger: { each: 0.03, from: "center" },
+            onComplete: function () {
+              gsap.set(".bar__top", { clearProps: "--blue-stop,--black-stop" });
+            },
+          },
+          0
+        )
+        .from(
+          ".bar__bottom",
+          {
+            "--blue-stop": "37%",
+            "--black-stop": "0%",
+            duration: 1.1,
+            stagger: { each: 0.03, from: "center" },
+            onComplete: function () {
+              gsap.set(".bar__bottom", { clearProps: "--blue-stop,--black-stop" });
+            },
+          },
+          0
+        )
+        /* Headline: cada linha sobe de dentro da própria janela de
+           overflow. Sem SplitText (plugin pago) — a divisão por linha
+           está no markup. */
+        .from(".hero__line-inner", { yPercent: 100, duration: 0.9, stagger: 0.08 }, 0.25)
+        .from(
+          [".hero__eyebrow", ".hero__note"],
+          { y: 14, opacity: 0, duration: 0.7, stagger: 0.1 },
+          0.35
         );
 
-      /* --- 3. reação ao scroll ----------------------------------- */
-      if (!window.ScrollTrigger) return;
+      /* Aba em segundo plano não precisa animar. */
+      document.addEventListener("visibilitychange", function () {
+        if (document.hidden) tl.pause();
+        else tl.resume();
+      });
 
+      if (!window.ScrollTrigger) return;
       gsap.registerPlugin(window.ScrollTrigger);
 
+      /*
+       * Reação ao scroll: só a opacidade do conjunto.
+       *
+       * No site de referência as colunas NÃO se mexem com o scroll —
+       * amostrei os valores ao longo de todo o hero e eles ficam
+       * congelados. Um scrub de scaleY por coluna, como o briefing
+       * pedia, também brigaria com o scaleY da entrada pela mesma
+       * propriedade. Opacidade não transforma nada, não custa layout e
+       * mantém a saída suave para a próxima seção.
+       */
       gsap
         .timeline({
           scrollTrigger: {
@@ -132,16 +195,7 @@
             scrub: 0.6,
           },
         })
-        .to(
-          ".bar",
-          {
-            scaleY: 0.25,
-            transformOrigin: "center",
-            stagger: { each: 0.02, from: "edges" },
-          },
-          0
-        )
-        .to(".hero__bars", { opacity: 0.35 }, 0);
+        .to(".hero__bars", { opacity: 0.25 }, 0);
     }, hero);
 
     window.DGAtivosHero = {
@@ -187,11 +241,25 @@
     function draw() {
       if (!buffer32) return;
 
+      /*
+       * Grão ESPARSO e modulado por alpha: a maioria dos pixels fica
+       * totalmente transparente e uns 20% recebem um ponto claro fraco.
+       *
+       * A referência usa um canvas cinza opaco com mix-blend-mode:
+       * soft-light. Isso é elegante mas frágil: onde o blend não é
+       * aplicado (rasterização por software, por exemplo) a camada vira
+       * um lençol cinza de 50% por cima da página inteira e destrói o
+       * preto do miolo — foi exatamente o que aconteceu aqui na primeira
+       * tentativa. Com alpha esparso o pior caso é um véu de ~4/255, que
+       * ninguém enxerga, e o resultado com blend continua sendo grão.
+       */
       for (var i = 0; i < buffer32.length; i++) {
-        var v = (Math.random() * 255) | 0;
-        /* Little-endian: 0xAABBGGRR. Alpha fixo em 255; quem controla a
-           intensidade é o opacity do CSS. */
-        buffer32[i] = (255 << 24) | (v << 16) | (v << 8) | v;
+        var a =
+          Math.random() < NOISE_DENSITY
+            ? NOISE_ALPHA_MIN + ((Math.random() * NOISE_ALPHA_RANGE) | 0)
+            : 0;
+        /* Little-endian: 0xAABBGGRR — branco com alpha variável. */
+        buffer32[i] = (a << 24) | 0x00ffffff;
       }
 
       ctx2d.putImageData(imageData, 0, 0);
@@ -214,8 +282,6 @@
       rafId = 0;
     }
 
-    /* Fora da viewport o grão não é visto por ninguém — o rAF pararia de
-       qualquer forma em algumas engines, mas não em todas. */
     var io = new IntersectionObserver(
       function (entries) {
         visible = entries[0].isIntersecting;

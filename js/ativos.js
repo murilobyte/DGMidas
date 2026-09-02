@@ -2,7 +2,6 @@
  * Comportamento da página /ativos:
  *   - liga todos os CTAs ao WhatsApp com a mensagem da sua origem
  *   - botão flutuante que aparece depois da hero
- *   - carrossel de prova social
  *   - JSON-LD de FAQPage gerado a partir do próprio acordeão
  *   - sincroniza o telefone do rodapé com a constante central
  *
@@ -52,45 +51,6 @@
     );
 
     io.observe(hero);
-  }
-
-  /*
-   * Carrossel por scroll-snap: o CSS já faz o arrasto e o encaixe, então
-   * aqui só empurramos o scrollLeft e mantemos o estado das setas.
-   */
-  function initSocialCarousel() {
-    var viewport = document.querySelector(".social__viewport");
-    var prev = document.querySelector('.social__arrow[data-dir="prev"]');
-    var next = document.querySelector('.social__arrow[data-dir="next"]');
-    if (!viewport || !prev || !next) return;
-
-    var card = viewport.querySelector(".social__card");
-
-    function step() {
-      if (!card) return viewport.clientWidth;
-      /* Largura do card + o gap, lido do layout real para não repetir o
-         valor do clamp() do CSS aqui dentro. */
-      var styles = window.getComputedStyle(viewport.querySelector(".social__track"));
-      return card.offsetWidth + (parseFloat(styles.columnGap) || 0);
-    }
-
-    function syncArrows() {
-      var max = viewport.scrollWidth - viewport.clientWidth;
-      prev.disabled = viewport.scrollLeft <= 1;
-      next.disabled = viewport.scrollLeft >= max - 1;
-    }
-
-    prev.addEventListener("click", function () {
-      viewport.scrollBy({ left: -step(), behavior: "smooth" });
-    });
-
-    next.addEventListener("click", function () {
-      viewport.scrollBy({ left: step(), behavior: "smooth" });
-    });
-
-    viewport.addEventListener("scroll", syncArrows, { passive: true });
-    window.addEventListener("resize", syncArrows, { passive: true });
-    syncArrows();
   }
 
   /*
@@ -150,7 +110,6 @@
   document.addEventListener("DOMContentLoaded", function () {
     initWhatsAppLinks();
     initFloatingButton();
-    initSocialCarousel();
     initFaqSchema();
     initPhone();
   });

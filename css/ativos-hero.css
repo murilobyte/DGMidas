@@ -1,43 +1,71 @@
 /*
-  Hero da página /ativos — barras verticais com gradiente, dithering e grão.
+  Hero da página /ativos — barras verticais com gradiente, grade e grão.
 
-  Regra de ouro deste arquivo: o estado que o CSS descreve é o estado FINAL.
-  A animação do GSAP (js/ativos-hero.js) só existe a partir dele, sempre via
-  `gsap.from()`. Se o GSAP não carregar, ou se o usuário pedir menos
-  movimento, a hero continua legível e completa — nada fica invisível
-  esperando um script que talvez nunca rode.
+  ============================================================
+  COMO O EFEITO REALMENTE FUNCIONA
+  ============================================================
+  Extraído do <style> embutido e do CSS computado ao vivo em
+  https://www.sui.io/ai (o próprio site expõe a receita).
+
+  O truque não é escurecer o meio: é a ALTURA das colunas.
+
+  Cada coluna é centrada na vertical e pintada com um gradiente que é
+  CLARO nas duas pontas e transparente no miolo. Quanto mais alta a
+  coluna, mais longe da tela ficam as pontas claras — sobra só o miolo
+  transparente, ou seja, preto.
+
+  Por isso a coluna central é a MAIS ALTA (809svh, ~8x a tela): o brilho
+  dela fica todo fora do enquadramento. E as colunas das pontas são as
+  mais baixas (180svh), então o claro delas cai dentro da tela e acende
+  as bordas esquerda e direita. Daí o desenho característico: preto no
+  centro, laranja nas laterais.
+
+  Foi exatamente isso que eu tinha errado antes — barras de no máximo
+  100svh deixam todo o brilho dentro da tela e lavam a peça inteira.
+
+  A altura final segue uma rampa linear: 89,9svh x (9 - distância do
+  centro). Confere com o site: centro 809svh, ponta 180svh.
+  ============================================================
+
+  Regra de ouro deste arquivo: o estado que o CSS descreve é o estado
+  FINAL. A animação (js/ativos-hero.js) parte dele, sempre via
+  `gsap.from()`. Sem GSAP, ou com prefers-reduced-motion, a hero já
+  nasce no visual correto.
 */
 
 /*
   Registrar as variáveis permite ao navegador interpolá-las como
-  porcentagem de verdade (e não como string), o que deixa o loop de
-  respiração suave mesmo quando o frame atrasa. Sem suporte a @property
+  porcentagem de verdade (e não como string), o que deixa a transição
+  suave mesmo quando o frame atrasa. Sem suporte a @property
   (Safari < 16.4) o GSAP ainda reescreve o valor a cada frame — só perde
   a interpolação nativa.
 */
-@property --stop {
+@property --blue-stop {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 50%;
 }
 
-@property --fade {
+@property --black-stop {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 0%;
 }
 
 .hero {
+  --ramp: 62svh;
   position: relative;
   min-height: 100svh;
   background: var(--absolute-black);
   overflow: hidden;
-  /* Cria um contexto de empilhamento próprio: o mix-blend-mode das camadas
-     de fundo não pode vazar para o header nem para a seção seguinte. */
+  /* Contexto de empilhamento próprio: as colunas medem vários milhares
+     de pixels e não podem vazar para o header nem para a seção seguinte. */
   isolation: isolate;
-  display: grid;
-  place-items: center;
-  padding-block: clamp(4rem, 12vh, 8rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-block: clamp(5rem, 14vh, 9rem);
 }
 
 .hero__bg {
@@ -50,6 +78,10 @@
   position: absolute;
   inset: 0;
   display: flex;
+  flex-direction: row;
+  /* Centrar na vertical é o que faz a altura da coluna virar controle de
+     brilho: a coluna cresce para os dois lados, empurrando as pontas
+     claras para fora da tela em igual medida. */
   align-items: center;
   justify-content: center;
 }
@@ -58,266 +90,178 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100svh;
-  /* O ScrollTrigger anima scaleY; avisar o compositor evita repaint da
-     coluna inteira a cada frame de scroll. */
+  /* A rampa: --ramp x (9 - distância do centro). --d é definido pelos
+     nth-child abaixo.
+
+     --ramp é o ÚNICO botão de ajuste do visual: quanto maior, mais
+     altas ficam as colunas, mais longe da tela vão as pontas claras do
+     gradiente e mais preta fica a peça. 89.9svh é o valor medido no
+     sui.io/ai; valores menores trazem o laranja de volta para o topo e
+     para a base, aproximando do enquadramento da v1. */
+  height: calc((9 - var(--d)) * var(--ramp));
   will-change: transform;
 }
 
 .bar__top,
 .bar__bottom {
-  flex: 1;
+  flex: 1 1 50%;
 }
 
+/*
+  Valores de repouso (= estado final da animação de entrada), lidos do
+  site de referência: topo 40%/90%, base 60%/10%.
+*/
 .bar__top {
-  --stop: 63%;
-  --fade: 100%;
+  --blue-stop: 40%;
+  --black-stop: 90%;
   background-image: linear-gradient(
     var(--white),
-    var(--orange) var(--stop),
-    rgba(0, 0, 0, 0) var(--fade)
+    var(--orange) var(--blue-stop),
+    rgba(0, 0, 0, 0) var(--black-stop)
   );
 }
 
 .bar__bottom {
-  --fade: 0%;
-  --stop: 37%;
+  --black-stop: 10%;
+  --blue-stop: 60%;
   background-image: linear-gradient(
-    rgba(0, 0, 0, 0) var(--fade),
-    var(--orange) var(--stop),
+    rgba(0, 0, 0, 0) var(--black-stop),
+    var(--orange) var(--blue-stop),
     var(--white)
   );
 }
 
-/* Silhueta em montanha: as colunas das pontas são mais baixas, então o
-   miolo — onde fica o texto — é a parte mais alta e mais escura. */
-.bar:nth-child(1),
-.bar:nth-child(15) {
-  height: 44.44svh;
-}
-
-.bar:nth-child(2),
-.bar:nth-child(14) {
-  height: 66.67svh;
-}
-
-.bar:nth-child(3),
-.bar:nth-child(13) {
-  height: 88.89svh;
-}
+/* Distância do centro (a coluna 8 é o centro de 15). */
+.bar:nth-child(8)               { --d: 0; }
+.bar:nth-child(7), .bar:nth-child(9)  { --d: 1; }
+.bar:nth-child(6), .bar:nth-child(10) { --d: 2; }
+.bar:nth-child(5), .bar:nth-child(11) { --d: 3; }
+.bar:nth-child(4), .bar:nth-child(12) { --d: 4; }
+.bar:nth-child(3), .bar:nth-child(13) { --d: 5; }
+.bar:nth-child(2), .bar:nth-child(14) { --d: 6; }
+.bar:nth-child(1), .bar:nth-child(15) { --d: 7; }
 
 /*
-  Padrão de dithering.
+  Grade de pontos.
 
-  DESVIO DOCUMENTADO em relação ao briefing: o briefing previa
-  `img.hero__pattern` com `object-fit: cover`. O tile Bayer gerado
-  (assets/dither-bayer.png) tem 8x8 px e existe para REPETIR — esticado
-  por `cover` viraria um borrão cinza, não um dithering. Por isso a
-  camada é uma div com background repetido e `image-rendering: pixelated`,
-  que preserva a borda dura de cada pixel. Mesmo efeito, um request de
-  215 bytes, sem custo de layout.
+  No site de referência é um PNG de 1440x870 com `object-fit: cover`.
+  Medi o arquivo original: grade de 14px, ponto de 2x2px,
+  rgb(53,57,64) a 87% de alpha. Como o desenho só repete, aqui ele é um
+  tile de 14x14 (82 bytes) com `background-repeat` — mesmo resultado,
+  sem baixar uma imagem de tela cheia.
 
-  O tile foi gerado por script (matriz Bayer 8x8 -> PNG RGBA), não em
-  canvas em runtime: assim não custa JS nenhum e o navegador cacheia.
+  `image-rendering: pixelated` mantém a borda dura do ponto em telas
+  com devicePixelRatio fracionário.
 */
 .hero__pattern {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background-image: url("../assets/dither-bayer.png");
+  background-image: url("../assets/hero-grid.png");
   background-repeat: repeat;
-  background-size: 24px 24px;
+  background-size: 14px 14px;
   image-rendering: pixelated;
-  mix-blend-mode: multiply;
-  opacity: 0.9;
 }
 
 /*
-  Scrim. As colunas são mais bonitas quando queimam bem claro, mas é
-  exatamente no miolo — onde elas ficam mais altas e mais brilhantes —
-  que mora o texto. Este é o único jeito de manter as duas coisas:
-  escurece o centro, deixa as bordas acesas.
+  Grão de filme.
 
-  Vive entre o dithering e o grão de propósito: precisa apagar o
-  padrão também, senão o dithering continuaria marcando por cima da
-  headline.
+  A referência usa soft-light a 50% sobre um canvas cinza opaco. Aqui o
+  canvas é transparente com pontos claros esparsos (ver draw() em
+  js/ativos-hero.js), então o blend é um ganho, não uma dependência: se
+  ele não for aplicado, o pior caso é um véu de ~4/255 em vez de um
+  lençol cinza cobrindo a página.
 */
-.hero__scrim {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 72% 58% at 50% 52%,
-    rgba(0, 0, 0, 0.94) 0%,
-    rgba(0, 0, 0, 0.86) 40%,
-    rgba(0, 0, 0, 0.45) 72%,
-    rgba(0, 0, 0, 0) 100%
-  );
-}
-
 .hero__noise {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  opacity: 0.06;
+  opacity: 0.4;
   mix-blend-mode: overlay;
 }
 
+/*
+  Conteúdo. Na v1 o bloco eyebrow + headline fica no centro e a linha de
+  apoio desce quase até o rodapé da hero. O `margin-top: auto` na nota
+  empurra ela para baixo dentro do flex, sem posicionamento absoluto e
+  sem quebrar a altura da seção.
+*/
 .hero__content {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 780px;
+  max-width: 900px;
   margin-inline: auto;
   padding-inline: var(--section-padding-x);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .hero__eyebrow {
   color: var(--orange);
-  font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: 0.02em;
+  font-weight: 500;
+  font-size: 0.95rem;
 }
 
 .hero__title {
-  font-size: clamp(2.25rem, 6.5vw, 4.25rem);
-  font-weight: 800;
-  line-height: 1.05;
+  font-size: clamp(2.25rem, 5.6vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.12;
   letter-spacing: -0.02em;
   color: var(--white);
-  text-wrap: balance;
 }
 
 /*
   Divisão manual por linha (o SplitText do GSAP é plugin pago). Cada
-  .hero__line é a janela com overflow hidden; o .hero__line-inner é o que
-  sobe. `display: block` nos dois para o translateY funcionar.
+  .hero__line é a janela com overflow hidden; o .hero__line-inner é o
+  que sobe.
 */
 .hero__line {
   display: block;
   overflow: hidden;
   /* Sem o padding a barriga de letras como "ç" e "p" seria cortada pela
      janela do overflow. A margem negativa devolve o espaço ao layout. */
-  padding-bottom: 0.12em;
-  margin-bottom: -0.12em;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
 }
 
 .hero__line-inner {
   display: block;
 }
 
-.hero__text {
-  max-width: 620px;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 1rem;
-  line-height: 1.65;
-}
-
-.hero__text strong {
-  color: var(--white);
-  font-weight: 700;
-}
-
-.hero__actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-.hero__microcopy {
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 0.9rem;
-}
-
-.hero__badges {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-  margin-top: 0.25rem;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 0.9rem;
-  font-weight: 600;
-}
-
-.hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-/* Separador em bolinha entre os selos — decorativo, some no mobile
-   quando os selos empilham. */
-.hero__badge + .hero__badge::before {
-  content: "";
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: var(--orange);
+.hero__note {
+  position: relative;
+  z-index: 2;
+  margin-top: auto;
+  padding-top: clamp(3rem, 13vh, 8rem);
+  padding-inline: var(--section-padding-x);
+  max-width: 440px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
 
 @media (max-width: 767px) {
-  /* Sete colunas bastam na largura do celular; mais que isso vira listra
-     fina e o dithering some. */
-  .bar:nth-child(n + 8) {
+  /* Seis colunas no celular, como na referência. A rampa é recalculada
+     para o centro cair entre as colunas 3 e 4. */
+  .bar:nth-child(n + 7) {
     display: none;
   }
 
-  /* Precisa repetir os seletores nth-child: um `.bar { height }` solto
-     perderia em especificidade para as regras da silhueta lá de cima e
-     as colunas das pontas continuariam baixas. */
-  .bar,
-  .bar:nth-child(1),
-  .bar:nth-child(2),
-  .bar:nth-child(3) {
-    height: 100svh;
-  }
-
-  .hero__actions {
-    flex-direction: column;
-    width: 100%;
-    max-width: 260px;
-  }
-
-  .hero__actions .btn {
-    width: 100%;
-  }
-
-  .hero__badge + .hero__badge::before {
-    display: none;
-  }
-
-  /*
-    No celular o texto ocupa quase toda a altura da hero, então a elipse
-    do scrim deixaria o eyebrow no topo e os selos embaixo sobre a parte
-    mais clara das colunas. Aqui o escurecimento vira uma faixa vertical
-    que cobre todo o bloco de texto e só solta as pontas.
-  */
-  .hero__scrim {
-    background: linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.2) 0%,
-      rgba(0, 0, 0, 0.9) 22%,
-      rgba(0, 0, 0, 0.9) 88%,
-      rgba(0, 0, 0, 0.55) 100%
-    );
-  }
+  .bar:nth-child(3), .bar:nth-child(4) { --d: 0; }
+  .bar:nth-child(2), .bar:nth-child(5) { --d: 2; }
+  .bar:nth-child(1), .bar:nth-child(6) { --d: 5; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  /* O grão animado é a única camada que não tem estado final útil
-     parado: sem loop ele fica um chuvisco fixo. Melhor sumir. */
+  /* O grão animado é a única camada sem estado final útil parado: sem
+     loop vira um chuvisco fixo. Melhor sumir. */
   .hero__noise {
     display: none;
   }

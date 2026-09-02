@@ -41,6 +41,8 @@ window.DGAtivos = (function () {
     google: "Olá! Quero consultar disponibilidade de conta Google Ads.",
     tiktok: "Olá! Quero consultar disponibilidade de conta TikTok Ads.",
     perfis: "Olá! Quero consultar disponibilidade de perfis.",
+    /* Sem seção de garantia na página hoje; a chave fica pronta para
+       quando ela entrar. */
     garantia: "Olá! Tenho uma dúvida sobre a garantia de troca.",
     suporte: "Olá! Preciso de suporte.",
     "cta-final": "Olá! Quero receber disponibilidade e orçamento.",
