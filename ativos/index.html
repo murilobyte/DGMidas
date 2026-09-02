@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      /ativos — PENDÊNCIAS DE COPY  ([X] no corpo da página)
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      Tudo abaixo está marcado com o literal [X] no HTML, cada um
+      com um comentário logo acima explicando o que entra ali.
+      Buscar por "[X]" neste arquivo lista todos.
+
+        1. Garantia — os 3 passos numerados (título + texto de cada)
+        2. Garantia — a linha de condições abaixo dos passos
+        3. Como funciona a compra — os 5 passos (título + texto)
+        4. Prova social — os 3 depoimentos (frase, nome, cargo) e os
+           prints de WhatsApp que entram em cada card
+        5. FAQ — as 9 respostas
+        6. FAQ — as perguntas 7, 8 e 9
+        7. assets/og-ativos.jpg — imagem de compartilhamento própria
+           (a home também aponta para uma og-image.jpg que não existe
+           no repositório)
+
+      TRANSCRITO DA v1 — CONFERIR CONTRA O ARQUIVO DE COPY:
+      os trechos precedidos por um comentário "v1" foram lidos da
+      captura da primeira versão da página, não de um arquivo de
+      texto. O sentido está certo, mas vale conferir palavra por
+      palavra antes de publicar.
+
+      NÃO CARREGA lead-modal.js de propósito: aquele script dá
+      preventDefault em todo botão primário do site para abrir o
+      modal de lead, o que quebraria os links diretos de WhatsApp
+      desta página.
+      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    -->
+
+    <title>Ativos para Tráfego Pago | BMs, Perfis, Google e TikTok | DG Mídias</title>
+    <meta
+      name="description"
+      content="BMs Facebook, perfis, contas Google e TikTok e BM para disparo com limite definido. Entrega configurada, garantia de troca e suporte 24h no WhatsApp."
+    />
+    <meta name="theme-color" content="#0E0E0E" />
+    <link rel="canonical" href="https://www.dgmidias.com/ativos" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="DG Mídias" />
+    <meta property="og:url" content="https://www.dgmidias.com/ativos" />
+    <meta
+      property="og:title"
+      content="Ativos para Tráfego Pago | BMs, Perfis, Google e TikTok | DG Mídias"
+    />
+    <meta
+      property="og:description"
+      content="BMs Facebook, perfis, contas Google e TikTok e BM para disparo com limite definido. Entrega configurada, garantia de troca e suporte 24h no WhatsApp."
+    />
+    <!-- [X] imagem de compartilhamento própria da página (1200x630) -->
+    <meta property="og:image" content="https://www.dgmidias.com/assets/og-ativos.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+
+    <!-- O tile do dithering entra como background da hero: sem preload
+         ele só é pedido depois do CSS, já na primeira dobra. -->
+    <link rel="preload" as="image" href="../assets/dither-bayer.png" />
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/ativos-hero.css" />
+    <link rel="stylesheet" href="../css/ativos.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+  </head>
+
+  <body class="page-ativos">
+    <!-- Barra de confiança + header grudam juntos: ver .topstack em ativos.css -->
+    <div class="topstack">
+      <div class="topbar">
+        <div class="container topbar__inner">
+          <span class="topbar__item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 10.59V6h-2v7.41l4.29 4.3 1.42-1.42z"/></svg>
+            Entrega em até 24 horas
+          </span>
+          <span class="topbar__item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1 3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5zm-1.2 15L7 12.2l1.4-1.4 2.4 2.4 5.4-5.4L17.6 9z"/></svg>
+            Garantia de troca
+          </span>
+          <span class="topbar__item">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-7 12h-2v-2h2zm0-4h-2V6h2z"/></svg>
+            Suporte 24h no WhatsApp
+          </span>
+        </div>
+      </div>
+
+      <header class="site-header" id="site-header">
+        <div class="container header__inner">
+          <a href="../index.html" class="header__logo">
+            <img src="../assets/svg/logo.svg" alt="DG Mídias" width="132" height="29" />
+          </a>
+
+          <nav class="header__nav" id="header-nav">
+            <ul class="header__nav-list">
+              <li><a href="../index.html#inicio" class="header__nav-link">Início</a></li>
+              <li><a href="../index.html#servicos" class="header__nav-link">Serviços</a></li>
+              <li><a href="/ativos" class="header__nav-link" aria-current="page">Ativos</a></li>
+              <li><a href="../index.html#contato" class="header__nav-link">Trabalhe conosco</a></li>
+              <li><a href="../index.html#contato" class="header__nav-link">Contato</a></li>
+            </ul>
+          </nav>
+
+          <div class="header__actions">
+            <a
+              href="https://wa.me/5537998157790"
+              class="btn btn--primary header__cta"
+              data-wa="hero"
+              >Fale conosco</a
+            >
+            <button
+              class="header__burger"
+              id="header-burger"
+              type="button"
+              aria-label="Abrir menu"
+              aria-expanded="false"
+              aria-controls="header-nav"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </header>
+    </div>
+
+    <main>
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           HERO
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="hero" id="topo">
+        <!--
+          Fundo puramente decorativo. As 15 colunas são criadas por
+          js/ativos-hero.js — ver o comentário lá sobre por que não
+          moram no HTML.
+        -->
+        <div class="hero__bg" aria-hidden="true">
+          <div class="hero__bars"></div>
+          <div class="hero__pattern"></div>
+          <div class="hero__scrim"></div>
+          <canvas class="hero__noise"></canvas>
+        </div>
+
+        <div class="hero__content">
+          <p class="hero__eyebrow">Ativos para tráfego pago</p>
+
+          <h1 class="hero__title">
+            <span class="hero__line"><span class="hero__line-inner">Sua operação de anúncios</span></span>
+            <span class="hero__line"><span class="hero__line-inner">não pode parar</span></span>
+          </h1>
+
+          <p class="hero__text">
+            BMs do Facebook, perfis, contas do Google, contas do TikTok e BMs
+            para disparo com limite definido, entregues configurados, com
+            <strong>garantia de troca</strong> e
+            <strong>suporte 24 horas por dia no WhatsApp</strong>. Mais de 5 mil
+            ativos entregues para e-commerces e anunciantes em todo o Brasil.
+          </p>
+
+          <div class="hero__actions">
+            <a
+              href="https://wa.me/5537998157790"
+              class="btn btn--primary"
+              data-wa="hero"
+              >Falar com o time no WhatsApp</a
+            >
+            <a href="#catalogo" class="btn btn--secondary">Ver catálogo de ativos</a>
+          </div>
+
+          <p class="hero__microcopy">Atendimento humano, sem robô. Resposta em minutos.</p>
+
+          <p class="hero__badges">
+            <span class="hero__badge">Entrega em até 24h</span>
+            <span class="hero__badge">Garantia de troca</span>
+            <span class="hero__badge">+5 mil ativos entregues</span>
+          </p>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           FAIXA DE NÚMEROS
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="stats" aria-label="Números da operação">
+        <div class="container stats__grid">
+          <div class="stat" data-animate>
+            <span class="stat__number">+5 mil</span>
+            <span class="stat__label">ativos entregues</span>
+          </div>
+          <div class="stat" data-animate>
+            <span class="stat__number">24h</span>
+            <span class="stat__label">de entrega média</span>
+          </div>
+          <div class="stat" data-animate>
+            <span class="stat__number">24h</span>
+            <span class="stat__label">de suporte</span>
+          </div>
+          <div class="stat" data-animate>
+            <span class="stat__number">Sem custo</span>
+            <span class="stat__label">reposições</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           DOR DO COMPRADOR
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="section pain">
+        <div class="container">
+          <div class="section__head">
+            <h2 class="section__title" data-animate>
+              Quem anuncia sabe: o problema nunca avisa
+            </h2>
+          </div>
+
+          <div class="pain__body">
+            <!-- v1 -->
+            <p data-animate>
+              A operação para, o faturamento para junto, e o suporte da
+              plataforma responde com um artigo de ajuda genérico.
+            </p>
+            <!--
+              [X] segundo parágrafo da dor. Na v1 ele falava de: abrir o
+              gerenciador e a estrutura não rodar mais sem explicação, o
+              fornecedor sumir, montar do zero custar uma semana entre
+              verificação e aquecimento, e o mais barato sair mais caro.
+              O texto da captura não estava legível o bastante para
+              transcrever palavra por palavra — colar aqui o original.
+            -->
+            <p data-animate>[X]</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           CATÁLOGO
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="section section--panel catalog" id="catalogo">
+        <div class="container">
+          <div class="section__head">
+            <h2 class="section__title" data-animate>O que entregamos</h2>
+            <!-- v1 -->
+            <p class="section__lead" data-animate>
+              Todo ativo sai daqui configurado, testado e com garantia. Preços
+              sob consulta, definidos por tipo e disponibilidade.
+            </p>
+          </div>
+
+          <div class="catalog__list">
+            <!-- v1 (as 5 descrições abaixo) -->
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">BMs Facebook</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  Business Managers entregues configuradas e prontas para uso, em
+                  diferentes perfis de limite e verificação, conforme o estágio
+                  da sua operação.
+                </p>
+                <p class="catalog__for">
+                  <b>Ideal para:</b> quem precisa estruturar ou ampliar a
+                  operação de anúncios com rapidez.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="bm-facebook"
+                >Falar com o time</a
+              >
+            </article>
+
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">BM para disparo</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  BM preparada especificamente para operação de mensagens no
+                  WhatsApp, entregue com o limite de disparo já definido e
+                  informado antes da compra.
+                </p>
+                <p class="catalog__for">
+                  <b>Ideal para:</b> quem faz campanhas de recuperação,
+                  reativação de base e ofertas por WhatsApp e precisa saber
+                  exatamente qual volume a estrutura suporta.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="bm-disparo"
+                >Falar com o time</a
+              >
+            </article>
+
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">Contas Google</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  Contas Google Ads entregues configuradas, com meio de pagamento
+                  e estrutura pronta para veiculação.
+                </p>
+                <p class="catalog__for">
+                  <b>Ideal para:</b> quem precisa de estrutura estável para
+                  operar com consistência.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="google"
+                >Falar com o time</a
+              >
+            </article>
+
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">Contas TikTok</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  Contas TikTok Ads entregues configuradas e prontas para
+                  veiculação, com limite e estrutura definida.
+                </p>
+                <p class="catalog__for">
+                  <b>Ideal para:</b> e-commerces que querem abrir o canal de
+                  maior crescimento em criativo de vídeo sem perder tempo na
+                  configuração inicial.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="tiktok"
+                >Falar com o time</a
+              >
+            </article>
+
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">Perfis</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  Perfis entregues com configuração completa e histórico de uso
+                  real, prontos para serem vinculados à sua estrutura.
+                </p>
+                <p class="catalog__for">
+                  <b>Ideal para:</b> quem precisa de estrutura estável para
+                  operar com consistência.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="perfis"
+                >Falar com o time</a
+              >
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           GARANTIA — o argumento mais forte da página
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="warranty" id="garantia">
+        <div class="warranty__panel section-inset">
+          <div class="warranty__head">
+            <p class="warranty__eyebrow" data-animate>Garantia de troca</p>
+            <h2 class="section__title" data-animate>Deu ruim? A gente troca</h2>
+            <!--
+              [X] linha de apoio da garantia: o que ela cobre, em uma
+              frase. Sem prazo nem percentual inventado aqui.
+            -->
+            <p class="section__lead" data-animate>[X]</p>
+          </div>
+
+          <div class="warranty__steps">
+            <!-- [X] passo 1 — título e texto -->
+            <div class="warranty__step" data-animate>
+              <span class="warranty__num">1</span>
+              <h3 class="warranty__step-title">[X]</h3>
+              <p class="warranty__step-text">[X]</p>
+            </div>
+
+            <!-- [X] passo 2 — título e texto -->
+            <div class="warranty__step" data-animate>
+              <span class="warranty__num">2</span>
+              <h3 class="warranty__step-title">[X]</h3>
+              <p class="warranty__step-text">[X]</p>
+            </div>
+
+            <!-- [X] passo 3 — título e texto -->
+            <div class="warranty__step" data-animate>
+              <span class="warranty__num">3</span>
+              <h3 class="warranty__step-title">[X]</h3>
+              <p class="warranty__step-text">[X]</p>
+            </div>
+          </div>
+
+          <div class="warranty__foot" data-animate>
+            <a
+              href="https://wa.me/5537998157790"
+              class="btn btn--primary"
+              data-wa="garantia"
+              >Tirar uma dúvida sobre a garantia</a
+            >
+            <!-- [X] condições e prazo da garantia, em uma linha -->
+            <p class="warranty__note">[X]</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           SUPORTE
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="section section--panel support" id="suporte">
+        <div class="container support__inner">
+          <div class="support__copy">
+            <h2 class="support__title" data-animate>Suporte</h2>
+            <!-- v1 -->
+            <p class="support__subtitle" data-animate>
+              Suporte com gente de verdade, 24 horas por dia
+            </p>
+            <!-- v1 -->
+            <p class="support__text" data-animate>
+              Você não abre chamado, não recebe número de protocolo e não
+              conversa com robô. Chama no WhatsApp e fala com alguém do time que
+              conhece a sua operação, em qualquer horário e qualquer dia da
+              semana.
+            </p>
+            <!-- v1 -->
+            <p class="support__text" data-animate>
+              Resposta em minutos, não em dias úteis. Mesmo atendente,
+              acompanhando seu histórico. Domingo, feriado e madrugada
+              incluídos.
+            </p>
+            <div class="support__cta" data-animate>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--primary"
+                data-wa="suporte"
+                >Chamar no WhatsApp</a
+              >
+            </div>
+          </div>
+
+          <div class="support__media" data-animate>
+            <img
+              src="../assets/suporte.webp"
+              alt="Atendente da DG Mídias, de headset, respondendo clientes pelo computador"
+              width="1100"
+              height="1448"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           COMO FUNCIONA A COMPRA
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="section steps" id="como-funciona">
+        <div class="container">
+          <div class="section__head">
+            <h2 class="section__title" data-animate>Como funciona a compra</h2>
+          </div>
+
+          <!--
+            [X] os 5 passos abaixo. A ordem provável é: contato no
+            WhatsApp -> definição do ativo e do limite -> orçamento e
+            pagamento -> entrega configurada -> acompanhamento e
+            garantia. Substituir título e texto de cada um pelo texto
+            do arquivo de copy.
+          -->
+          <ol class="steps__list">
+            <li class="steps__item" data-animate>
+              <span class="steps__marker" aria-hidden="true">1</span>
+              <div class="steps__body">
+                <h3 class="steps__title">[X]</h3>
+                <p class="steps__text">[X]</p>
+              </div>
+            </li>
+            <li class="steps__item" data-animate>
+              <span class="steps__marker" aria-hidden="true">2</span>
+              <div class="steps__body">
+                <h3 class="steps__title">[X]</h3>
+                <p class="steps__text">[X]</p>
+              </div>
+            </li>
+            <li class="steps__item" data-animate>
+              <span class="steps__marker" aria-hidden="true">3</span>
+              <div class="steps__body">
+                <h3 class="steps__title">[X]</h3>
+                <p class="steps__text">[X]</p>
+              </div>
+            </li>
+            <li class="steps__item" data-animate>
+              <span class="steps__marker" aria-hidden="true">4</span>
+              <div class="steps__body">
+                <h3 class="steps__title">[X]</h3>
+                <p class="steps__text">[X]</p>
+              </div>
+            </li>
+            <li class="steps__item" data-animate>
+              <span class="steps__marker" aria-hidden="true">5</span>
+              <div class="steps__body">
+                <h3 class="steps__title">[X]</h3>
+                <p class="steps__text">[X]</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           PROVA SOCIAL
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="section section--panel social" id="depoimentos">
+        <div class="container">
+          <div class="section__head">
+            <h2 class="section__title" data-animate>Quem já compra com a gente</h2>
+          </div>
+
+          <!--
+            [X] os 3 depoimentos (frase, nome, cargo/empresa) e os prints
+            de WhatsApp. Cada .social__shot é o slot da imagem: trocar o
+            texto interno por
+            <img src="../assets/depoimento-1.webp" alt="..."
+                 width="…" height="…" loading="lazy">
+            Nenhum depoimento foi escrito aqui — nada de frase inventada.
+          -->
+          <div class="social__viewport" role="group" tabindex="0" aria-label="Depoimentos de clientes">
+            <div class="social__track">
+              <figure class="social__card">
+                <blockquote class="social__quote">[X]</blockquote>
+                <div class="social__shot">[X] print do WhatsApp</div>
+                <figcaption class="social__author">
+                  <span class="social__name">[X]</span>
+                  <span class="social__role">[X]</span>
+                </figcaption>
+              </figure>
+
+              <figure class="social__card">
+                <blockquote class="social__quote">[X]</blockquote>
+                <div class="social__shot">[X] print do WhatsApp</div>
+                <figcaption class="social__author">
+                  <span class="social__name">[X]</span>
+                  <span class="social__role">[X]</span>
+                </figcaption>
+              </figure>
+
+              <figure class="social__card">
+                <blockquote class="social__quote">[X]</blockquote>
+                <div class="social__shot">[X] print do WhatsApp</div>
+                <figcaption class="social__author">
+                  <span class="social__name">[X]</span>
+                  <span class="social__role">[X]</span>
+                </figcaption>
+              </figure>
+            </div>
+          </div>
+
+          <div class="social__nav">
+            <button class="social__arrow" type="button" data-dir="prev" aria-label="Depoimento anterior">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6z"/></svg>
+            </button>
+            <button class="social__arrow" type="button" data-dir="next" aria-label="Próximo depoimento">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.6 16.6 10 18l6-6-6-6-1.4 1.4 4.6 4.6z"/></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           FAQ
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="section faq faq--dark" id="faq">
+        <div class="container faq__inner">
+          <div class="faq__head">
+            <h2 class="faq__title" data-animate>FAQ</h2>
+            <!-- v1 -->
+            <p class="faq__intro" data-animate>
+              O que perguntam antes de fechar conosco, respondido sem rodeio.
+            </p>
+          </div>
+
+          <!--
+            As perguntas 1 a 6 vieram da v1 (conferir a redação). As
+            perguntas 7, 8 e 9 e TODAS as respostas estão como [X].
+
+            O JSON-LD de FAQPage é montado por js/ativos.js a partir
+            deste acordeão e ignora qualquer item cuja resposta ainda
+            contenha "[X]" — ou seja, o schema só passa a existir
+            quando a copy real entrar. Não há nada a editar lá.
+          -->
+          <ul class="faq__list">
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q1" aria-expanded="false" aria-controls="faq-a1">
+                  <span class="faq__index" aria-hidden="true">1</span>
+                  <span class="faq__question-text">Em quanto tempo recebo depois de fechar?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a1" role="region" aria-labelledby="faq-q1">
+                <div class="faq__answer-inner">
+                  <p class="faq__answer-text">[X]</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q2" aria-expanded="false" aria-controls="faq-a2">
+                  <span class="faq__index" aria-hidden="true">2</span>
+                  <span class="faq__question-text">O que exatamente vem junto com o ativo?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a2" role="region" aria-labelledby="faq-q2">
+                <div class="faq__answer-inner">
+                  <p class="faq__answer-text">[X]</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q3" aria-expanded="false" aria-controls="faq-a3">
+                  <span class="faq__index" aria-hidden="true">3</span>
+                  <span class="faq__question-text">Como funciona a garantia?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a3" role="region" aria-labelledby="faq-q3">
+                <div class="faq__answer-inner">
+                  <p class="faq__answer-text">[X]</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q4" aria-expanded="false" aria-controls="faq-a4">
+                  <span class="faq__index" aria-hidden="true">4</span>
+                  <span class="faq__question-text">Qual o limite de disparo da BM que vocês entregam?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a4" role="region" aria-labelledby="faq-q4">
+                <div class="faq__answer-inner">
+                  <p class="faq__answer-text">[X]</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q5" aria-expanded="false" aria-controls="faq-a5">
+                  <span class="faq__index" aria-hidden="true">5</span>
+                  <span class="faq__question-text">A conta do TikTok já vem pronta para anunciar?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a5" role="region" aria-labelledby="faq-q5">
+                <div class="faq__answer-inner">
+                  <p class="faq__answer-text">[X]</p>
+                </div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q6" aria-expanded="false" aria-controls="faq-a6">
+                  <span class="faq__index" aria-hidden="true">6</span>
+                  <span class="faq__question-text">Vocês atendem quem está começando agora?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a6" role="region" aria-labelledby="faq-q6">
+                <div class="faq__answer-inner">
+                  <p class="faq__answer-text">[X]</p>
+                </div>
+              </div>
+            </li>
+
+            <!-- [X] pergunta 7 -->
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q7" aria-expanded="false" aria-controls="faq-a7">
+                  <span class="faq__index" aria-hidden="true">7</span>
+                  <span class="faq__question-text">[X]</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a7" role="region" aria-labelledby="faq-q7">
+                <div class="faq__answer-inner">
+                  <p class="faq__answer-text">[X]</p>
+                </div>
+              </div>
+            </li>
+
+            <!-- [X] pergunta 8 -->
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q8" aria-expanded="false" aria-controls="faq-a8">
+                  <span class="faq__index" aria-hidden="true">8</span>
+                  <span class="faq__question-text">[X]</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a8" role="region" aria-labelledby="faq-q8">
+                <div class="faq__answer-inner">
+                  <p class="faq__answer-text">[X]</p>
+                </div>
+              </div>
+            </li>
+
+            <!-- [X] pergunta 9 -->
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q9" aria-expanded="false" aria-controls="faq-a9">
+                  <span class="faq__index" aria-hidden="true">9</span>
+                  <span class="faq__question-text">[X]</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a9" role="region" aria-labelledby="faq-q9">
+                <div class="faq__answer-inner">
+                  <p class="faq__answer-text">[X]</p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           VENDA CRUZADA
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="section section--panel cross">
+        <div class="container">
+          <div class="section__head">
+            <h2 class="section__title" data-animate>A DG Mídias também opera com você</h2>
+          </div>
+
+          <!-- [X] o texto dos 3 cards abaixo -->
+          <div class="cross__grid">
+            <article class="cross__card" data-animate>
+              <span class="cross__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 24h-6v-6h6v6zm8-9h-6v9h6v-9zm8-4h-6v13h6v-13zm0-11l-6 1.221 1.716 1.708-6.85 6.733-3.001-3.002-7.841 7.797 1.41 1.418 6.427-6.39 2.991 2.993 8.28-8.137 1.667 1.66 1.201-6.001z"/></svg>
+              </span>
+              <h3 class="cross__title">Gestão de tráfego</h3>
+              <p class="cross__text">[X]</p>
+              <a class="cross__link" href="../index.html#servicos">Ver serviços</a>
+            </article>
+
+            <article class="cross__card" data-animate>
+              <span class="cross__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M24 20h-3v4l-5.333-4h-7.667v-4h2v2h6.333l2.667 2v-2h3v-8.001h-2v-2h4v12.001zm-6-6h-9.667l-5.333 4v-4h-3v-14.001h18v14.001z"/></svg>
+              </span>
+              <h3 class="cross__title">Disparos por API oficial</h3>
+              <p class="cross__text">[X]</p>
+              <a class="cross__link" href="../index.html#tecnologia">Como funciona</a>
+            </article>
+
+            <article class="cross__card" data-animate>
+              <span class="cross__icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M23.809 21.646l-6.205-6.205c1.167-1.605 1.857-3.579 1.857-5.711 0-5.365-4.365-9.73-9.731-9.73-5.365 0-9.73 4.365-9.73 9.73 0 5.366 4.365 9.73 9.73 9.73 2.034 0 3.923-.627 5.487-1.698l6.238 6.238 2.354-2.354zm-20.955-11.916c0-3.792 3.085-6.877 6.877-6.877s6.877 3.085 6.877 6.877-3.085 6.877-6.877 6.877c-3.793 0-6.877-3.085-6.877-6.877z"/></svg>
+              </span>
+              <h3 class="cross__title">Consultoria de estrutura</h3>
+              <p class="cross__text">[X]</p>
+              <a class="cross__link" href="../index.html#contato">Falar com o time</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+           CTA FINAL
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+      <section class="closing" id="contato">
+        <div class="container closing__inner">
+          <h2 class="section__title" data-animate>
+            Fale com o time e receba disponibilidade e orçamento agora
+          </h2>
+          <p class="section__lead" data-animate>
+            Atendimento humano no WhatsApp, todos os dias, 24 horas. Diga o que
+            você precisa e a gente resolve.
+          </p>
+          <div class="closing__actions" data-animate>
+            <a
+              href="https://wa.me/5537998157790"
+              class="btn btn--primary"
+              data-wa="cta-final"
+              >Falar com o time</a
+            >
+            <a href="#catalogo" class="btn btn--secondary">Ver nosso catálogo</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner section-inset">
+        <div class="site-footer__col">
+          <h3 class="site-footer__heading">Contato</h3>
+          <!-- href e texto vêm de PHONE_TEL / PHONE_DISPLAY em ativos-config.js -->
+          <a href="tel:+5537998157790" class="site-footer__link" data-phone
+            >+55 37 99815-7790</a
+          >
+          <a href="mailto:contato@dgmidias.com" class="site-footer__link"
+            >contato@dgmidias.com</a
+          >
+          <a
+            href="https://instagram.com/dgmidiasagencia"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="site-footer__link"
+            >@dgmidiasagencia</a
+          >
+        </div>
+        <div class="site-footer__col site-footer__col--right">
+          <p class="site-footer__address">
+            Rua Sete de Setembro, Centro - n105, apto04<br />
+            35570-304
+          </p>
+          <p class="site-footer__cnpj">CNPJ: 41.336.477/0001-20</p>
+        </div>
+      </div>
+
+      <div class="site-footer__brand section-inset">
+        <img
+          class="site-footer__logo"
+          src="../assets/svg/logo.svg"
+          alt=""
+          width="253"
+          height="56"
+          loading="lazy"
+        />
+      </div>
+
+      <p class="site-footer__copy">2026 Todos os direitos reservados ®DG Midias.</p>
+    </footer>
+
+    <a
+      href="https://wa.me/5537998157790"
+      class="wa-float"
+      data-wa="flutuante"
+      aria-label="Falar com o time no WhatsApp"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.82 11.82 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413"/></svg>
+    </a>
+
+    <script src="../js/vendor/gsap.min.js" defer></script>
+    <script src="../js/vendor/ScrollTrigger.min.js" defer></script>
+    <script src="../js/ativos-config.js" defer></script>
+    <script src="../js/main.js" defer></script>
+    <script src="../js/header.js" defer></script>
+    <script src="../js/faq.js" defer></script>
+    <script src="../js/ativos-hero.js" defer></script>
+    <script src="../js/ativos.js" defer></script>
+  </body>
+</html>

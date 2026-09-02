@@ -1,0 +1,324 @@
+/*
+  Hero da página /ativos — barras verticais com gradiente, dithering e grão.
+
+  Regra de ouro deste arquivo: o estado que o CSS descreve é o estado FINAL.
+  A animação do GSAP (js/ativos-hero.js) só existe a partir dele, sempre via
+  `gsap.from()`. Se o GSAP não carregar, ou se o usuário pedir menos
+  movimento, a hero continua legível e completa — nada fica invisível
+  esperando um script que talvez nunca rode.
+*/
+
+/*
+  Registrar as variáveis permite ao navegador interpolá-las como
+  porcentagem de verdade (e não como string), o que deixa o loop de
+  respiração suave mesmo quando o frame atrasa. Sem suporte a @property
+  (Safari < 16.4) o GSAP ainda reescreve o valor a cada frame — só perde
+  a interpolação nativa.
+*/
+@property --stop {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
+@property --fade {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  background: var(--absolute-black);
+  overflow: hidden;
+  /* Cria um contexto de empilhamento próprio: o mix-blend-mode das camadas
+     de fundo não pode vazar para o header nem para a seção seguinte. */
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  padding-block: clamp(4rem, 12vh, 8rem);
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__bars {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  /* O ScrollTrigger anima scaleY; avisar o compositor evita repaint da
+     coluna inteira a cada frame de scroll. */
+  will-change: transform;
+}
+
+.bar__top,
+.bar__bottom {
+  flex: 1;
+}
+
+.bar__top {
+  --stop: 63%;
+  --fade: 100%;
+  background-image: linear-gradient(
+    var(--white),
+    var(--orange) var(--stop),
+    rgba(0, 0, 0, 0) var(--fade)
+  );
+}
+
+.bar__bottom {
+  --fade: 0%;
+  --stop: 37%;
+  background-image: linear-gradient(
+    rgba(0, 0, 0, 0) var(--fade),
+    var(--orange) var(--stop),
+    var(--white)
+  );
+}
+
+/* Silhueta em montanha: as colunas das pontas são mais baixas, então o
+   miolo — onde fica o texto — é a parte mais alta e mais escura. */
+.bar:nth-child(1),
+.bar:nth-child(15) {
+  height: 44.44svh;
+}
+
+.bar:nth-child(2),
+.bar:nth-child(14) {
+  height: 66.67svh;
+}
+
+.bar:nth-child(3),
+.bar:nth-child(13) {
+  height: 88.89svh;
+}
+
+/*
+  Padrão de dithering.
+
+  DESVIO DOCUMENTADO em relação ao briefing: o briefing previa
+  `img.hero__pattern` com `object-fit: cover`. O tile Bayer gerado
+  (assets/dither-bayer.png) tem 8x8 px e existe para REPETIR — esticado
+  por `cover` viraria um borrão cinza, não um dithering. Por isso a
+  camada é uma div com background repetido e `image-rendering: pixelated`,
+  que preserva a borda dura de cada pixel. Mesmo efeito, um request de
+  215 bytes, sem custo de layout.
+
+  O tile foi gerado por script (matriz Bayer 8x8 -> PNG RGBA), não em
+  canvas em runtime: assim não custa JS nenhum e o navegador cacheia.
+*/
+.hero__pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("../assets/dither-bayer.png");
+  background-repeat: repeat;
+  background-size: 24px 24px;
+  image-rendering: pixelated;
+  mix-blend-mode: multiply;
+  opacity: 0.9;
+}
+
+/*
+  Scrim. As colunas são mais bonitas quando queimam bem claro, mas é
+  exatamente no miolo — onde elas ficam mais altas e mais brilhantes —
+  que mora o texto. Este é o único jeito de manter as duas coisas:
+  escurece o centro, deixa as bordas acesas.
+
+  Vive entre o dithering e o grão de propósito: precisa apagar o
+  padrão também, senão o dithering continuaria marcando por cima da
+  headline.
+*/
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 72% 58% at 50% 52%,
+    rgba(0, 0, 0, 0.94) 0%,
+    rgba(0, 0, 0, 0.86) 40%,
+    rgba(0, 0, 0, 0.45) 72%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+.hero__noise {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+}
+
+.hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 780px;
+  margin-inline: auto;
+  padding-inline: var(--section-padding-x);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.hero__eyebrow {
+  color: var(--orange);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.hero__title {
+  font-size: clamp(2.25rem, 6.5vw, 4.25rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  text-wrap: balance;
+}
+
+/*
+  Divisão manual por linha (o SplitText do GSAP é plugin pago). Cada
+  .hero__line é a janela com overflow hidden; o .hero__line-inner é o que
+  sobe. `display: block` nos dois para o translateY funcionar.
+*/
+.hero__line {
+  display: block;
+  overflow: hidden;
+  /* Sem o padding a barriga de letras como "ç" e "p" seria cortada pela
+     janela do overflow. A margem negativa devolve o espaço ao layout. */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.hero__line-inner {
+  display: block;
+}
+
+.hero__text {
+  max-width: 620px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.hero__text strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.hero__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.hero__microcopy {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9rem;
+}
+
+.hero__badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 0.25rem;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Separador em bolinha entre os selos — decorativo, some no mobile
+   quando os selos empilham. */
+.hero__badge + .hero__badge::before {
+  content: "";
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--orange);
+}
+
+@media (max-width: 767px) {
+  /* Sete colunas bastam na largura do celular; mais que isso vira listra
+     fina e o dithering some. */
+  .bar:nth-child(n + 8) {
+    display: none;
+  }
+
+  /* Precisa repetir os seletores nth-child: um `.bar { height }` solto
+     perderia em especificidade para as regras da silhueta lá de cima e
+     as colunas das pontas continuariam baixas. */
+  .bar,
+  .bar:nth-child(1),
+  .bar:nth-child(2),
+  .bar:nth-child(3) {
+    height: 100svh;
+  }
+
+  .hero__actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 260px;
+  }
+
+  .hero__actions .btn {
+    width: 100%;
+  }
+
+  .hero__badge + .hero__badge::before {
+    display: none;
+  }
+
+  /*
+    No celular o texto ocupa quase toda a altura da hero, então a elipse
+    do scrim deixaria o eyebrow no topo e os selos embaixo sobre a parte
+    mais clara das colunas. Aqui o escurecimento vira uma faixa vertical
+    que cobre todo o bloco de texto e só solta as pontas.
+  */
+  .hero__scrim {
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.2) 0%,
+      rgba(0, 0, 0, 0.9) 22%,
+      rgba(0, 0, 0, 0.9) 88%,
+      rgba(0, 0, 0, 0.55) 100%
+    );
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* O grão animado é a única camada que não tem estado final útil
+     parado: sem loop ele fica um chuvisco fixo. Melhor sumir. */
+  .hero__noise {
+    display: none;
+  }
+}

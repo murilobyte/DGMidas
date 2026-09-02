@@ -1,0 +1,989 @@
+/*
+  Estilos da página /ativos.
+
+  Escopo: quase tudo pende de `.page-ativos` (no <body>), porque esta
+  página reaproveita classes globais do site — .btn, .site-header,
+  .site-footer, .faq__item — e não pode alterar como elas se comportam
+  na home.
+
+  Ritmo vertical: uma escala só, --sec-y. Nenhum padding de seção
+  fora dela.
+*/
+
+.page-ativos {
+  --sec-y: clamp(5rem, 10vw, 9rem);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  /* Piso de contraste do corpo de texto: 0.78 sobre preto passa AA com
+     folga em 16px. O cinza #838383 da home reprovava no mobile. */
+  --muted: rgba(255, 255, 255, 0.78);
+  --panel: #111111;
+  background-color: var(--absolute-black);
+}
+
+/*
+  Âncoras precisam limpar a barra superior + o header, não só o header.
+  Quem rola é o <html>, então o scroll-padding tem de morar nele — em
+  .page-ativos (o <body>) a propriedade não teria efeito. Sobrescreve os
+  96px de css/header.css porque esta folha carrega depois, e só nesta
+  página.
+*/
+html {
+  scroll-padding-top: 132px;
+}
+
+.section {
+  padding-block: var(--sec-y);
+}
+
+.section--panel {
+  background-color: var(--panel);
+}
+
+.section__head {
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section__title {
+  font-size: clamp(2rem, 5vw, 3.25rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  text-wrap: balance;
+}
+
+.section__lead {
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+.section__lead strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+/* Entrada padrão das seções — o observador de [data-animate] do main.js
+   é quem adiciona .in-view. */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s var(--ease-default), transform 0.6s var(--ease-default);
+}
+
+[data-animate].in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------------------------------------------------------- */
+/* Barra superior de confiança + header                              */
+/* ---------------------------------------------------------------- */
+
+/*
+  A barra e o header grudam juntos, como um bloco só. Empilhar dois
+  `position: sticky; top: 0` faria um cobrir o outro; por isso quem gruda
+  é o wrapper, e o .site-header volta a `relative` (que o menu mobile
+  precisa, porque ele se posiciona por `absolute; top: 100%`).
+*/
+.topstack {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.page-ativos .site-header {
+  position: relative;
+}
+
+.topbar {
+  background-color: var(--absolute-black);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.topbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.5rem;
+  padding-block: 0.6rem;
+  text-align: center;
+}
+
+.topbar__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.topbar__item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  fill: var(--orange);
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    font-size: 0.75rem;
+  }
+
+  .topbar__inner {
+    gap: 0.2rem 0.9rem;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Faixa de números                                                  */
+/* ---------------------------------------------------------------- */
+
+.stats {
+  background-color: var(--absolute-black);
+  border-block: 1px solid var(--line);
+  padding-block: clamp(2.5rem, 6vw, 4rem);
+}
+
+.stats__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.stat__number {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--orange);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.stat__label {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+@media (max-width: 760px) {
+  .stats__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Dor do comprador                                                  */
+/* ---------------------------------------------------------------- */
+
+.pain__body {
+  max-width: 720px;
+  margin: clamp(2rem, 5vw, 3rem) auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pain__body p {
+  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- */
+/* Catálogo                                                          */
+/* ---------------------------------------------------------------- */
+
+.catalog__list {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  border-top: 1px solid var(--line);
+}
+
+/*
+  Linhas, não cards em grade — foi o formato que já funcionava na v1 e é
+  o que escala para cinco produtos sem virar parede de texto.
+
+  A grade de 3 colunas com largura fixa nas laterais é o que garante o
+  pedido de "botões alinhados": em todas as linhas o CTA começa na mesma
+  coordenada X e fica centrado na altura da linha, independentemente do
+  tamanho da descrição.
+*/
+.catalog__row {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) minmax(0, 2fr) auto;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding-block: clamp(1.75rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--line);
+  transition: background-color var(--duration-default) var(--ease-default);
+}
+
+.catalog__row:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.catalog__name {
+  font-size: clamp(1.5rem, 3vw, 2.125rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--white);
+}
+
+.catalog__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.catalog__desc {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.catalog__for {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.catalog__for b {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.catalog__cta {
+  justify-self: end;
+}
+
+@media (max-width: 900px) {
+  .catalog__row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .catalog__cta {
+    justify-self: start;
+    margin-top: 0.25rem;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Garantia — seção de destaque                                      */
+/* ---------------------------------------------------------------- */
+
+.warranty {
+  background-color: var(--absolute-black);
+  padding-block: var(--sec-y);
+}
+
+/*
+  O painel usa a assinatura visual do site: bloco recuado, cantos
+  arredondados e gradiente laranja saindo do topo. É o argumento mais
+  forte da página, então é o único bloco com cor de fundo própria.
+*/
+.warranty__panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: clamp(24px, 3vw, 40px);
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(180deg, rgba(224, 104, 25, 0.22) 0%, var(--panel) 55%);
+  padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.5rem, 5vw, 3.5rem);
+}
+
+.warranty__head {
+  max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.warranty__eyebrow {
+  color: var(--orange);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  margin-bottom: 0.75rem;
+}
+
+.warranty__steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  margin-top: clamp(2.5rem, 6vw, 3.5rem);
+}
+
+.warranty__step {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background-color: rgba(0, 0, 0, 0.35);
+}
+
+.warranty__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--orange);
+  color: var(--white);
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.warranty__step-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.warranty__step-text {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.warranty__foot {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  text-align: center;
+}
+
+.warranty__note {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9375rem;
+}
+
+@media (max-width: 860px) {
+  .warranty__steps {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Suporte                                                           */
+/* ---------------------------------------------------------------- */
+
+.support__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(2rem, 6vw, 4.5rem);
+}
+
+.support__title {
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--white);
+}
+
+.support__subtitle {
+  margin-top: 1.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.support__text {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+.support__cta {
+  margin-top: 2rem;
+}
+
+.support__media {
+  border-radius: clamp(20px, 3vw, 32px);
+  overflow: hidden;
+  /* Trava a proporção antes de a imagem baixar — é o que impede o
+     salto de layout (CLS) nesta seção. */
+  aspect-ratio: 4 / 3;
+}
+
+.support__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* O enquadramento da foto é vertical; sem isso o `cover` cortaria a
+     cabeça do atendente no recorte 4/3. */
+  object-position: 50% 22%;
+}
+
+@media (max-width: 860px) {
+  .support__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .support__media {
+    order: -1;
+    aspect-ratio: 16 / 10;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Como funciona a compra — timeline                                 */
+/* ---------------------------------------------------------------- */
+
+.steps__list {
+  max-width: 820px;
+  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.steps__item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: clamp(1rem, 3vw, 2rem);
+  padding-bottom: clamp(2rem, 4vw, 2.75rem);
+}
+
+.steps__item:last-child {
+  padding-bottom: 0;
+}
+
+/* A linha da timeline é um ::before da bolinha, esticado até o próximo
+   passo. O último item não desenha nada. */
+.steps__marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background-color: var(--panel);
+  color: var(--orange);
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.steps__item:not(:last-child) .steps__marker::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 1px;
+  height: calc(100% + clamp(2rem, 4vw, 2.75rem));
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, var(--line-strong), rgba(255, 255, 255, 0.02));
+}
+
+.steps__body {
+  padding-top: 0.75rem;
+}
+
+.steps__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.steps__text {
+  margin-top: 0.5rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* ---------------------------------------------------------------- */
+/* Prova social                                                      */
+/* ---------------------------------------------------------------- */
+
+/*
+  Carrossel por scroll-snap: rola com o dedo, com a roda e com as setas
+  do teclado sem uma linha de JS de arrasto. Os botões só empurram o
+  scrollLeft.
+*/
+.social__viewport {
+  margin-top: clamp(2.5rem, 6vw, 3.5rem);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  /* Espaço para o anel de foco do slide não ser cortado no scroll. */
+  padding: 4px;
+}
+
+.social__viewport::-webkit-scrollbar {
+  display: none;
+}
+
+.social__track {
+  display: flex;
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+}
+
+.social__card {
+  flex: 0 0 min(420px, 82%);
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(1.5rem, 3vw, 2rem);
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background-color: var(--panel);
+}
+
+.social__quote {
+  color: var(--muted);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+/* Slot para o print do WhatsApp. Enquanto não houver imagem, o próprio
+   contorno tracejado mostra onde ela entra. */
+.social__shot {
+  margin-top: auto;
+  border-radius: 14px;
+  border: 1px dashed var(--line-strong);
+  background-color: rgba(0, 0, 0, 0.4);
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-align: center;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.social__shot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.social__author {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.social__name {
+  font-weight: 700;
+  color: var(--white);
+  font-size: 1rem;
+}
+
+.social__role {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.875rem;
+}
+
+.social__nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.social__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  color: var(--white);
+  transition: background-color var(--duration-default) var(--ease-default),
+    opacity var(--duration-default) var(--ease-default);
+}
+
+.social__arrow:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.social__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.social__arrow svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* ---------------------------------------------------------------- */
+/* FAQ (variante escura)                                             */
+/* ---------------------------------------------------------------- */
+
+/*
+  Reaproveita as classes .faq__item / .faq__question / .faq__answer para
+  herdar o acordeão de js/faq.js sem duplicar JS. O visual é escrito do
+  zero aqui — css/faq.css (painel branco da home) não é carregado nesta
+  página, então não há conflito.
+
+  Layout em duas colunas: título fixo à esquerda, lista à direita.
+*/
+.faq--dark .faq__inner {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr);
+  gap: clamp(2rem, 6vw, 4.5rem);
+  align-items: start;
+}
+
+.faq--dark .faq__title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+
+.faq--dark .faq__intro {
+  margin-top: 1rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.faq--dark .faq__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq--dark .faq__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq--dark .faq__item:first-child {
+  border-top: 1px solid var(--line);
+}
+
+.faq--dark .faq__question {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding-block: 1.4rem;
+  text-align: left;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--white);
+  transition: color var(--duration-default) var(--ease-default);
+}
+
+.faq--dark .faq__question:hover {
+  color: var(--orange);
+}
+
+.faq--dark .faq__index {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.faq--dark .faq__icon {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.faq--dark .faq__icon::before,
+.faq--dark .faq__icon::after {
+  content: "";
+  position: absolute;
+  background-color: currentColor;
+  transition: transform 0.35s var(--ease-default);
+}
+
+.faq--dark .faq__icon::before {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  transform: translateY(-50%);
+}
+
+.faq--dark .faq__icon::after {
+  left: 50%;
+  top: 0;
+  width: 1.5px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.faq--dark .faq__item.is-open .faq__icon::after {
+  transform: translateX(-50%) rotate(90deg);
+}
+
+/* Abertura por grid-template-rows 0fr -> 1fr: anima a altura real sem
+   precisar medir nada em JS. */
+.faq--dark .faq__answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.4s var(--ease-default),
+    opacity 0.4s var(--ease-default);
+}
+
+.faq--dark .faq__item.is-open .faq__answer {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.faq--dark .faq__answer-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.faq--dark .faq__answer-text {
+  padding: 0 3rem 1.5rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 860px) {
+  .faq--dark .faq__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .faq--dark .faq__answer-text {
+    padding-inline: 0;
+  }
+
+  .faq--dark .faq__question {
+    grid-template-columns: 1.75rem 1fr auto;
+    gap: 0.75rem;
+    font-size: 1rem;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Venda cruzada                                                     */
+/* ---------------------------------------------------------------- */
+
+.cross__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  margin-top: clamp(2.5rem, 6vw, 3.5rem);
+}
+
+.cross__card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding: clamp(1.75rem, 3vw, 2.25rem);
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  background-color: rgba(255, 255, 255, 0.02);
+  transition: border-color var(--duration-default) var(--ease-default),
+    transform var(--duration-default) var(--ease-default);
+}
+
+.cross__card:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-3px);
+}
+
+.cross__icon {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background-color: rgba(224, 104, 25, 0.14);
+}
+
+.cross__icon svg {
+  width: 20px;
+  height: 20px;
+  fill: var(--orange);
+}
+
+.cross__title {
+  font-size: 1.1875rem;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.cross__text {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.cross__link {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  color: var(--orange);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.cross__link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 860px) {
+  .cross__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cross__card:hover {
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* CTA final                                                         */
+/* ---------------------------------------------------------------- */
+
+.closing {
+  background: linear-gradient(180deg, var(--absolute-black) 0%, rgba(224, 104, 25, 0.16) 100%);
+  padding-block: var(--sec-y);
+  text-align: center;
+}
+
+.closing__inner {
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.closing__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
+@media (max-width: 560px) {
+  .closing__actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 260px;
+    margin-inline: auto;
+  }
+
+  .closing__actions .btn {
+    width: 100%;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Botão flutuante de WhatsApp                                       */
+/* ---------------------------------------------------------------- */
+
+.wa-float {
+  position: fixed;
+  right: clamp(1rem, 3vw, 1.75rem);
+  bottom: clamp(1rem, 3vw, 1.75rem);
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #25d366;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  /* Escondido até o usuário passar da hero — js/ativos.js troca a
+     classe. `visibility` junto de `opacity` para o botão não continuar
+     clicável enquanto invisível. */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px) scale(0.9);
+  transition: opacity 0.35s var(--ease-default), transform 0.35s var(--ease-default),
+    visibility 0.35s;
+}
+
+.wa-float.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.wa-float:hover {
+  filter: brightness(1.08);
+}
+
+.wa-float svg {
+  width: 30px;
+  height: 30px;
+  fill: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-float {
+    transition: opacity 0.01ms, visibility 0.01ms;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Correções de acessibilidade em componentes compartilhados         */
+/* ---------------------------------------------------------------- */
+
+/*
+  Os dois ajustes abaixo consertam problemas que NÃO nasceram nesta
+  página: vêm de css/footer.css e de js/main.js + css/style.css, que a
+  home também usa. Como o briefing pede "Não altere nenhuma outra
+  página do site", a correção fica escopada em .page-ativos. A home
+  continua com o comportamento antigo — vale abrir isso como um ajuste
+  próprio depois.
+*/
+
+/*
+  1. Contraste do rodapé. O #313131 sobre preto dá 1.61:1, muito abaixo
+     do mínimo AA de 4.5:1 — na prática o endereço e o CNPJ ficam
+     ilegíveis. #8A8A8A dá 6.1:1 e mantém o tom discreto do original.
+*/
+.page-ativos .site-footer__link,
+.page-ativos .site-footer__address,
+.page-ativos .site-footer__cnpj,
+.page-ativos .site-footer__copy {
+  color: #8a8a8a;
+}
+
+/*
+  2. Nome acessível dos botões. O efeito cascata de js/main.js quebra o
+     rótulo em um <span> por letra e o .btn__char-inner é `display:
+     block` — cada letra vira uma caixa de bloco, então o texto visível
+     é computado como "V\ne\nr\n..." e deixa de bater com o aria-label
+     ("Ver catálogo de ativos"). O axe reprova por label/name mismatch,
+     que é justamente o que quebra comando de voz.
+
+     `inline-block` mantém a animação (transform funciona igual, e o
+     overflow do .btn__char continua recortando) e devolve o rótulo a
+     uma linha só para quem lê a página.
+*/
+.page-ativos .btn__char-inner {
+  display: inline-block;
+}
