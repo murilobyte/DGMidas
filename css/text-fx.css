@@ -1,0 +1,58 @@
+/*
+  Efeitos de texto — o CSS que acompanha js/text-fx.js.
+
+  Portado da landing da Rare Tech, onde a revelação por linha é feita com
+  GSAP. Aqui a cascata vive no CSS (uma variável --i por linha), porque
+  o módulo também roda na home, que não carrega o GSAP.
+
+  Nada aqui esconde texto por conta própria: .split-line só existe
+  depois que o JS quebra o elemento em linhas. Sem JS, o texto fica
+  visível e legível.
+*/
+
+/* A janela que recorta a linha. Sem overflow não há de onde a linha
+   subir. */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  /* As letras com descida (g, p, ç) encostam no corte do overflow; o
+     par padding/margem devolve o espaço sem mexer no layout. */
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+
+.split-line {
+  display: inline-block;
+  transform: translateY(110%);
+  /* power3.out, a mesma curva do original. */
+  transition: transform 0.9s cubic-bezier(0.215, 0.61, 0.355, 1);
+  transition-delay: calc(var(--i, 0) * 90ms);
+  will-change: transform;
+}
+
+[data-split].is-in .split-line {
+  transform: none;
+}
+
+/* Usado só durante a medição, antes de as linhas serem montadas. */
+.w {
+  display: inline-block;
+}
+
+/*
+  Telas pequenas: mesma coreografia, 30% mais rápida. Um texto que
+  ocupa mais linhas no celular ficaria lento demais com a cascata cheia.
+*/
+@media (max-width: 767px) {
+  .split-line {
+    transition-duration: 0.63s;
+    transition-delay: calc(var(--i, 0) * 63ms);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .split-line {
+    transform: none;
+    transition: none;
+  }
+}

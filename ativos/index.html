@@ -56,6 +56,7 @@
     <link rel="stylesheet" href="../css/preloader.css" />
     <link rel="stylesheet" href="../css/header.css" />
     <link rel="stylesheet" href="../css/ativos-hero.css" />
+    <link rel="stylesheet" href="../css/text-fx.css" />
     <link rel="stylesheet" href="../css/ativos.css" />
     <link rel="stylesheet" href="../css/footer.css" />
     <!--
@@ -114,11 +115,11 @@
 
         <nav class="header__nav" id="header-nav">
           <ul class="header__nav-list">
-            <li><a href="../index.html#inicio" class="header__nav-link">Início</a></li>
-            <li><a href="../index.html#servicos" class="header__nav-link">Serviços</a></li>
-            <li><a href="/ativos" class="header__nav-link" aria-current="page">Ativos</a></li>
-            <li><a href="../index.html#contato" class="header__nav-link">Trabalhe conosco</a></li>
-            <li><a href="../index.html#contato" class="header__nav-link">Contato</a></li>
+            <li><a href="../index.html#inicio" class="header__nav-link" data-scramble>Início</a></li>
+            <li><a href="../index.html#servicos" class="header__nav-link" data-scramble>Serviços</a></li>
+            <li><a href="/ativos" class="header__nav-link" aria-current="page" data-scramble>Ativos</a></li>
+            <li><a href="../index.html#contato" class="header__nav-link" data-scramble>Trabalhe conosco</a></li>
+            <li><a href="../index.html#contato" class="header__nav-link" data-scramble>Contato</a></li>
           </ul>
         </nav>
 
@@ -215,7 +216,7 @@
            ============================================================ -->
       <section class="section pain">
         <div class="container">
-          <h2 class="section__title" data-animate>
+          <h2 class="section__title" data-split>
             Quem anuncia sabe: o<br />problema nunca avisa
           </h2>
 
@@ -241,7 +242,7 @@ Nós existimos para que nada disso seja problema seu.</p>
       <section class="section catalog" id="catalogo">
         <div class="container">
           <div class="section__head">
-            <h2 class="section__title" data-animate>O que entregamos</h2>
+            <h2 class="section__title" data-split>O que entregamos</h2>
             <!-- v1 -->
             <p class="section__lead" data-animate>
               Todo ativo sai daqui configurado, testado e com garantia.<br />
@@ -258,7 +259,7 @@ Nós existimos para que nada disso seja problema seu.</p>
         <div class="catalog__list">
             <!-- v1 (as 5 descrições abaixo) -->
             <article class="catalog__row" data-animate>
-              <h3 class="catalog__name">BMs <br>Facebook</h3>
+              <h3 class="catalog__name" data-scramble data-scramble-once>BMs <br>Facebook</h3>
               <div class="catalog__copy">
                 <p class="catalog__desc">
                   Business Managers entregues configuradas e prontas para uso, em
@@ -279,7 +280,7 @@ Nós existimos para que nada disso seja problema seu.</p>
             </article>
 
             <article class="catalog__row" data-animate>
-              <h3 class="catalog__name">BM para disparo</h3>
+              <h3 class="catalog__name" data-scramble data-scramble-once>BM para disparo</h3>
               <div class="catalog__copy">
                 <p class="catalog__desc">
                   BM preparada especificamente para operação de mensagens no
@@ -301,7 +302,7 @@ Nós existimos para que nada disso seja problema seu.</p>
             </article>
 
             <article class="catalog__row" data-animate>
-              <h3 class="catalog__name">Contas <br>Google</h3>
+              <h3 class="catalog__name" data-scramble data-scramble-once>Contas <br>Google</h3>
               <div class="catalog__copy">
                 <p class="catalog__desc">
                   Contas Google Ads entregues configuradas, com meio de pagamento
@@ -321,7 +322,7 @@ Nós existimos para que nada disso seja problema seu.</p>
             </article>
 
             <article class="catalog__row" data-animate>
-              <h3 class="catalog__name">Contas <br>TikTok</h3>
+              <h3 class="catalog__name" data-scramble data-scramble-once>Contas <br>TikTok</h3>
               <div class="catalog__copy">
                 <p class="catalog__desc">
                   Contas TikTok Ads entregues configuradas e prontas para
@@ -342,7 +343,7 @@ Nós existimos para que nada disso seja problema seu.</p>
             </article>
 
             <article class="catalog__row" data-animate>
-              <h3 class="catalog__name">Perfis</h3>
+              <h3 class="catalog__name" data-scramble data-scramble-once>Perfis</h3>
               <div class="catalog__copy">
                 <p class="catalog__desc">
                   Perfis entregues com configuração completa e histórico de uso
@@ -369,7 +370,7 @@ Nós existimos para que nada disso seja problema seu.</p>
       <section class="section support" id="suporte">
         <div class="container support__inner">
           <div class="support__copy">
-            <h2 class="support__title" data-animate>Suporte</h2>
+            <h2 class="support__title" data-split>Suporte</h2>
             <!-- v1 -->
             <p class="support__subtitle" data-animate>
               Suporte com gente de verdade, 24 horas por dia
@@ -420,7 +421,7 @@ Nós existimos para que nada disso seja problema seu.</p>
       <section class="section faq faq--dark" id="faq">
         <div class="container faq__inner">
           <div class="faq__head">
-            <h2 class="faq__title" data-animate>Faq</h2>
+            <h2 class="faq__title" data-split>Faq</h2>
             <!-- v1 -->
             <p class="faq__intro" data-animate>
               O que perguntam antes de fechar<br />conosco, respondido sem
@@ -524,7 +525,7 @@ Nós existimos para que nada disso seja problema seu.</p>
            ============================================================ -->
       <section class="section closing" id="contato">
         <div class="container closing__inner">
-          <h2 class="closing__title" data-animate>
+          <h2 class="closing__title" data-split>
             Fale com o time e receba<br />disponibilidade e orçamento<br />agora
           </h2>
           <p class="closing__text" data-animate>
@@ -602,6 +603,7 @@ Nós existimos para que nada disso seja problema seu.</p>
     <script src="../js/main.js" defer></script>
     <script src="../js/header.js" defer></script>
     <script src="../js/faq.js" defer></script>
+    <script src="../js/text-fx.js" defer></script>
     <script src="../js/ativos-hero.js" defer></script>
     <script src="../js/ativos.js" defer></script>
   </body>
