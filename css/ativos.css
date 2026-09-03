@@ -24,16 +24,19 @@
      folga em 16px. O cinza #838383 da home reprovava no mobile. */
   --muted: rgba(255, 255, 255, 0.78);
   --panel: #161616;
-  /* Off-white morno dos dois blocos claros. Leitura minha da captura —
-     se o valor da marca for outro, trocar só aqui. */
   /*
-     A hero tem 200svh, mas o fechamento termina por volta de 70% do
-     curso. Sem compensar isso sobravam ~430px de preto rolando sem
-     nada acontecendo antes do próximo texto entrar. Este recuo puxa o
-     bloco seguinte para cima, então ele chega justamente quando as
-     colunas acabam de fechar.
+    A hero tem 200svh, mas o fechamento termina por volta de 70% do
+    curso. Sem compensar isso sobravam ~430px de preto rolando sem nada
+    acontecendo antes do próximo texto entrar. Este recuo puxa o bloco
+    seguinte para cima, então ele chega justamente quando as colunas
+    acabam de fechar.
   */
   --hero-tail: 50svh;
+  /* Recuo interno das linhas full-bleed do catálogo — maior que o
+     --section-padding-x geral, para bater com a referência. */
+  --catalog-gutter: clamp(1.25rem, 8vw, 7rem);
+  /* Off-white morno dos dois blocos claros. Leitura minha da captura —
+     se o valor da marca for outro, trocar só aqui. */
   --light: #f5f2ed;
   --ink: #0e0e0e;
   --ink-muted: #4a4a4a;
@@ -171,6 +174,11 @@ html {
   background-color: var(--panel);
 }
 
+/*
+  A lista é full-bleed: mora fora do .container e o recuo vem do padding
+  de cada linha. É o que faz o traço de separação ir de borda a borda,
+  como na referência.
+*/
 .catalog__list {
   margin-top: clamp(2.5rem, 6vw, 4rem);
   border-top: 1px solid var(--line);
@@ -184,28 +192,52 @@ html {
   CTAs alinhados: em todas as linhas o botão começa na mesma coordenada
   X e fica centrado na altura da linha, independentemente do tamanho da
   descrição.
-*/
 
+  `isolation: isolate` cria o contexto de empilhamento que permite ao
+  ::before do preenchimento usar z-index: -1 e ficar atrás do texto sem
+  sumir atrás do fundo da seção.
+*/
 .catalog__row {
+  position: relative;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(150px, 0.9fr) minmax(0, 2fr) auto;
+  /* 1 : 2.4 deixa a coluna do título estreita o bastante para o nome
+     quebrar em duas linhas, como na referência. */
+  grid-template-columns: minmax(140px, 1fr) minmax(0, 2.4fr) auto;
   align-items: center;
-  gap: clamp(1.5rem, 4vw, 3rem);
-  padding-block: clamp(1.75rem, 4vw, 2.5rem);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding-block: clamp(1.75rem, 4vw, 2.75rem);
+  padding-inline: var(--catalog-gutter);
   border-bottom: 1px solid var(--line);
-  transition: background-color var(--duration-default) var(--ease-default);
 }
 
-.catalog__row:hover {
-  background-color: rgba(255, 255, 255, 0.02);
+/*
+  O preenchimento branco do hover.
+
+  Na referência é uma div dedicada animando `height` de 0 a 100%, ancorada
+  no topo, com `height .3s cubic-bezier(0, .4, .25, 1)`. Aqui é um
+  ::before com scaleY e a mesma curva: dispensa o elemento extra em todas
+  as cinco linhas e roda no compositor em vez de disparar layout a cada
+  frame. Para um preenchimento de cor chapada o desenho é idêntico.
+*/
+.catalog__row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--white);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s cubic-bezier(0, 0.4, 0.25, 1);
 }
 
 .catalog__name {
-  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
   font-weight: 400;
   line-height: 1.15;
   letter-spacing: -0.01em;
   color: var(--white);
+  transition: color 0.3s cubic-bezier(0, 0.4, 0.25, 1);
 }
 
 .catalog__copy {
@@ -214,20 +246,69 @@ html {
   gap: 0.85rem;
 }
 
-.catalog__desc {
-  color: var(--muted);
+.catalog__desc,
+.catalog__for {
   font-size: 0.9375rem;
   line-height: 1.6;
+  transition: color 0.3s cubic-bezier(0, 0.4, 0.25, 1);
+}
+
+.catalog__desc {
+  color: var(--muted);
 }
 
 .catalog__for {
   color: rgba(255, 255, 255, 0.72);
-  font-size: 0.9375rem;
-  line-height: 1.6;
 }
 
 .catalog__cta {
   justify-self: end;
+  /* Mais rápido que o resto, como na referência. */
+  transition: background-color 0.15s cubic-bezier(0, 0.485, 0.25, 1),
+    color 0.15s cubic-bezier(0, 0.485, 0.25, 1);
+}
+
+/*
+  Só em ponteiro fino: no toque o :hover "gruda" depois do tap e a linha
+  ficaria branca até o usuário tocar em outro lugar. O :focus-within
+  cobre a navegação por teclado, que é como o CTA é alcançado sem mouse.
+*/
+@media (hover: hover) and (pointer: fine) {
+  .catalog__row:hover::before {
+    transform: scaleY(1);
+  }
+
+  .catalog__row:hover .catalog__name {
+    color: var(--ink);
+  }
+
+  .catalog__row:hover .catalog__desc,
+  .catalog__row:hover .catalog__for {
+    color: #55585e;
+  }
+
+  .catalog__row:hover .catalog__cta {
+    background-color: var(--orange);
+    color: var(--white);
+  }
+}
+
+.catalog__row:focus-within::before {
+  transform: scaleY(1);
+}
+
+.catalog__row:focus-within .catalog__name {
+  color: var(--ink);
+}
+
+.catalog__row:focus-within .catalog__desc,
+.catalog__row:focus-within .catalog__for {
+  color: #55585e;
+}
+
+.catalog__row:focus-within .catalog__cta {
+  background-color: var(--orange);
+  color: var(--white);
 }
 
 @media (max-width: 900px) {
@@ -239,6 +320,17 @@ html {
   .catalog__cta {
     justify-self: start;
     margin-top: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* A troca de estado continua; só o movimento sai. */
+  .catalog__row::before,
+  .catalog__name,
+  .catalog__desc,
+  .catalog__for,
+  .catalog__cta {
+    transition: none;
   }
 }
 
