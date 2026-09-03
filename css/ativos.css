@@ -244,6 +244,13 @@ html {
   display: flex;
   flex-direction: column;
   gap: 0.85rem;
+  /*
+    Limite de medida, não de coluna: a grade continua igual (os CTAs não
+    saem do lugar) e só o texto passa a quebrar antes. Em `ch` porque a
+    conta que importa é de caracteres por linha, não de pixels — assim o
+    limite acompanha o tamanho da fonte em qualquer breakpoint.
+  */
+  max-width: 58ch;
 }
 
 .catalog__desc,
