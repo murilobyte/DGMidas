@@ -15,7 +15,17 @@
   Aqui o azul #298DFF vira o laranja da marca.
 */
 
+/*
+  Escondida por padrão. Quem a liga é a classe .is-loading no <html>,
+  posta pelo script inline no <head> de cada página — só na primeira
+  visita da sessão e nunca com prefers-reduced-motion. Assim a cortina
+  não chega a pintar nas páginas seguintes, nem com JS desligado.
+*/
 .preloader {
+  display: none;
+}
+
+.is-loading .preloader {
   position: fixed;
   inset: 0;
   z-index: 9999;
@@ -161,17 +171,7 @@
 }
 
 /*
-  Menos movimento: sem deslize. A cortina só some — e o JS já encurta a
-  contagem, então ela sai quase de imediato.
+  Não há regra de prefers-reduced-motion aqui de propósito: com essa
+  preferência o script do <head> nunca adiciona .is-loading, então a
+  cortina fica em display:none e nada disto chega a rodar.
 */
-@media (prefers-reduced-motion: reduce) {
-  .preloader {
-    transition: opacity 0.2s linear;
-    animation: none;
-  }
-
-  .preloader.is-done {
-    transform: none;
-    opacity: 0;
-  }
-}

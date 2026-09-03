@@ -6,21 +6,18 @@
  * requestAnimationFrame para o número e uma transição de CSS para a
  * saída.
  *
- * ================================================================
- * AJUSTE
- * ================================================================
- * ONCE_PER_SESSION  false (padrão) = a cortina aparece a cada
- *                   carregamento, como no site de referência. Vire para
- *                   true e ela passa a aparecer só na primeira página da
- *                   sessão — quem for da home para /ativos não vê de
- *                   novo. É uma troca de fidelidade por conveniência;
- *                   deixei no padrão fiel porque foi o que você pediu.
- * ================================================================
+ * QUEM DECIDE SE A CORTINA APARECE não é este arquivo: é o script
+ * inline no <head> de cada página, que precisa rodar antes da primeira
+ * pintura. Ele mostra a cortina apenas na primeira visita da sessão
+ * (sessionStorage) e nunca com prefers-reduced-motion, marcando o
+ * <html> com a classe .is-loading. Aqui só animamos o que ele ligou.
+ *
+ * Para voltar a exibir em todo carregamento, como no site de
+ * referência, basta remover as duas linhas de sessionStorage daquele
+ * script inline.
  */
 (function () {
   "use strict";
-
-  var ONCE_PER_SESSION = false;
 
   /* Tempo mínimo em tela, para a cortina não "piscar" em cache quente. */
   var MIN_MS = 1100;
@@ -51,25 +48,15 @@
       window.setTimeout(remove, 1400);
     };
 
-    /* Já viu nesta sessão, ou pediu menos movimento: sai direto. */
-    var seen = false;
-    try {
-      seen = ONCE_PER_SESSION && window.sessionStorage.getItem("dg-preloader") === "1";
-    } catch (e) {
-      /* sessionStorage pode lançar em modo restrito — segue o baile. */
-    }
-
-    if (seen || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      if (pctEl) pctEl.textContent = "100%";
-      if (lineEl) lineEl.style.width = "100%";
-      finish();
+    /*
+     * A cortina não foi ligada (visita seguinte da sessão, menos
+     * movimento, ou JS parcialmente bloqueado): não há nada a animar.
+     * Tira o nó do DOM e sai — ele está em display:none, mas deixar uma
+     * camada de tela cheia pendurada não ajuda ninguém.
+     */
+    if (!root.classList.contains("is-loading")) {
+      if (el.parentNode) el.parentNode.removeChild(el);
       return;
-    }
-
-    try {
-      if (ONCE_PER_SESSION) window.sessionStorage.setItem("dg-preloader", "1");
-    } catch (e) {
-      /* idem */
     }
 
     var loaded = document.readyState === "complete";

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt-BR" class="is-loading">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -58,12 +58,34 @@
     <link rel="stylesheet" href="../css/ativos-hero.css" />
     <link rel="stylesheet" href="../css/ativos.css" />
     <link rel="stylesheet" href="../css/footer.css" />
-    <noscript>
-      <style>
-        .preloader { display: none !important; }
-        .is-loading, .is-loading body { overflow: auto !important; }
-      </style>
-    </noscript>
+    <!--
+      Decide ANTES da primeira pintura se a cortina aparece. Precisa ser
+      um script bloqueante aqui no <head>: se a decisão ficasse no
+      preloader.js (que é `defer`), a segunda página já teria pintado o
+      preto da cortina antes de descobrir que devia pulá-la.
+
+      Como o preloader só existe quando esta linha roda, também não é
+      mais preciso um <noscript>: com JS desligado a classe nunca é
+      adicionada e o CSS mantém a cortina em display:none.
+    -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        try {
+          /* Menos movimento: nem mostra. */
+          if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        } catch (e) {}
+        try {
+          /* Uma vez por sessão: quem vai da home para /ativos não vê de novo. */
+          if (sessionStorage.getItem("dg-preloader") === "1") return;
+          sessionStorage.setItem("dg-preloader", "1");
+        } catch (e) {
+          /* Sem sessionStorage não há como lembrar; mostrar é o
+             comportamento pretendido. */
+        }
+        d.classList.add("is-loading");
+      })();
+    </script>
   </head>
 
   <body class="page-ativos">
