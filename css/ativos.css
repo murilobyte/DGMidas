@@ -1,0 +1,742 @@
+/*
+  Estilos da página /ativos.
+
+  Escopo: quase tudo pende de `.page-ativos` (no <body>), porque esta
+  página reaproveita classes globais do site — .btn, .site-header,
+  .site-footer, .faq__item — e não pode alterar como elas se comportam
+  na home.
+
+  A página alterna blocos escuros e blocos claros, como na captura de
+  referência:
+    hero (preto) -> intro (preto) -> dor (preto) -> catálogo (grafite)
+    -> suporte (CLARO) -> faixa laranja -> faq (preto)
+    -> cta final (CLARO) -> rodapé (preto)
+
+  Ritmo vertical: uma escala só, --sec-y. Nenhum padding de seção
+  fora dela.
+*/
+
+.page-ativos {
+  --sec-y: clamp(4.5rem, 9vw, 8rem);
+  --line: rgba(255, 255, 255, 0.08);
+  --line-strong: rgba(255, 255, 255, 0.16);
+  /* Piso de contraste do corpo de texto sobre preto: 0.78 passa AA com
+     folga em 16px. O cinza #838383 da home reprovava no mobile. */
+  --muted: rgba(255, 255, 255, 0.78);
+  --panel: #161616;
+  /*
+    A hero tem 200svh, mas o fechamento termina por volta de 70% do
+    curso. Sem compensar isso sobravam ~430px de preto rolando sem nada
+    acontecendo antes do próximo texto entrar. Este recuo puxa o bloco
+    seguinte para cima, então ele chega justamente quando as colunas
+    acabam de fechar.
+  */
+  --hero-tail: 50svh;
+  /* Recuo interno das linhas full-bleed do catálogo — maior que o
+     --section-padding-x geral, para bater com a referência. */
+  --catalog-gutter: clamp(1.25rem, 8vw, 7rem);
+  /* Off-white morno dos dois blocos claros. Leitura minha da captura —
+     se o valor da marca for outro, trocar só aqui. */
+  --light: #f5f2ed;
+  --ink: #0e0e0e;
+  --ink-muted: #4a4a4a;
+  background-color: var(--absolute-black);
+}
+
+/* Quem rola é o <html>, então o scroll-padding tem de morar nele — em
+   .page-ativos (o <body>) a propriedade não teria efeito. */
+html {
+  scroll-padding-top: 96px;
+}
+
+.section {
+  padding-block: var(--sec-y);
+}
+
+.section__head {
+  max-width: 720px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.section__title {
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  text-align: center;
+}
+
+.section__lead {
+  margin-top: 1.25rem;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* Entrada padrão — o observador de [data-animate] do main.js é quem
+   adiciona .in-view. */
+[data-animate] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s var(--ease-default), transform 0.6s var(--ease-default);
+}
+
+[data-animate].in-view {
+  opacity: 1;
+  transform: none;
+}
+
+/* O header fica sobre o preto da hero, sem barra de confiança acima —
+   a v1 não tem essa barra. */
+.page-ativos .site-header {
+  background-color: var(--absolute-black);
+}
+
+/* ---------------------------------------------------------------- */
+/* Subheadline + CTAs                                                */
+/* ---------------------------------------------------------------- */
+
+.intro {
+  /*
+    `position: relative` + z-index não são decoração: a .hero é
+    posicionada, então sem isto ela pintaria por cima deste bloco em vez
+    de ser coberta por ele.
+  */
+  position: relative;
+  z-index: 1;
+  margin-top: calc(-1 * var(--hero-tail));
+  background-color: var(--absolute-black);
+  padding-block: clamp(3rem, 8vw, 6rem);
+}
+
+/* Sem animação de fechamento a hero volta a ter uma tela só e não há
+   cauda para compensar. */
+.hero--static + .intro {
+  margin-top: 0;
+}
+
+.intro__inner {
+  max-width: 620px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.intro__text {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.intro__text strong {
+  color: var(--white);
+  font-weight: 700;
+}
+
+.intro__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
+/* ---------------------------------------------------------------- */
+/* Dor do comprador                                                  */
+/* ---------------------------------------------------------------- */
+
+.pain {
+  background-color: var(--absolute-black);
+}
+
+.pain__body {
+  max-width: 640px;
+  margin: clamp(2rem, 5vw, 3rem) auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pain__body p {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.75;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------- */
+/* Catálogo                                                          */
+/* ---------------------------------------------------------------- */
+
+.catalog {
+  background-color: var(--panel);
+}
+
+/*
+  A lista é full-bleed: mora fora do .container e o recuo vem do padding
+  de cada linha. É o que faz o traço de separação ir de borda a borda,
+  como na referência.
+*/
+.catalog__list {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  border-top: 1px solid var(--line);
+}
+
+/*
+  Linhas, não cards em grade — é o formato da referência e o que escala
+  para cinco produtos sem virar parede de texto.
+
+  A grade de 3 colunas com largura fixa nas laterais é o que mantém os
+  CTAs alinhados: em todas as linhas o botão começa na mesma coordenada
+  X e fica centrado na altura da linha, independentemente do tamanho da
+  descrição.
+
+  `isolation: isolate` cria o contexto de empilhamento que permite ao
+  ::before do preenchimento usar z-index: -1 e ficar atrás do texto sem
+  sumir atrás do fundo da seção.
+*/
+.catalog__row {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  /* 1 : 2.4 deixa a coluna do título estreita o bastante para o nome
+     quebrar em duas linhas, como na referência. */
+  grid-template-columns: minmax(140px, 1fr) minmax(0, 2.4fr) auto;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  padding-block: clamp(1.75rem, 4vw, 2.75rem);
+  padding-inline: var(--catalog-gutter);
+  border-bottom: 1px solid var(--line);
+}
+
+/*
+  O preenchimento branco do hover.
+
+  Na referência é uma div dedicada animando `height` de 0 a 100%, ancorada
+  no topo, com `height .3s cubic-bezier(0, .4, .25, 1)`. Aqui é um
+  ::before com scaleY e a mesma curva: dispensa o elemento extra em todas
+  as cinco linhas e roda no compositor em vez de disparar layout a cada
+  frame. Para um preenchimento de cor chapada o desenho é idêntico.
+*/
+.catalog__row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--white);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.3s cubic-bezier(0, 0.4, 0.25, 1);
+}
+
+.catalog__name {
+  font-size: clamp(1.75rem, 3.6vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  transition: color 0.3s cubic-bezier(0, 0.4, 0.25, 1);
+}
+
+.catalog__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  /*
+    Limite de medida, não de coluna: a grade continua igual (os CTAs não
+    saem do lugar) e só o texto passa a quebrar antes. Em `ch` porque a
+    conta que importa é de caracteres por linha, não de pixels — assim o
+    limite acompanha o tamanho da fonte em qualquer breakpoint.
+  */
+  max-width: 58ch;
+}
+
+.catalog__desc,
+.catalog__for {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  transition: color 0.3s cubic-bezier(0, 0.4, 0.25, 1);
+}
+
+.catalog__desc {
+  color: var(--muted);
+}
+
+.catalog__for {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.catalog__cta {
+  justify-self: end;
+  /* Mais rápido que o resto, como na referência. */
+  transition: background-color 0.15s cubic-bezier(0, 0.485, 0.25, 1),
+    color 0.15s cubic-bezier(0, 0.485, 0.25, 1);
+}
+
+/*
+  Só em ponteiro fino: no toque o :hover "gruda" depois do tap e a linha
+  ficaria branca até o usuário tocar em outro lugar. O :focus-within
+  cobre a navegação por teclado, que é como o CTA é alcançado sem mouse.
+*/
+@media (hover: hover) and (pointer: fine) {
+  .catalog__row:hover::before {
+    transform: scaleY(1);
+  }
+
+  .catalog__row:hover .catalog__name {
+    color: var(--ink);
+  }
+
+  .catalog__row:hover .catalog__desc,
+  .catalog__row:hover .catalog__for {
+    color: #55585e;
+  }
+
+  .catalog__row:hover .catalog__cta {
+    background-color: var(--orange);
+    color: var(--white);
+  }
+}
+
+.catalog__row:focus-within::before {
+  transform: scaleY(1);
+}
+
+.catalog__row:focus-within .catalog__name {
+  color: var(--ink);
+}
+
+.catalog__row:focus-within .catalog__desc,
+.catalog__row:focus-within .catalog__for {
+  color: #55585e;
+}
+
+.catalog__row:focus-within .catalog__cta {
+  background-color: var(--orange);
+  color: var(--white);
+}
+
+@media (max-width: 900px) {
+  .catalog__row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .catalog__cta {
+    justify-self: start;
+    margin-top: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* A troca de estado continua; só o movimento sai. */
+  .catalog__row::before,
+  .catalog__name,
+  .catalog__desc,
+  .catalog__for,
+  .catalog__cta {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Suporte — bloco claro                                             */
+/* ---------------------------------------------------------------- */
+
+/*
+  O gradiente do fim da seção é o que antes era a faixa laranja num
+  elemento separado. Trazê-lo para o fundo da própria seção elimina o
+  <div> decorativo e, principalmente, deixa a transição para o preto do
+  FAQ acontecer no mesmo pintado — sem risco de uma emenda de 1px entre
+  dois blocos.
+
+  Os stops vieram da referência.
+*/
+.support {
+  background: linear-gradient(
+    180deg,
+    #ffffff 83.2%,
+    #fc6909 90.93%,
+    #000000 100%
+  );
+  color: var(--ink);
+  /*
+    O respiro embaixo não é decorativo: é a pista por onde o gradiente
+    corre. Sem ele o laranja e o preto passariam por trás do texto.
+  */
+  padding-block: var(--sec-y) clamp(9rem, 20vw, 17rem);
+}
+
+/*
+  Alinhado pelo TOPO, não centrado: na referência o texto e a foto
+  começam na mesma linha e a coluna de texto termina bem antes.
+*/
+.support__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: clamp(2rem, 6vw, 4.5rem);
+}
+
+.support__title {
+  font-size: clamp(2rem, 4.2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.support__subtitle {
+  /* O vão grande entre o título e o subtítulo é da referência. */
+  margin-top: clamp(2.5rem, 6vw, 5rem);
+  /* Quebra em "Suporte com gente de / verdade, 24 horas por dia",
+     como na referência. */
+  max-width: 20ch;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--ink);
+}
+
+.support__text {
+  margin-top: 1.5rem;
+  max-width: 42ch;
+  color: var(--ink-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.support__cta {
+  margin-top: clamp(2.5rem, 6vw, 5.5rem);
+}
+
+.support__media {
+  overflow: hidden;
+  /* Trava a proporção antes de a imagem baixar — é o que impede o salto
+     de layout (CLS) nesta seção. E o retrato é o enquadramento nativo
+     do arquivo, então quase não há corte. */
+  aspect-ratio: 7 / 9;
+}
+
+.support__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+@media (max-width: 860px) {
+  .support__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .support__media {
+    order: -1;
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* FAQ (variante escura, duas colunas)                               */
+/* ---------------------------------------------------------------- */
+
+/*
+  Reaproveita as classes .faq__item / .faq__question / .faq__answer para
+  herdar o acordeão de js/faq.js sem duplicar JS. O visual é escrito do
+  zero aqui — css/faq.css (painel branco da home) não é carregado nesta
+  página, então não há conflito.
+*/
+.faq--dark {
+  background-color: var(--absolute-black);
+}
+
+.faq--dark .faq__inner {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.faq--dark .faq__title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+
+.faq--dark .faq__intro {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.faq--dark .faq__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.faq--dark .faq__item {
+  border-bottom: 1px solid var(--line);
+}
+
+.faq--dark .faq__item:first-child {
+  border-top: 1px solid var(--line);
+}
+
+.faq--dark .faq__question {
+  display: grid;
+  grid-template-columns: 2rem 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding-block: 1.35rem;
+  text-align: left;
+  font-size: 0.9375rem;
+  font-weight: 400;
+  color: var(--white);
+  transition: color var(--duration-default) var(--ease-default);
+}
+
+.faq--dark .faq__question:hover {
+  color: var(--orange);
+}
+
+.faq--dark .faq__index {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.faq--dark .faq__icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+.faq--dark .faq__icon::before,
+.faq--dark .faq__icon::after {
+  content: "";
+  position: absolute;
+  background-color: currentColor;
+  transition: transform 0.35s var(--ease-default);
+}
+
+.faq--dark .faq__icon::before {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  transform: translateY(-50%);
+}
+
+.faq--dark .faq__icon::after {
+  left: 50%;
+  top: 0;
+  width: 1.5px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.faq--dark .faq__item.is-open .faq__icon::after {
+  transform: translateX(-50%) rotate(90deg);
+}
+
+/* Abertura por grid-template-rows 0fr -> 1fr: anima a altura real sem
+   precisar medir nada em JS. */
+.faq--dark .faq__answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.4s var(--ease-default),
+    opacity 0.4s var(--ease-default);
+}
+
+.faq--dark .faq__item.is-open .faq__answer {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.faq--dark .faq__answer-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.faq--dark .faq__answer-text {
+  padding: 0 3rem 1.4rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+@media (max-width: 860px) {
+  .faq--dark .faq__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .faq--dark .faq__answer-text {
+    padding-inline: 0;
+  }
+
+  .faq--dark .faq__question {
+    grid-template-columns: 1.75rem 1fr auto;
+    gap: 0.75rem;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* CTA final — bloco claro                                           */
+/* ---------------------------------------------------------------- */
+
+.closing {
+  background-color: var(--light);
+  text-align: center;
+}
+
+.closing__inner {
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.closing__title {
+  font-size: clamp(1.9rem, 4.2vw, 3rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.closing__text {
+  margin-top: 1.5rem;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+  line-height: 1.7;
+}
+
+.closing__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.25rem;
+}
+
+/* O .btn--secondary do site é branco a 8% — invisível sobre o bloco
+   claro. Aqui ele vira um contorno escuro. */
+.closing .btn--secondary {
+  background-color: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(14, 14, 14, 0.25);
+}
+
+.closing .btn--secondary:hover {
+  background-color: rgba(14, 14, 14, 0.06);
+}
+
+@media (max-width: 560px) {
+  .intro__actions,
+  .closing__actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 260px;
+    margin-inline: auto;
+  }
+
+  .intro__actions .btn,
+  .closing__actions .btn {
+    width: 100%;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Botão flutuante de WhatsApp                                       */
+/* ---------------------------------------------------------------- */
+
+.wa-float {
+  position: fixed;
+  right: clamp(1rem, 3vw, 1.75rem);
+  bottom: clamp(1rem, 3vw, 1.75rem);
+  z-index: 90;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #25d366;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  /* Escondido até o usuário passar da hero — js/ativos.js troca a
+     classe. `visibility` junto de `opacity` para o botão não continuar
+     clicável enquanto invisível. */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px) scale(0.9);
+  transition: opacity 0.35s var(--ease-default), transform 0.35s var(--ease-default),
+    visibility 0.35s;
+}
+
+.wa-float.is-visible {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.wa-float:hover {
+  filter: brightness(1.08);
+}
+
+.wa-float svg {
+  width: 30px;
+  height: 30px;
+  fill: #ffffff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-float {
+    transition: opacity 0.01ms, visibility 0.01ms;
+    transform: none;
+  }
+}
+
+/* ---------------------------------------------------------------- */
+/* Correções de acessibilidade em componentes compartilhados         */
+/* ---------------------------------------------------------------- */
+
+/*
+  Os dois ajustes abaixo consertam problemas que NÃO nasceram nesta
+  página: vêm de css/footer.css e de js/main.js + css/style.css, que a
+  home também usa. Como o briefing pede "Não altere nenhuma outra
+  página do site", a correção fica escopada em .page-ativos. A home
+  continua com o comportamento antigo — vale abrir isso como um ajuste
+  próprio depois.
+*/
+
+/*
+  1. Contraste do rodapé. O #313131 sobre preto dá 1.61:1, muito abaixo
+     do mínimo AA de 4.5:1 — na prática o endereço e o CNPJ ficam
+     ilegíveis. #8A8A8A dá 6.1:1 e mantém o tom discreto do original.
+*/
+.page-ativos .site-footer__link,
+.page-ativos .site-footer__address,
+.page-ativos .site-footer__cnpj,
+.page-ativos .site-footer__copy {
+  color: #8a8a8a;
+}
+
+/*
+  2. Nome acessível dos botões. O efeito cascata de js/main.js quebra o
+     rótulo em um <span> por letra e o .btn__char-inner é `display:
+     block` — cada letra vira uma caixa de bloco, então o texto visível
+     é computado como "V\ne\nr\n..." e deixa de bater com o aria-label.
+     `inline-block` mantém a animação (transform funciona igual, e o
+     overflow do .btn__char continua recortando) e devolve o rótulo a
+     uma linha só para quem lê a página.
+*/
+.page-ativos .btn__char-inner {
+  display: inline-block;
+}

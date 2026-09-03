@@ -1,0 +1,121 @@
+/*
+ * Comportamento da página /ativos:
+ *   - liga todos os CTAs ao WhatsApp com a mensagem da sua origem
+ *   - botão flutuante que aparece depois da hero
+ *   - JSON-LD de FAQPage gerado a partir do próprio acordeão
+ *   - sincroniza o telefone do rodapé com a constante central
+ *
+ * O acordeão do FAQ em si é o js/faq.js do site, reaproveitado: esta
+ * página usa as mesmas classes .faq__item / .faq__question.
+ */
+(function () {
+  "use strict";
+
+  var cfg = window.DGAtivos;
+
+  /*
+   * Todo CTA de WhatsApp é um <a data-wa="chave">. O href é montado aqui
+   * a partir do mapa de mensagens, então o HTML nunca repete uma URL e
+   * mudar o número é mexer em um lugar só.
+   */
+  function initWhatsAppLinks() {
+    if (!cfg) return;
+
+    document.querySelectorAll("[data-wa]").forEach(function (el) {
+      var origin = el.getAttribute("data-wa");
+
+      el.setAttribute("href", cfg.waFrom(origin));
+      el.setAttribute("target", "_blank");
+      el.setAttribute("rel", "noopener noreferrer");
+
+      el.addEventListener("click", function () {
+        cfg.track(origin);
+      });
+    });
+  }
+
+  /*
+   * O flutuante só entra depois da hero: na primeira dobra ele
+   * competiria com o CTA principal, que está logo ali.
+   *
+   * O gatilho é a chegada do bloco seguinte, e não a saída da hero, de
+   * propósito: a hero tem 200svh (o trilho da animação de fechamento),
+   * então esperar ela sair inteira seguraria o botão por duas telas
+   * inteiras de rolagem.
+   */
+  function initFloatingButton() {
+    var float = document.querySelector(".wa-float");
+    var next = document.querySelector(".intro");
+    if (!float || !next) return;
+
+    var io = new IntersectionObserver(
+      function (entries) {
+        float.classList.toggle("is-visible", entries[0].isIntersecting);
+      },
+      { threshold: 0 }
+    );
+
+    io.observe(next);
+  }
+
+  /*
+   * Schema de FAQPage montado a partir do DOM, e não escrito à mão: o
+   * acordeão vira a única fonte da verdade, sem risco de o schema e a
+   * página divergirem depois de uma edição de copy.
+   *
+   * Perguntas cuja resposta ainda é placeholder ficam de fora. Enviar
+   * "[X]" para o Google seria pior que não enviar nada.
+   */
+  function initFaqSchema() {
+    var items = document.querySelectorAll(".faq--dark .faq__item");
+    if (!items.length) return;
+
+    var entries = [];
+
+    items.forEach(function (item) {
+      var q = item.querySelector(".faq__question-text");
+      var a = item.querySelector(".faq__answer-text");
+      if (!q || !a) return;
+
+      var question = q.textContent.trim();
+      var answer = a.textContent.trim();
+
+      if (!question || !answer || answer.indexOf("[X]") !== -1) return;
+
+      entries.push({
+        "@type": "Question",
+        name: question,
+        acceptedAnswer: { "@type": "Answer", text: answer },
+      });
+    });
+
+    if (!entries.length) return;
+
+    var script = document.createElement("script");
+    script.type = "application/ld+json";
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: entries,
+    });
+
+    document.head.appendChild(script);
+  }
+
+  /* O telefone vive em js/ativos-config.js; o HTML só marca onde ele vai. */
+  function initPhone() {
+    if (!cfg) return;
+
+    document.querySelectorAll("[data-phone]").forEach(function (el) {
+      el.setAttribute("href", "tel:" + cfg.PHONE_TEL);
+      el.textContent = cfg.PHONE_DISPLAY;
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    initWhatsAppLinks();
+    initFloatingButton();
+    initFaqSchema();
+    initPhone();
+  });
+})();

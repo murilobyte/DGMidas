@@ -1,8 +1,23 @@
 @import "variables.css";
 @import "reset.css";
 
+/*
+  Tipografia do site: SF Pro Display.
+
+  A SF Pro é licenciada pela Apple para uso nas plataformas dela, o que
+  NÃO permite hospedar os arquivos como webfont — por isso a família é
+  referenciada pelo nome, não carregada por @font-face. Em Mac, iPhone e
+  iPad ela já está instalada e é usada; nos demais sistemas a pilha cai
+  para a fonte de interface equivalente, que tem métricas parecidas.
+
+  "SF Pro Display" vem antes de `system-ui` de propósito: em macOS o
+  `system-ui` troca sozinho para a SF Pro Text nos tamanhos pequenos, e
+  aqui queremos o corte Display em todos eles.
+*/
 body {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "SF Pro Display", -apple-system, BlinkMacSystemFont, system-ui,
+    "Segoe UI Variable Display", "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
 }
 
 .container {

@@ -33,6 +33,8 @@
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/preloader.css" />
+    <link rel="stylesheet" href="css/text-fx.css" />
     <link rel="stylesheet" href="css/header.css" />
     <link rel="stylesheet" href="css/hero.css" />
     <link rel="stylesheet" href="css/logos.css" />
@@ -43,8 +45,53 @@
     <link rel="stylesheet" href="css/cta-final.css" />
     <link rel="stylesheet" href="css/footer.css" />
     <link rel="stylesheet" href="css/lead-modal.css" />
+    <!--
+      Decide ANTES da primeira pintura se a cortina aparece. Precisa ser
+      um script bloqueante aqui no <head>: se a decisão ficasse no
+      preloader.js (que é `defer`), a segunda página já teria pintado o
+      preto da cortina antes de descobrir que devia pulá-la.
+
+      Como o preloader só existe quando esta linha roda, também não é
+      mais preciso um <noscript>: com JS desligado a classe nunca é
+      adicionada e o CSS mantém a cortina em display:none.
+    -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        try {
+          /* Menos movimento: nem mostra. */
+          if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        } catch (e) {}
+        try {
+          /* Uma vez por sessão: quem vai da home para /ativos não vê de novo. */
+          if (sessionStorage.getItem("dg-preloader") === "1") return;
+          sessionStorage.setItem("dg-preloader", "1");
+        } catch (e) {
+          /* Sem sessionStorage não há como lembrar; mostrar é o
+             comportamento pretendido. */
+        }
+        d.classList.add("is-loading");
+      })();
+    </script>
   </head>
   <body>
+    <!--
+      Preloader. A cortina já nasce no HTML para não haver um piscar de
+      página antes do JS assumir. Quem a remove é js/preloader.js; o
+      <noscript> no <head> cobre o caso de JS desligado e há uma animação
+      de segurança no CSS para o caso de o script não carregar.
+    -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+      <div class="preloader__track">
+        <div class="preloader__line">
+          <span class="preloader__marker">
+            <span class="preloader__dot"></span>
+            <span class="preloader__pct">0%</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
     <header class="site-header" id="site-header">
       <div class="container header__inner">
         <a href="#inicio" class="header__logo">
@@ -52,10 +99,11 @@
 
         <nav class="header__nav" id="header-nav">
           <ul class="header__nav-list">
-            <li><a href="#inicio" class="header__nav-link">Início</a></li>
-            <li><a href="#servicos" class="header__nav-link">Serviços</a></li>
-            <li><a href="#contato" class="header__nav-link">Trabalhe conosco</a></li>
-            <li><a href="#contato" class="header__nav-link">Contato</a></li>
+            <li><a href="#inicio" class="header__nav-link" data-scramble>Início</a></li>
+            <li><a href="#servicos" class="header__nav-link" data-scramble>Serviços</a></li>
+            <li><a href="/ativos" class="header__nav-link" data-scramble>Ativos</a></li>
+            <li><a href="#contato" class="header__nav-link" data-scramble>Trabalhe conosco</a></li>
+            <li><a href="#contato" class="header__nav-link" data-scramble>Contato</a></li>
           </ul>
         </nav>
 
@@ -133,7 +181,7 @@
       <section class="solutions" id="servicos">
         <div class="solutions__panel section-inset">
           <div class="solutions__header">
-            <h2 class="solutions__title" data-animate>Soluções digitais</h2>
+            <h2 class="solutions__title" data-split>Soluções digitais</h2>
             <p class="solutions__subtitle" data-animate>
               Tecnologia de ponta para<br />
               escalar seu negócio no digital.
@@ -215,7 +263,7 @@
 
       <section class="metrics" id="numeros">
         <div class="metrics__inner">
-          <h2 class="metrics__title" data-animate>
+          <h2 class="metrics__title" data-split>
             Números que comprovam<br />
             a nossa escala
           </h2>
@@ -259,7 +307,7 @@
 
       <section class="tech" id="tecnologia">
         <div class="tech__header container">
-          <h2 class="tech__title" data-animate>Tecnologia de ponta</h2>
+          <h2 class="tech__title" data-split>Tecnologia de ponta</h2>
           <p class="tech__desc" data-animate>
             Utilizamos a
             <strong>API Oficial do WhatsApp pela Meta</strong>, garantindo
@@ -322,7 +370,7 @@
 
       <section class="faq" id="faq">
         <div class="container">
-          <h2 class="faq__title" data-animate>FAQ</h2>
+          <h2 class="faq__title" data-split>FAQ</h2>
 
           <div class="faq__panel">
             <ul class="faq__list">
@@ -462,7 +510,7 @@
 
       <section class="cta-final" id="contato">
         <div class="container cta-final__inner">
-          <h2 class="cta-final__title" data-animate>
+          <h2 class="cta-final__title" data-split>
             Pronto para escalar<br />
             seu negócio?
           </h2>
@@ -484,7 +532,7 @@
       <div class="site-footer__inner section-inset">
         <div class="site-footer__col">
           <h3 class="site-footer__heading">Contato</h3>
-          <a href="tel:+553700000000" class="site-footer__link"
+          <a href="tel:+5537998157790" class="site-footer__link"
             >+55 37 99815-7790</a
           >
           <a href="mailto:contato@dgmidias.com" class="site-footer__link"
@@ -585,6 +633,8 @@
       </div>
     </div>
 
+    <script src="js/preloader.js"></script>
+    <script src="js/text-fx.js" defer></script>
     <script src="js/main.js"></script>
     <script src="js/header.js"></script>
     <script src="js/hero.js"></script>

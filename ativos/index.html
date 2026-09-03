@@ -1,0 +1,610 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--
+      /ativos — PENDÊNCIAS DE COPY
+      Marcadas com o literal [X] no corpo da página, cada uma com um
+      comentário logo acima. Buscar por "[X]" lista todas.
+
+        1. 2º parágrafo da seção "Quem anuncia sabe"
+        2. As 6 respostas do FAQ
+        3. assets/og-ativos.jpg (imagem de compartilhamento)
+
+      TRANSCRITO DA CAPTURA — CONFERIR:
+      os trechos precedidos por um comentário "v1" foram lidos da
+      captura da primeira versão, não de um arquivo de texto. O sentido
+      está certo; conferir palavra por palavra antes de publicar.
+
+      NÃO CARREGA lead-modal.js de propósito: aquele script dá
+      preventDefault em todo botão primário do site para abrir o modal
+      de lead, o que quebraria os links diretos de WhatsApp daqui.
+    -->
+
+    <title>Ativos para Tráfego Pago | BMs, Perfis, Google e TikTok | DG Mídias</title>
+    <meta
+      name="description"
+      content="BMs Facebook, perfis, contas Google e TikTok e BM para disparo com limite definido. Entrega configurada, garantia de troca e suporte 24h no WhatsApp."
+    />
+    <meta name="theme-color" content="#0E0E0E" />
+    <link rel="canonical" href="https://www.dgmidias.com/ativos" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="DG Mídias" />
+    <meta property="og:url" content="https://www.dgmidias.com/ativos" />
+    <meta
+      property="og:title"
+      content="Ativos para Tráfego Pago | BMs, Perfis, Google e TikTok | DG Mídias"
+    />
+    <meta
+      property="og:description"
+      content="BMs Facebook, perfis, contas Google e TikTok e BM para disparo com limite definido. Entrega configurada, garantia de troca e suporte 24h no WhatsApp."
+    />
+    <!-- [X] imagem de compartilhamento própria da página (1200x630) -->
+    <meta property="og:image" content="https://www.dgmidias.com/assets/og-ativos.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" as="image" href="../assets/hero-grid.png" />
+
+    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="../css/preloader.css" />
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/ativos-hero.css" />
+    <link rel="stylesheet" href="../css/text-fx.css" />
+    <link rel="stylesheet" href="../css/ativos.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <!--
+      Decide ANTES da primeira pintura se a cortina aparece. Precisa ser
+      um script bloqueante aqui no <head>: se a decisão ficasse no
+      preloader.js (que é `defer`), a segunda página já teria pintado o
+      preto da cortina antes de descobrir que devia pulá-la.
+
+      Como o preloader só existe quando esta linha roda, também não é
+      mais preciso um <noscript>: com JS desligado a classe nunca é
+      adicionada e o CSS mantém a cortina em display:none.
+    -->
+    <script>
+      (function () {
+        var d = document.documentElement;
+        try {
+          /* Menos movimento: nem mostra. */
+          if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        } catch (e) {}
+        try {
+          /* Uma vez por sessão: quem vai da home para /ativos não vê de novo. */
+          if (sessionStorage.getItem("dg-preloader") === "1") return;
+          sessionStorage.setItem("dg-preloader", "1");
+        } catch (e) {
+          /* Sem sessionStorage não há como lembrar; mostrar é o
+             comportamento pretendido. */
+        }
+        d.classList.add("is-loading");
+      })();
+    </script>
+  </head>
+
+  <body class="page-ativos">
+    <!--
+      Preloader. A cortina já nasce no HTML para não haver um piscar de
+      página antes do JS assumir. Quem a remove é js/preloader.js; o
+      <noscript> no <head> cobre o caso de JS desligado e há uma animação
+      de segurança no CSS para o caso de o script não carregar.
+    -->
+    <div class="preloader" id="preloader" aria-hidden="true">
+      <div class="preloader__track">
+        <div class="preloader__line">
+          <span class="preloader__marker">
+            <span class="preloader__dot"></span>
+            <span class="preloader__pct">0%</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <header class="site-header" id="site-header">
+      <div class="container header__inner">
+        <a href="../index.html" class="header__logo">
+          <img src="../assets/svg/logo.svg" alt="DG Mídias" width="132" height="29" />
+        </a>
+
+        <nav class="header__nav" id="header-nav">
+          <ul class="header__nav-list">
+            <li><a href="../index.html#inicio" class="header__nav-link" data-scramble>Início</a></li>
+            <li><a href="../index.html#servicos" class="header__nav-link" data-scramble>Serviços</a></li>
+            <li><a href="/ativos" class="header__nav-link" aria-current="page" data-scramble>Ativos</a></li>
+            <li><a href="../index.html#contato" class="header__nav-link" data-scramble>Trabalhe conosco</a></li>
+            <li><a href="../index.html#contato" class="header__nav-link" data-scramble>Contato</a></li>
+          </ul>
+        </nav>
+
+        <div class="header__actions">
+          <a
+            href="https://wa.me/5537998157790"
+            class="btn btn--primary header__cta"
+            data-wa="hero"
+            >Fale conosco</a
+          >
+          <button
+            class="header__burger"
+            id="header-burger"
+            type="button"
+            aria-label="Abrir menu"
+            aria-expanded="false"
+            aria-controls="header-nav"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- ============================================================
+           HERO
+           ============================================================ -->
+      <!--
+        A seção tem o DOBRO da altura da tela e prende uma camada de
+        100svh dentro dela (.hero__sticky) — mesma montagem do
+        sui.io/ai. É esse trecho a mais de rolagem que dá espaço para a
+        animação de fechamento acontecer com a hero parada na tela.
+      -->
+      <section class="hero" id="topo">
+        <div class="hero__sticky">
+          <!--
+            Fundo decorativo. As 15 colunas são criadas por
+            js/ativos-hero.js — ver o comentário lá sobre por que não
+            moram no HTML.
+          -->
+          <div class="hero__bg" aria-hidden="true">
+            <div class="hero__bars"></div>
+            <div class="hero__pattern"></div>
+          </div>
+
+          <div class="hero__content">
+            <p class="hero__eyebrow">Ativos para tráfego pago</p>
+
+            <h1 class="hero__title">
+              <span class="hero__line"><span class="hero__line-inner">Sua operação de anúncios</span></span>
+              <span class="hero__line"><span class="hero__line-inner">não pode parar</span></span>
+            </h1>
+
+            <!-- v1 -->
+            <p class="hero__note">
+              Todos os ativos que sua empresa precisa para anunciar, prontos
+              para rodar hoje
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SUBHEADLINE + CTAS  (bloco separado, como na v1)
+           ============================================================ -->
+      <div class="intro">
+        <div class="container intro__inner">
+          <!-- v1 -->
+          <p class="intro__text" data-animate>
+            BMs do Facebook, perfis, contas do Google, contas do TikTok e BMs
+            para disparo com limite definido, entregues configuradas, com
+            garantia de troca e <strong>suporte 24 horas</strong> por dia no
+            WhatsApp. <strong>Mais de 5 mil ativos entregues</strong> para
+            e-commerces e anunciantes em <strong>todo o Brasil</strong>.
+          </p>
+
+          <div class="intro__actions" data-animate>
+            <a
+              href="https://wa.me/5537998157790"
+              class="btn btn--primary"
+              data-wa="hero"
+              >Falar com o time</a
+            >
+            <a href="#catalogo" class="btn btn--secondary">Ver nosso catálogo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           DOR DO COMPRADOR
+           ============================================================ -->
+      <section class="section pain">
+        <div class="container">
+          <h2 class="section__title" data-split>
+            Quem anuncia sabe: o<br />problema nunca avisa
+          </h2>
+
+          <div class="pain__body">
+            <!-- v1 -->
+            <p data-animate>
+              A operação para, o faturamento para junto, e o suporte da
+              plataforma responde com um artigo de ajuda genérico.
+            </p>
+            <p data-animate>Você abre o gerenciador e a estrutura não roda mais, 
+              sem explicação. O fornecedor que vendeu o ativo some. Montar tudo do 
+              zero custa uma semana entre verificação, configuração e aquecimento, e 
+              procurar o mais barato sai mais caro ainda, porque ativo sem configuração, 
+              sem histórico e sem garantia cobra a conta depois.
+Nós existimos para que nada disso seja problema seu.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           CATÁLOGO
+           ============================================================ -->
+      <section class="section catalog" id="catalogo">
+        <div class="container">
+          <div class="section__head">
+            <h2 class="section__title" data-split>O que entregamos</h2>
+            <!-- v1 -->
+            <p class="section__lead" data-animate>
+              Todo ativo sai daqui configurado, testado e com garantia.<br />
+              Preços sob consulta, definidos por tipo e disponibilidade.
+            </p>
+          </div>
+        </div>
+
+        <!--
+          A lista fica FORA do .container de propósito: as linhas ocupam a
+          largura inteira da tela, com o recuo interno vindo do padding de
+          cada linha. É o que dá o traço de separação de borda a borda.
+        -->
+        <div class="catalog__list">
+            <!-- v1 (as 5 descrições abaixo) -->
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">BMs <br>Facebook</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  Business Managers entregues configuradas e prontas para uso, em
+                  diferentes perfis de limite e verificação, conforme o estágio
+                  da sua operação.
+                </p>
+                <p class="catalog__for">
+                  Ideal para: quem precisa estruturar ou ampliar a operação de
+                  anúncios com rapidez.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="bm-facebook"
+                >Falar com o time</a
+              >
+            </article>
+
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">BM para disparo</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  BM preparada especificamente para operação de mensagens no
+                  WhatsApp, entregue com o limite de disparo já definido e
+                  informado antes da compra.
+                </p>
+                <p class="catalog__for">
+                  Ideal para: quem faz campanhas de recuperação, reativação de
+                  base e ofertas por WhatsApp e precisa saber exatamente qual
+                  volume a estrutura suporta.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="bm-disparo"
+                >Falar com o time</a
+              >
+            </article>
+
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">Contas <br>Google</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  Contas Google Ads entregues configuradas, com meio de pagamento
+                  e estrutura pronta para veiculação.
+                </p>
+                <p class="catalog__for">
+                  Ideal para: quem precisa de estrutura estável para operar com
+                  consistência.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="google"
+                >Falar com o time</a
+              >
+            </article>
+
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">Contas <br>TikTok</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  Contas TikTok Ads entregues configuradas e prontas para
+                  veiculação, com limite e estrutura definida.
+                </p>
+                <p class="catalog__for">
+                  Ideal para: e-commerces que querem abrir o canal de maior
+                  crescimento em criativo de vídeo sem perder tempo na
+                  configuração inicial.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="tiktok"
+                >Falar com o time</a
+              >
+            </article>
+
+            <article class="catalog__row" data-animate>
+              <h3 class="catalog__name">Perfis</h3>
+              <div class="catalog__copy">
+                <p class="catalog__desc">
+                  Perfis entregues com configuração completa e histórico de uso
+                  real, prontos para serem vinculados à sua estrutura.
+                </p>
+                <p class="catalog__for">
+                  Ideal para: quem precisa de estrutura estável para operar com
+                  consistência.
+                </p>
+              </div>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--secondary catalog__cta"
+                data-wa="perfis"
+                >Falar com o time</a
+              >
+            </article>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           SUPORTE  (bloco claro)
+           ============================================================ -->
+      <section class="section support" id="suporte">
+        <div class="container support__inner">
+          <div class="support__copy">
+            <h2 class="support__title" data-split>Suporte</h2>
+            <!-- v1 -->
+            <p class="support__subtitle" data-animate>
+              Suporte com gente de verdade, 24 horas por dia
+            </p>
+            <!-- v1 -->
+            <p class="support__text" data-animate>
+              Você não abre chamado, não recebe número de protocolo e não
+              conversa com robô. Chama no WhatsApp e fala com alguém do time que
+              conhece a sua operação, em qualquer horário e qualquer dia da
+              semana.
+            </p>
+            <!-- v1 -->
+            <p class="support__text" data-animate>
+              Resposta em minutos, não em dias úteis | Mesmo atendente,
+              acompanhando seu histórico | Domingo, feriado e madrugada
+              incluídos
+            </p>
+            <div class="support__cta" data-animate>
+              <a
+                href="https://wa.me/5537998157790"
+                class="btn btn--primary"
+                data-wa="suporte"
+                >Chamar no WhatsApp</a
+              >
+            </div>
+          </div>
+
+          <div class="support__media" data-animate>
+            <!-- srcset: no mobile a foto ocupa a largura da tela, mas
+                 1100px de fonte é desperdício ali. -->
+            <img
+              src="../assets/suporte.webp"
+              srcset="../assets/suporte-640.webp 640w, ../assets/suporte.webp 1100w"
+              sizes="(max-width: 860px) calc(100vw - 2.5rem), 45vw"
+              alt="Atendente da DG Mídias, de headset, respondendo clientes pelo computador"
+              width="1100"
+              height="1448"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           FAQ
+           ============================================================ -->
+      <section class="section faq faq--dark" id="faq">
+        <div class="container faq__inner">
+          <div class="faq__head">
+            <h2 class="faq__title" data-split>Faq</h2>
+            <!-- v1 -->
+            <p class="faq__intro" data-animate>
+              O que perguntam antes de fechar<br />conosco, respondido sem
+              rodeio.
+            </p>
+          </div>
+
+          <!--
+            As 6 perguntas vieram da captura (conferir a redação). TODAS
+            as respostas estão como [X].
+
+            O JSON-LD de FAQPage é montado por js/ativos.js a partir
+            deste acordeão e ignora qualquer item cuja resposta ainda
+            contenha "[X]" — o schema só passa a existir quando a copy
+            real entrar. Não há nada a editar lá.
+          -->
+          <ul class="faq__list">
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q1" aria-expanded="false" aria-controls="faq-a1">
+                  <span class="faq__index" aria-hidden="true">1</span>
+                  <span class="faq__question-text">Em quanto tempo recebo depois de fechar?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a1" role="region" aria-labelledby="faq-q1">
+                <div class="faq__answer-inner"><p class="faq__answer-text">Entrega em até 24 horas na maioria dos casos. Ativos com configuração específica podem levar mais tempo, e você é avisado do prazo antes de fechar.</p></div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q2" aria-expanded="false" aria-controls="faq-a2">
+                  <span class="faq__index" aria-hidden="true">2</span>
+                  <span class="faq__question-text">O que exatamente vem junto com o ativo?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a2" role="region" aria-labelledby="faq-q2">
+                <div class="faq__answer-inner"><p class="faq__answer-text">Cada tipo tem uma composição diferente, e ela é descrita por escrito no orçamento antes do pagamento. Nada é entregue sem que você saiba o que está recebendo.</p></div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q3" aria-expanded="false" aria-controls="faq-a3">
+                  <span class="faq__index" aria-hidden="true">3</span>
+                  <span class="faq__question-text">Como funciona a garantia?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a3" role="region" aria-labelledby="faq-q3">
+                <div class="faq__answer-inner"><p class="faq__answer-text">Você tem três dias de garantia. Se o ativo apresentar problema dentro do prazo, a reposição é feita sem custo em até 24 horas.</p></div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q4" aria-expanded="false" aria-controls="faq-a4">
+                  <span class="faq__index" aria-hidden="true">4</span>
+                  <span class="faq__question-text">Qual o limite de disparo da BM que vocês entregam?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a4" role="region" aria-labelledby="faq-q4">
+                <div class="faq__answer-inner"><p class="faq__answer-text">Trabalhamos com faixas definidas, de (x)mil disparos por dia. O limite da sua BM é informado por escrito antes do pagamento, e você escolhe a faixa compatível com o tamanho da sua base.</p></div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q5" aria-expanded="false" aria-controls="faq-a5">
+                  <span class="faq__index" aria-hidden="true">5</span>
+                  <span class="faq__question-text">A conta do TikTok já vem pronta para anunciar?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a5" role="region" aria-labelledby="faq-q5">
+                <div class="faq__answer-inner"><p class="faq__answer-text">Sim. Vem configurada, com meio de pagamento e estrutura definida. O suporte acompanha a primeira veiculação.</p></div>
+              </div>
+            </li>
+
+            <li class="faq__item">
+              <h3>
+                <button class="faq__question" id="faq-q6" aria-expanded="false" aria-controls="faq-a6">
+                  <span class="faq__index" aria-hidden="true">6</span>
+                  <span class="faq__question-text">Vocês atendem quem está começando agora?</span>
+                  <span class="faq__icon" aria-hidden="true"></span>
+                </button>
+              </h3>
+              <div class="faq__answer" id="faq-a6" role="region" aria-labelledby="faq-q6">
+                <div class="faq__answer-inner"><p class="faq__answer-text">Sim. Se você não sabe qual ativo faz sentido para o seu momento, o time orienta antes de vender. Não temos interesse em vender o ativo errado.</p></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ============================================================
+           CTA FINAL  (bloco claro)
+           ============================================================ -->
+      <section class="section closing" id="contato">
+        <div class="container closing__inner">
+          <h2 class="closing__title" data-split>
+            Fale com o time e receba<br />disponibilidade e orçamento<br />agora
+          </h2>
+          <p class="closing__text" data-animate>
+            Atendimento humano no WhatsApp, todos os dias, 24 horas.<br />
+            Diga o que você precisa e a gente resolve.
+          </p>
+          <div class="closing__actions" data-animate>
+            <a
+              href="https://wa.me/5537998157790"
+              class="btn btn--primary"
+              data-wa="cta-final"
+              >Falar com o time</a
+            >
+            <a href="#catalogo" class="btn btn--secondary">Ver nosso catálogo</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner section-inset">
+        <div class="site-footer__col">
+          <h3 class="site-footer__heading">Contato</h3>
+          <!-- href e texto vêm de PHONE_TEL / PHONE_DISPLAY em ativos-config.js -->
+          <a href="tel:+5537998157790" class="site-footer__link" data-phone
+            >+55 37 99815-7790</a
+          >
+          <a href="mailto:contato@dgmidias.com" class="site-footer__link"
+            >contato@dgmidias.com</a
+          >
+          <a
+            href="https://instagram.com/dgmidiasagencia"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="site-footer__link"
+            >@dgmidiasagencia</a
+          >
+        </div>
+        <div class="site-footer__col site-footer__col--right">
+          <p class="site-footer__address">
+            Rua Sete de Setembro, Centro - n105, apto04<br />
+            35570-304
+          </p>
+          <p class="site-footer__cnpj">CNPJ: 41.336.477/0001-20</p>
+        </div>
+      </div>
+
+      <div class="site-footer__brand section-inset">
+        <img
+          class="site-footer__logo"
+          src="../assets/svg/logo.svg"
+          alt=""
+          width="253"
+          height="56"
+          loading="lazy"
+        />
+      </div>
+
+      <p class="site-footer__copy">2026 Todos os direitos reservados ®DG Midias.</p>
+    </footer>
+
+    <a
+      href="https://wa.me/5537998157790"
+      class="wa-float"
+      data-wa="flutuante"
+      aria-label="Falar com o time no WhatsApp"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 0 1 6.988 2.896 9.82 9.82 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885m8.413-18.297A11.82 11.82 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.88 11.88 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 0 0-3.48-8.413"/></svg>
+    </a>
+
+    <script src="../js/preloader.js" defer></script>
+    <script src="../js/vendor/gsap.min.js" defer></script>
+    <script src="../js/vendor/ScrollTrigger.min.js" defer></script>
+    <script src="../js/ativos-config.js" defer></script>
+    <script src="../js/main.js" defer></script>
+    <script src="../js/header.js" defer></script>
+    <script src="../js/faq.js" defer></script>
+    <script src="../js/text-fx.js" defer></script>
+    <script src="../js/ativos-hero.js" defer></script>
+    <script src="../js/ativos.js" defer></script>
+  </body>
+</html>

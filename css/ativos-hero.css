@@ -1,0 +1,263 @@
+/*
+  Hero da página /ativos — barras verticais com gradiente, grade e grão.
+
+  ============================================================
+  COMO O EFEITO REALMENTE FUNCIONA
+  ============================================================
+  Extraído do <style> embutido e do CSS computado ao vivo em
+  https://www.sui.io/ai (o próprio site expõe a receita).
+
+  O truque não é escurecer o meio: é a ALTURA das colunas.
+
+  Cada coluna é centrada na vertical e pintada com um gradiente que é
+  CLARO nas duas pontas e transparente no miolo. Quanto mais alta a
+  coluna, mais longe da tela ficam as pontas claras — sobra só o miolo
+  transparente, ou seja, preto.
+
+  Por isso a coluna central é a MAIS ALTA (809svh, ~8x a tela): o brilho
+  dela fica todo fora do enquadramento. E as colunas das pontas são as
+  mais baixas (180svh), então o claro delas cai dentro da tela e acende
+  as bordas esquerda e direita. Daí o desenho característico: preto no
+  centro, laranja nas laterais.
+
+  Foi exatamente isso que eu tinha errado antes — barras de no máximo
+  100svh deixam todo o brilho dentro da tela e lavam a peça inteira.
+
+  A altura final segue uma rampa linear: 89,9svh x (9 - distância do
+  centro). Confere com o site: centro 809svh, ponta 180svh.
+  ============================================================
+
+  Regra de ouro deste arquivo: o estado que o CSS descreve é o estado
+  FINAL. A animação (js/ativos-hero.js) parte dele, sempre via
+  `gsap.from()`. Sem GSAP, ou com prefers-reduced-motion, a hero já
+  nasce no visual correto.
+*/
+
+/*
+  Registrar as variáveis permite ao navegador interpolá-las como
+  porcentagem de verdade (e não como string), o que deixa a transição
+  suave mesmo quando o frame atrasa. Sem suporte a @property
+  (Safari < 16.4) o GSAP ainda reescreve o valor a cada frame — só perde
+  a interpolação nativa.
+*/
+@property --blue-stop {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+
+@property --black-stop {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+/*
+  A seção é só o TRILHO: ela tem o dobro da altura útil e não desenha
+  nada. Quem desenha é .hero__sticky, que fica presa no topo enquanto o
+  trilho passa — os ~100svh de sobra são exatamente o curso de rolagem
+  da animação de fechamento.
+
+  IMPORTANTE: nada de `overflow: hidden` aqui. Um ancestral com overflow
+  recortado vira o contêiner de rolagem do sticky e o `position: sticky`
+  deixa de grudar na viewport. O recorte mora na camada presa.
+
+  --hd é a altura do header, medida em js/ativos-hero.js. Sem JS o
+  fallback de 80px mantém o enquadramento próximo do certo.
+*/
+.hero {
+  --ramp: 62svh;
+  --hd: 80px;
+  position: relative;
+  height: calc(200svh - var(--hd));
+  background: var(--absolute-black);
+}
+
+/*
+  Sem animação de fechamento (usuário pediu menos movimento, ou o GSAP
+  não carregou) o trilho extra viraria ~100svh de rolagem sem nada
+  acontecendo. Nesse caso a seção encolhe para uma tela só. Quem aplica
+  a classe é js/ativos-hero.js.
+*/
+.hero--static {
+  height: calc(100svh - var(--hd));
+}
+
+.hero__sticky {
+  position: sticky;
+  top: var(--hd);
+  height: calc(100svh - var(--hd));
+  overflow: hidden;
+  /* Contexto de empilhamento próprio: as colunas medem vários milhares
+     de pixels e não podem vazar para o header nem para a seção seguinte. */
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-block: clamp(2rem, 6vh, 4rem);
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__bars {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: row;
+  /* Centrar na vertical é o que faz a altura da coluna virar controle de
+     brilho: a coluna cresce para os dois lados, empurrando as pontas
+     claras para fora da tela em igual medida. */
+  align-items: center;
+  justify-content: center;
+}
+
+.bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* A rampa: --ramp x (9 - distância do centro). --d é definido pelos
+     nth-child abaixo.
+
+     --ramp é o ÚNICO botão de ajuste do visual: quanto maior, mais
+     altas ficam as colunas, mais longe da tela vão as pontas claras do
+     gradiente e mais preta fica a peça. 89.9svh é o valor medido no
+     sui.io/ai; valores menores trazem o laranja de volta para o topo e
+     para a base, aproximando do enquadramento da v1. */
+  height: calc((9 - var(--d)) * var(--ramp));
+  will-change: transform;
+}
+
+.bar__top,
+.bar__bottom {
+  flex: 1 1 50%;
+}
+
+/*
+  Valores de repouso (= estado final da animação de entrada), lidos do
+  site de referência: topo 40%/90%, base 60%/10%.
+*/
+.bar__top {
+  --blue-stop: 40%;
+  --black-stop: 90%;
+  background-image: linear-gradient(
+    var(--white),
+    var(--orange) var(--blue-stop),
+    rgba(0, 0, 0, 0) var(--black-stop)
+  );
+}
+
+.bar__bottom {
+  --black-stop: 10%;
+  --blue-stop: 60%;
+  background-image: linear-gradient(
+    rgba(0, 0, 0, 0) var(--black-stop),
+    var(--orange) var(--blue-stop),
+    var(--white)
+  );
+}
+
+/* Distância do centro (a coluna 8 é o centro de 15). */
+.bar:nth-child(8)               { --d: 0; }
+.bar:nth-child(7), .bar:nth-child(9)  { --d: 1; }
+.bar:nth-child(6), .bar:nth-child(10) { --d: 2; }
+.bar:nth-child(5), .bar:nth-child(11) { --d: 3; }
+.bar:nth-child(4), .bar:nth-child(12) { --d: 4; }
+.bar:nth-child(3), .bar:nth-child(13) { --d: 5; }
+.bar:nth-child(2), .bar:nth-child(14) { --d: 6; }
+.bar:nth-child(1), .bar:nth-child(15) { --d: 7; }
+
+/*
+  Grade de pontos.
+
+  No site de referência é um PNG de 1440x870 com `object-fit: cover`.
+  Medi o arquivo original: grade de 14px, ponto de 2x2px,
+  rgb(53,57,64) a 87% de alpha. Como o desenho só repete, aqui ele é um
+  tile de 14x14 (82 bytes) com `background-repeat` — mesmo resultado,
+  sem baixar uma imagem de tela cheia.
+
+  `image-rendering: pixelated` mantém a borda dura do ponto em telas
+  com devicePixelRatio fracionário.
+*/
+.hero__pattern {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("../assets/hero-grid.png");
+  background-repeat: repeat;
+  background-size: 14px 14px;
+  image-rendering: pixelated;
+}
+
+/* Eyebrow, headline e a linha de apoio, tudo no mesmo bloco centrado. */
+.hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 900px;
+  margin-inline: auto;
+  padding-inline: var(--section-padding-x);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hero__eyebrow {
+  color: var(--orange);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.hero__title {
+  font-size: clamp(2.25rem, 5.6vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+
+/*
+  Divisão manual por linha (o SplitText do GSAP é plugin pago). Cada
+  .hero__line é a janela com overflow hidden; o .hero__line-inner é o
+  que sobe.
+*/
+.hero__line {
+  display: block;
+  overflow: hidden;
+  /* Sem o padding a barriga de letras como "ç" e "p" seria cortada pela
+     janela do overflow. A margem negativa devolve o espaço ao layout. */
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.hero__line-inner {
+  display: block;
+}
+
+/* Centralizada junto com o resto do bloco, logo abaixo da headline. */
+.hero__note {
+  margin-top: 0.75rem;
+  max-width: 440px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 767px) {
+  /* Seis colunas no celular, como na referência. A rampa é recalculada
+     para o centro cair entre as colunas 3 e 4. */
+  .bar:nth-child(n + 7) {
+    display: none;
+  }
+
+  .bar:nth-child(3), .bar:nth-child(4) { --d: 0; }
+  .bar:nth-child(2), .bar:nth-child(5) { --d: 2; }
+  .bar:nth-child(1), .bar:nth-child(6) { --d: 5; }
+}
+
