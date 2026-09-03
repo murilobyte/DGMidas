@@ -345,58 +345,86 @@ html {
 /* Suporte — bloco claro                                             */
 /* ---------------------------------------------------------------- */
 
+/*
+  O gradiente do fim da seção é o que antes era a faixa laranja num
+  elemento separado. Trazê-lo para o fundo da própria seção elimina o
+  <div> decorativo e, principalmente, deixa a transição para o preto do
+  FAQ acontecer no mesmo pintado — sem risco de uma emenda de 1px entre
+  dois blocos.
+
+  Os stops vieram da referência.
+*/
 .support {
-  background-color: var(--light);
+  background: linear-gradient(
+    180deg,
+    #ffffff 83.2%,
+    #fc6909 90.93%,
+    #000000 100%
+  );
   color: var(--ink);
+  /*
+    O respiro embaixo não é decorativo: é a pista por onde o gradiente
+    corre. Sem ele o laranja e o preto passariam por trás do texto.
+  */
+  padding-block: var(--sec-y) clamp(9rem, 20vw, 17rem);
 }
 
+/*
+  Alinhado pelo TOPO, não centrado: na referência o texto e a foto
+  começam na mesma linha e a coluna de texto termina bem antes.
+*/
 .support__inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  align-items: center;
+  align-items: start;
   gap: clamp(2rem, 6vw, 4.5rem);
 }
 
 .support__title {
-  font-size: clamp(1.9rem, 4vw, 2.75rem);
+  font-size: clamp(2rem, 4.2vw, 3rem);
   font-weight: 700;
   line-height: 1.1;
+  letter-spacing: -0.02em;
   color: var(--ink);
 }
 
 .support__subtitle {
-  margin-top: 1.5rem;
+  /* O vão grande entre o título e o subtítulo é da referência. */
+  margin-top: clamp(2.5rem, 6vw, 5rem);
+  /* Quebra em "Suporte com gente de / verdade, 24 horas por dia",
+     como na referência. */
+  max-width: 20ch;
   font-size: 1rem;
   font-weight: 700;
+  line-height: 1.4;
   color: var(--ink);
 }
 
 .support__text {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
+  max-width: 42ch;
   color: var(--ink-muted);
   font-size: 1rem;
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 .support__cta {
-  margin-top: 2rem;
+  margin-top: clamp(2.5rem, 6vw, 5.5rem);
 }
 
 .support__media {
-  border-radius: clamp(16px, 2vw, 24px);
   overflow: hidden;
   /* Trava a proporção antes de a imagem baixar — é o que impede o salto
-     de layout (CLS) nesta seção. */
-  aspect-ratio: 4 / 3;
+     de layout (CLS) nesta seção. E o retrato é o enquadramento nativo
+     do arquivo, então quase não há corte. */
+  aspect-ratio: 7 / 9;
 }
 
 .support__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  /* O enquadramento da foto é vertical; sem isso o `cover` cortaria a
-     cabeça do atendente no recorte 4/3. */
-  object-position: 50% 22%;
+  object-position: 50% 30%;
 }
 
 @media (max-width: 860px) {
@@ -406,38 +434,8 @@ html {
 
   .support__media {
     order: -1;
-    aspect-ratio: 16 / 10;
+    aspect-ratio: 4 / 3;
   }
-}
-
-/* ---------------------------------------------------------------- */
-/* Faixa laranja de transição                                        */
-/* ---------------------------------------------------------------- */
-
-/*
-  Liga o bloco claro do suporte ao preto do FAQ. A mesma grade de
-  pontos da hero por cima, para a faixa não ficar um degradê liso no
-  meio de uma página que é toda texturizada.
-*/
-.orange-band {
-  position: relative;
-  height: clamp(120px, 16vw, 220px);
-  background: linear-gradient(
-    180deg,
-    var(--orange) 0%,
-    #8a3f10 52%,
-    var(--absolute-black) 100%
-  );
-}
-
-.orange-band::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: url("../assets/hero-grid.png");
-  background-repeat: repeat;
-  background-size: 14px 14px;
-  image-rendering: pixelated;
 }
 
 /* ---------------------------------------------------------------- */
