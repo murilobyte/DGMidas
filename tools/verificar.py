@@ -66,12 +66,25 @@ for pagina in PAGINAS:
     elif "fbq('track', 'PageView')" not in html:
         problemas.append("%s: pixel sem PageView" % pagina)
 
-# 5. sitemap e robots seguem o mesmo dominio
+# 5. o telefone e um so no site inteiro: numero trocado pela metade manda
+#    lead para uma linha desativada sem nenhum sinal de erro
+numeros = set()
+for rel in PAGINAS + ["js/lead-modal.js", "js/ativos-config.js"]:
+    conteudo = ler(rel)
+    numeros.update(re.findall(r"wa\.me/(\d{12,13})", conteudo))
+    numeros.update(re.findall(r'tel:\+(\d{12,13})', conteudo))
+    numeros.update(re.findall(r'WHATSAPP_NUMBER\s*=\s*"(\d{12,13})"', conteudo))
+    numeros.update(d.replace(" ", "").replace("-", "") for d in re.findall(r'\+55 \d{2} \d{4,5}-\d{4}', conteudo))
+numeros = {n.lstrip("+") for n in numeros}
+if len(numeros) > 1:
+    problemas.append("telefone divergente no site: %s" % ", ".join(sorted(numeros)))
+
+# 6. sitemap e robots seguem o mesmo dominio
 for arquivo in ("sitemap.xml", "robots.txt"):
     for achado in re.findall(r'https://dgmidias\.com[^"\s<]*', ler(arquivo)):
         problemas.append("%s: URL sem www -> %s" % (arquivo, achado))
 
-# 6. toda pagina do site esta no sitemap
+# 7. toda pagina do site esta no sitemap
 sitemap = ler("sitemap.xml")
 for pagina in PAGINAS:
     rota = "/" if pagina == "index.html" else "/" + os.path.dirname(pagina)

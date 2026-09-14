@@ -22,9 +22,9 @@ window.DGAtivos = (function () {
   "use strict";
 
   /* Número usado em todos os links wa.me e no tel: do rodapé. */
-  var WHATSAPP_NUMBER = "5537998157790";
-  var PHONE_DISPLAY = "+55 37 99815-7790";
-  var PHONE_TEL = "+5537998157790";
+  var WHATSAPP_NUMBER = "5537991391582";
+  var PHONE_DISPLAY = "+55 37 99139-1582";
+  var PHONE_TEL = "+5537991391582";
 
   /*
    * Uma mensagem por origem. É o que permite ler no WhatsApp qual bloco

@@ -7,7 +7,7 @@
  * levando ao WhatsApp — só não registra na planilha.
  */
 const SHEETS_ENDPOINT = "https://script.google.com/macros/s/AKfycbyKU15bk4LYy97covqOR5CozsEnGKv0WgQwnjWnpqunXQK5dlZy4pLXyxKQKd4I2G7oSw/exec";
-const WHATSAPP_NUMBER = "5537998157790";
+const WHATSAPP_NUMBER = "5537991391582";
 
 function initLeadModal() {
   const modal = document.getElementById("lead-modal");
