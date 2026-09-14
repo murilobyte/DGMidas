@@ -63,6 +63,7 @@ function initLeadModal() {
     }
 
     sendToSheet({ nome, telefone, email });
+    trackLead();
 
     const message = `Olá, meu nome é ${nome}. E quero aumentar minhas vendas!`;
     const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
@@ -70,6 +71,29 @@ function initLeadModal() {
     form.reset();
     close();
     window.open(url, "_blank", "noopener");
+  });
+}
+
+/*
+ * Conversão para o Meta Pixel (instalado no <head> do index.html).
+ *
+ * Só dispara depois da validação: um `Lead` por formulário de fato
+ * preenchido, e não por tentativa de envio com campo vazio.
+ *
+ * Não há pressa em esperar o fbevents.js: o snippet do <head> define
+ * `fbq` na hora e enfileira o que chegar antes do script carregar. E
+ * como o WhatsApp abre em aba nova (window.open), esta página continua
+ * viva para a fila esvaziar.
+ *
+ * O guard existe para o caso de um bloqueador de anúncios derrubar o
+ * fbevents.js — sem ele, um `fbq` inexistente lançaria antes do
+ * window.open e o lead não chegaria ao WhatsApp.
+ */
+function trackLead() {
+  if (typeof window.fbq !== "function") return;
+
+  window.fbq("track", "Lead", {
+    content_name: "formulario-home",
   });
 }
 

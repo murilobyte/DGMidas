@@ -68,6 +68,16 @@ window.DGAtivos = (function () {
    * consome assim que for instalado) e repassado ao gtag se ele existir.
    * Enquanto não houver nenhum dos dois, isto é um no-op silencioso — e
    * nenhum clique deixa de funcionar por causa disso.
+   *
+   * O Meta Pixel, esse já está instalado (no <head> da página). Aqui o
+   * clique vira um `Contact`: nesta página o preço é sob consulta, então
+   * abrir a conversa no WhatsApp é a conversão — não há formulário nem
+   * checkout depois dele. A origem vai junto em content_name para dar
+   * para separar no Gerenciador qual bloco converteu.
+   *
+   * O guard em fbq não é paranoia: se um bloqueador de anúncios impedir
+   * o fbevents.js de carregar, `fbq` não existe e o clique tem de
+   * continuar levando a pessoa ao WhatsApp do mesmo jeito.
    */
   function track(origin) {
     var payload = {
@@ -83,6 +93,13 @@ window.DGAtivos = (function () {
       window.gtag("event", "whatsapp_click", {
         origem: origin,
         pagina: "/ativos",
+      });
+    }
+
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "Contact", {
+        content_name: origin,
+        content_category: "ativos",
       });
     }
   }
